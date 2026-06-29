@@ -249,6 +249,19 @@
 .cal-cell--blank {
   background: #faf6ee;
 }
+.cal-cell--today {
+  background: #fbf1e6;
+}
+.cal-cell__num--today {
+  background: var(--coral);
+  color: #fff;
+  border-radius: 50%;
+  width: 1.6em;
+  height: 1.6em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 .cal-cell__num {
   position: absolute;
   top: 0.25rem;

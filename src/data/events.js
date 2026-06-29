@@ -1,9 +1,33 @@
 // Fictional events for now — real data will replace this later.
+// Dates are generated relative to "today" (via `offset` in days) so the
+// events always appear as upcoming on whatever the current date is.
 // Images use picsum.photos placeholders (stable per seed).
-// `day` is the day-of-month (all events are in December for this mock).
 const img = (seed) => `https://picsum.photos/seed/${seed}/600/400`
 
-export const EVENTS = [
+const MONTHS = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+]
+
+const pad = (n) => String(n).padStart(2, '0')
+const isoOf = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+
+function ordinal(n) {
+  const s = ['th', 'st', 'nd', 'rd']
+  const v = n % 100
+  return n + (s[(v - 20) % 10] || s[v] || s[0])
+}
+
+const TODAY = new Date()
+TODAY.setHours(0, 0, 0, 0)
+
+function dateFromOffset(offset) {
+  const d = new Date(TODAY)
+  d.setDate(TODAY.getDate() + offset)
+  return d
+}
+
+const RAW = [
   {
     id: 'running-club',
     title: 'Running Club',
@@ -13,14 +37,131 @@ export const EVENTS = [
     address: '3110 Parkwood St, El Paso, TX 79925',
     lat: 31.7745,
     lng: -106.4096,
-    day: 15,
-    date: 'December 15th',
+    offset: 0,
     time: '7:00 pm',
     price: 'Free',
     about:
       'Whether you’re chasing a PR or just starting your fitness journey, you’re welcome here! We’re a casual, no-drop group that focuses on community, good miles, and great post-run coffee.',
     additionalInfo: 'Bring your own water',
     host: 'Sunset Heights Coffee',
+  },
+  {
+    id: 'sunrise-yoga',
+    title: 'Sunrise Yoga',
+    category: 'Sports',
+    image: img('elp-yoga'),
+    family: true,
+    address: 'Memorial Park, El Paso, TX 79930',
+    lat: 31.7869,
+    lng: -106.4663,
+    offset: 1,
+    time: '7:00 am',
+    price: 'Free',
+    about:
+      'Start your day with a gentle all-levels flow as the sun comes up. Mats provided while supplies last.',
+    additionalInfo: 'Bring a towel and water.',
+    host: 'Sun City Yoga',
+  },
+  {
+    id: 'mariachi-festival',
+    title: 'Mariachi Festival',
+    category: 'Music',
+    image: img('elp-mariachi'),
+    family: true,
+    address: '2701 Sun Bowl Dr, El Paso, TX 79902',
+    lat: 31.7683,
+    lng: -106.5045,
+    offset: 3,
+    time: '5:00 pm',
+    price: '$50 - $400',
+    about: 'Get ready for an unforgettable night of live music.',
+    additionalInfo: 'No food/drinks or any arm allowed.',
+    host: 'Mariachi "Las Galleras"',
+  },
+  {
+    id: 'jazz-night',
+    title: 'Jazz Night',
+    category: 'Music',
+    image: img('elp-jazz'),
+    family: false,
+    address: '125 Pioneer Plaza, El Paso, TX 79901',
+    lat: 31.7565,
+    lng: -106.486,
+    offset: 5,
+    time: '8:00 pm',
+    price: '$15.00',
+    about:
+      'An intimate evening of live jazz featuring local trios and a guest soloist. Doors open at 7:30 pm.',
+    additionalInfo: 'Seating is first come, first served.',
+    host: 'Downtown Jazz Society',
+  },
+  {
+    id: 'art-walk',
+    title: 'Art Walk',
+    category: 'Arts',
+    image: img('elp-art'),
+    family: true,
+    address: '1 Arts Festival Plaza, El Paso, TX 79901',
+    lat: 31.761,
+    lng: -106.488,
+    offset: 7,
+    time: '5:00 pm',
+    price: 'Free',
+    about:
+      'A self-guided walk through downtown galleries and studios. Meet local artists and watch live demonstrations.',
+    additionalInfo: 'Family friendly. Strollers welcome.',
+    host: 'El Paso Museum of Art',
+  },
+  {
+    id: 'farmers-market',
+    title: 'Farmers Market',
+    category: 'Markets',
+    image: img('elp-market'),
+    family: true,
+    address: 'Downtown Artist & Farmers Market',
+    lat: 31.757,
+    lng: -106.4855,
+    offset: 9,
+    time: '9:00 am',
+    price: 'Free',
+    about:
+      'Fresh produce, baked goods, handmade crafts, and food trucks from local vendors every weekend.',
+    additionalInfo: 'Cash and cards accepted. Pets on leash welcome.',
+    host: 'El Paso Markets',
+  },
+  {
+    id: 'soccer-pickup',
+    title: 'Pickup Soccer',
+    category: 'Sports',
+    image: img('elp-soccer'),
+    family: true,
+    address: '4200 Album Ave, El Paso, TX 79904',
+    lat: 31.772,
+    lng: -106.365,
+    offset: 11,
+    time: '6:00 pm',
+    price: 'Free',
+    about:
+      'Casual pickup soccer for all skill levels. Teams are mixed on the spot. Just show up and play.',
+    additionalInfo: 'Cleats recommended. Bring a light and dark shirt.',
+    host: 'Sun City Soccer',
+  },
+  {
+    id: 'cooking-class',
+    title: 'Cooking Class',
+    category: 'Food',
+    image: img('elp-cooking'),
+    family: false,
+    address: '500 N Oregon St, El Paso, TX 79901',
+    lat: 31.7598,
+    lng: -106.4877,
+    offset: 13,
+    time: '6:00 pm',
+    price: '$35.00',
+    about:
+      'Hands-on regional cooking class. Learn to make three dishes from scratch and enjoy them together at the end.',
+    additionalInfo: 'Aprons and ingredients provided.',
+    host: 'Mesa Culinary Studio',
   },
   {
     id: 'picnic',
@@ -31,8 +172,7 @@ export const EVENTS = [
     address: 'El Paso Botanical Garden',
     lat: 31.7501,
     lng: -106.5061,
-    day: 30,
-    date: 'December 30th',
+    offset: 17,
     time: '12:00 pm',
     price: '$20.00',
     about:
@@ -50,8 +190,7 @@ export const EVENTS = [
     address: '201 E Franklin Ave, El Paso, TX 79901',
     lat: 31.7592,
     lng: -106.4869,
-    day: 30,
-    date: 'December 30th',
+    offset: 19,
     time: '9:30 pm',
     price: '$50.00',
     about:
@@ -59,129 +198,16 @@ export const EVENTS = [
     additionalInfo: 'Bring your own food',
     host: 'The Reagan Winery',
   },
-  {
-    id: 'mariachi-festival',
-    title: 'Mariachi Festival',
-    category: 'Music',
-    image: img('elp-mariachi'),
-    family: true,
-    address: '2701 Sun Bowl Dr, El Paso, TX 79902',
-    lat: 31.7683,
-    lng: -106.5045,
-    day: 7,
-    date: 'December 7th',
-    time: '5:00 pm',
-    price: '$50 - $400',
-    about: 'Get ready for an unforgettable night of live music.',
-    additionalInfo: 'No food/drinks or any arm allowed.',
-    host: 'Mariachi "Las Galleras"',
-  },
-  {
-    id: 'jazz-night',
-    title: 'Jazz Night',
-    category: 'Music',
-    image: img('elp-jazz'),
-    family: false,
-    address: '125 Pioneer Plaza, El Paso, TX 79901',
-    lat: 31.7565,
-    lng: -106.486,
-    day: 18,
-    date: 'December 18th',
-    time: '8:00 pm',
-    price: '$15.00',
-    about:
-      'An intimate evening of live jazz featuring local trios and a guest soloist. Doors open at 7:30 pm.',
-    additionalInfo: 'Seating is first come, first served.',
-    host: 'Downtown Jazz Society',
-  },
-  {
-    id: 'sunrise-yoga',
-    title: 'Sunrise Yoga',
-    category: 'Sports',
-    image: img('elp-yoga'),
-    family: true,
-    address: 'Memorial Park, El Paso, TX 79930',
-    lat: 31.7869,
-    lng: -106.4663,
-    day: 16,
-    date: 'December 16th',
-    time: '7:00 am',
-    price: 'Free',
-    about:
-      'Start your day with a gentle all-levels flow as the sun comes up. Mats provided while supplies last.',
-    additionalInfo: 'Bring a towel and water.',
-    host: 'Sun City Yoga',
-  },
-  {
-    id: 'art-walk',
-    title: 'Art Walk',
-    category: 'Arts',
-    image: img('elp-art'),
-    family: true,
-    address: '1 Arts Festival Plaza, El Paso, TX 79901',
-    lat: 31.761,
-    lng: -106.488,
-    day: 20,
-    date: 'December 20th',
-    time: '5:00 pm',
-    price: 'Free',
-    about:
-      'A self-guided walk through downtown galleries and studios. Meet local artists and watch live demonstrations.',
-    additionalInfo: 'Family friendly. Strollers welcome.',
-    host: 'El Paso Museum of Art',
-  },
-  {
-    id: 'farmers-market',
-    title: 'Farmers Market',
-    category: 'Markets',
-    image: img('elp-market'),
-    family: true,
-    address: 'Downtown Artist & Farmers Market',
-    lat: 31.757,
-    lng: -106.4855,
-    day: 21,
-    date: 'December 21st',
-    time: '9:00 am',
-    price: 'Free',
-    about:
-      'Fresh produce, baked goods, handmade crafts, and food trucks from local vendors every weekend.',
-    additionalInfo: 'Cash and cards accepted. Pets on leash welcome.',
-    host: 'El Paso Markets',
-  },
-  {
-    id: 'soccer-pickup',
-    title: 'Pickup Soccer',
-    category: 'Sports',
-    image: img('elp-soccer'),
-    family: true,
-    address: '4200 Album Ave, El Paso, TX 79904',
-    lat: 31.772,
-    lng: -106.365,
-    day: 22,
-    date: 'December 22nd',
-    time: '6:00 pm',
-    price: 'Free',
-    about:
-      'Casual pickup soccer for all skill levels. Teams are mixed on the spot. Just show up and play.',
-    additionalInfo: 'Cleats recommended. Bring a light and dark shirt.',
-    host: 'Sun City Soccer',
-  },
-  {
-    id: 'cooking-class',
-    title: 'Cooking Class',
-    category: 'Food',
-    image: img('elp-cooking'),
-    family: false,
-    address: '500 N Oregon St, El Paso, TX 79901',
-    lat: 31.7598,
-    lng: -106.4877,
-    day: 28,
-    date: 'December 28th',
-    time: '6:00 pm',
-    price: '$35.00',
-    about:
-      'Hands-on regional cooking class. Learn to make three dishes from scratch and enjoy them together at the end.',
-    additionalInfo: 'Aprons and ingredients provided.',
-    host: 'Mesa Culinary Studio',
-  },
 ]
+
+// Derive real dates from each event's offset.
+export const EVENTS = RAW.map((e) => {
+  const d = dateFromOffset(e.offset)
+  return {
+    ...e,
+    dateObj: d,
+    iso: isoOf(d),
+    day: d.getDate(),
+    date: `${MONTHS[d.getMonth()]} ${ordinal(d.getDate())}`,
+  }
+})

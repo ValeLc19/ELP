@@ -24,6 +24,28 @@ function priceValue(p) {
   return m ? parseFloat(m[0]) : 0
 }
 
+const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n)
+
+// Date-filter window helpers, computed from the real current date.
+function dateWindow() {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const weekStart = addDays(today, -today.getDay()) // Sunday
+  const weekEnd = addDays(weekStart, 6) // Saturday
+  return { today, weekStart, weekEnd }
+}
+
+function matchesDateFilter(event, filter, win) {
+  const d = event.dateObj
+  if (filter === 'Today') return d.getTime() === win.today.getTime()
+  if (filter === 'This Week') return d >= win.weekStart && d <= win.weekEnd
+  if (filter === 'This Weekend') {
+    const weekend = d.getDay() === 0 || d.getDay() === 6
+    return weekend && d >= win.today && d <= win.weekEnd
+  }
+  return true
+}
+
 export default function Events() {
   const navigate = useNavigate()
   const [view, setView] = useState('map') // 'map' | 'calendar' | 'list'
@@ -41,15 +63,17 @@ export default function Events() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
+    const win = dateWindow()
     return EVENTS.filter((e) => {
       const catOk = activeCat === 'All' || e.category === activeCat
       const qOk =
         !q ||
         e.title.toLowerCase().includes(q) ||
         e.address.toLowerCase().includes(q)
-      return catOk && qOk
+      const dateOk = matchesDateFilter(e, activeDate, win)
+      return catOk && qOk && dateOk
     })
-  }, [activeCat, query])
+  }, [activeCat, activeDate, query])
 
   const sorted = useMemo(() => {
     const arr = filtered.slice()

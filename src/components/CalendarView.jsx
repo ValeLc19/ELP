@@ -15,13 +15,18 @@ const MONTH_NAMES = [
   'July', 'August', 'September', 'October', 'November', 'December',
 ]
 
-// Events live in December 2026, so the calendar opens there.
-const BASE = new Date(2026, 11, 15)
-
 const pad = (n) => String(n).padStart(2, '0')
 const isoOf = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
 const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n)
 const sundayOf = (d) => addDays(d, -d.getDay())
+
+// Today at midnight — the calendar opens on the real current month.
+function startOfToday() {
+  const t = new Date()
+  t.setHours(0, 0, 0, 0)
+  return t
+}
+const TODAY_ISO = isoOf(startOfToday())
 
 // "7:00 am" / "9:30 pm" -> minutes since midnight, for sorting.
 function timeToMinutes(t) {
@@ -32,13 +37,12 @@ function timeToMinutes(t) {
   return h * 60 + parseInt(m[2], 10)
 }
 
-// Index events by their real calendar date (all in December 2026 for now).
+// Index events by their real calendar date.
 function eventsByIso(events) {
   const map = {}
   for (const e of events) {
-    const key = isoOf(new Date(2026, 11, e.day))
-    if (!map[key]) map[key] = []
-    map[key].push(e)
+    if (!map[e.iso]) map[e.iso] = []
+    map[e.iso].push(e)
   }
   return map
 }
@@ -70,9 +74,12 @@ function MonthView({ anchor, events, onSelect }) {
         const dayEvents = byIso[isoOf(date)] || []
         const shown = dayEvents.slice(0, 3)
         const extra = dayEvents.length - shown.length
+        const isToday = isoOf(date) === TODAY_ISO
         return (
-          <div key={isoOf(date)} className="cal-cell">
-            <span className="cal-cell__num">{date.getDate()}</span>
+          <div key={isoOf(date)} className={`cal-cell ${isToday ? 'cal-cell--today' : ''}`}>
+            <span className={`cal-cell__num ${isToday ? 'cal-cell__num--today' : ''}`}>
+              {date.getDate()}
+            </span>
             <div className="cal-cell__events">
               {shown.map((e) => (
                 <button
@@ -112,7 +119,13 @@ function WeekView({ anchor, events, onSelect }) {
           <div key={isoOf(date)} className="cal-week__col">
             <div className="cal-week__head">
               <span className="cal-week__day">{WEEKDAYS[i].slice(0, 3)}</span>
-              <span className="cal-week__num">{date.getDate()}</span>
+              <span
+                className={`cal-week__num ${
+                  isoOf(date) === TODAY_ISO ? 'cal-cell__num--today' : ''
+                }`}
+              >
+                {date.getDate()}
+              </span>
             </div>
             <div className="cal-week__events">
               {dayEvents.map((e) => (
@@ -136,7 +149,7 @@ function WeekView({ anchor, events, onSelect }) {
 
 export default function CalendarView({ events, onSelect }) {
   const [mode, setMode] = useState('Month')
-  const [anchor, setAnchor] = useState(BASE)
+  const [anchor, setAnchor] = useState(startOfToday)
 
   const step = (dir) => {
     if (mode === 'Month') {
