@@ -246,6 +246,9 @@
   border-bottom: 1px solid var(--line);
   padding: 0.3rem 0.35rem 0.4rem;
 }
+.cal-cell--blank {
+  background: #faf6ee;
+}
 .cal-cell__num {
   position: absolute;
   top: 0.25rem;
@@ -462,11 +465,12 @@
   position: absolute;
   left: 0.7rem;
   bottom: 0.7rem;
-  background: #f0c34a;
+  background: #ecb84c;
   color: #2a2419;
-  font-size: 0.85rem;
-  padding: 0.2rem 0.7rem;
-  border-radius: 6px;
+  font-size: 0.95rem;
+  padding: 0.25rem 0.9rem;
+  border-radius: 10px;
+  border: 2px solid #c5882a;
 }
 .ev-card__body {
   padding: 0.9rem 1.1rem 1.1rem;

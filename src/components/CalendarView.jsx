@@ -10,27 +10,53 @@ const WEEKDAYS = [
   'Friday',
   'Saturday',
 ]
+const MONTH_NAMES = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+]
 
-// Mock month: December with day 1 on Sunday (matches the design).
-// When real data arrives we can compute the true weekday offset.
-const DAYS_IN_MONTH = 31
-const MONTH_NAME = 'December'
+// Events live in December 2026, so the calendar opens there.
+const BASE = new Date(2026, 11, 15)
 
-// The week shown in Week view (day-of-month range, Sun–Sat).
-const WEEK_START = 15
+const pad = (n) => String(n).padStart(2, '0')
+const isoOf = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n)
+const sundayOf = (d) => addDays(d, -d.getDay())
 
-function eventsByDay(events) {
+// "7:00 am" / "9:30 pm" -> minutes since midnight, for sorting.
+function timeToMinutes(t) {
+  const m = t.match(/(\d+):(\d+)\s*(am|pm)/i)
+  if (!m) return 0
+  let h = parseInt(m[1], 10) % 12
+  if (/pm/i.test(m[3])) h += 12
+  return h * 60 + parseInt(m[2], 10)
+}
+
+// Index events by their real calendar date (all in December 2026 for now).
+function eventsByIso(events) {
   const map = {}
   for (const e of events) {
-    if (!map[e.day]) map[e.day] = []
-    map[e.day].push(e)
+    const key = isoOf(new Date(2026, 11, e.day))
+    if (!map[key]) map[key] = []
+    map[key].push(e)
   }
   return map
 }
 
-function MonthView({ events, onSelect }) {
-  const byDay = eventsByDay(events)
-  const cells = Array.from({ length: DAYS_IN_MONTH }, (_, i) => i + 1)
+function MonthView({ anchor, events, onSelect }) {
+  const year = anchor.getFullYear()
+  const month = anchor.getMonth()
+  const byIso = eventsByIso(events)
+
+  const firstWeekday = new Date(year, month, 1).getDay()
+  const daysInMonth = new Date(year, month + 1, 0).getDate()
+  const total = Math.ceil((firstWeekday + daysInMonth) / 7) * 7
+
+  const cells = Array.from({ length: total }, (_, i) => {
+    const dayNum = i - firstWeekday + 1
+    if (dayNum < 1 || dayNum > daysInMonth) return null
+    return new Date(year, month, dayNum)
+  })
 
   return (
     <div className="cal-grid">
@@ -39,13 +65,14 @@ function MonthView({ events, onSelect }) {
           {d}
         </div>
       ))}
-      {cells.map((day) => {
-        const dayEvents = byDay[day] || []
+      {cells.map((date, i) => {
+        if (!date) return <div key={`b${i}`} className="cal-cell cal-cell--blank" />
+        const dayEvents = byIso[isoOf(date)] || []
         const shown = dayEvents.slice(0, 3)
         const extra = dayEvents.length - shown.length
         return (
-          <div key={day} className="cal-cell">
-            <span className="cal-cell__num">{day}</span>
+          <div key={isoOf(date)} className="cal-cell">
+            <span className="cal-cell__num">{date.getDate()}</span>
             <div className="cal-cell__events">
               {shown.map((e) => (
                 <button
@@ -70,21 +97,22 @@ function MonthView({ events, onSelect }) {
   )
 }
 
-function WeekView({ events, onSelect }) {
-  const byDay = eventsByDay(events)
-  const days = Array.from({ length: 7 }, (_, i) => WEEK_START + i)
+function WeekView({ anchor, events, onSelect }) {
+  const byIso = eventsByIso(events)
+  const start = sundayOf(anchor)
+  const days = Array.from({ length: 7 }, (_, i) => addDays(start, i))
 
   return (
     <div className="cal-week">
-      {days.map((day, i) => {
-        const dayEvents = (byDay[day] || [])
+      {days.map((date, i) => {
+        const dayEvents = (byIso[isoOf(date)] || [])
           .slice()
-          .sort((a, b) => a.time.localeCompare(b.time))
+          .sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time))
         return (
-          <div key={day} className="cal-week__col">
+          <div key={isoOf(date)} className="cal-week__col">
             <div className="cal-week__head">
               <span className="cal-week__day">{WEEKDAYS[i].slice(0, 3)}</span>
-              <span className="cal-week__num">{day}</span>
+              <span className="cal-week__num">{date.getDate()}</span>
             </div>
             <div className="cal-week__events">
               {dayEvents.map((e) => (
@@ -108,11 +136,27 @@ function WeekView({ events, onSelect }) {
 
 export default function CalendarView({ events, onSelect }) {
   const [mode, setMode] = useState('Month')
+  const [anchor, setAnchor] = useState(BASE)
+
+  const step = (dir) => {
+    if (mode === 'Month') {
+      setAnchor(new Date(anchor.getFullYear(), anchor.getMonth() + dir, 1))
+    } else {
+      setAnchor(addDays(anchor, dir * 7))
+    }
+  }
+
+  const start = sundayOf(anchor)
+  const end = addDays(start, 6)
+  const heading =
+    mode === 'Month'
+      ? `${MONTH_NAMES[anchor.getMonth()]} ${anchor.getFullYear()}`
+      : `${MONTH_NAMES[start.getMonth()]} ${start.getDate()}–${end.getDate()}`
 
   return (
     <div className="calendar">
       <div className="calendar__head">
-        <h2 className="calendar__month">{MONTH_NAME}</h2>
+        <h2 className="calendar__month">{heading}</h2>
         <div className="calendar__controls">
           <div className="seg">
             <button
@@ -128,19 +172,19 @@ export default function CalendarView({ events, onSelect }) {
               Week
             </button>
           </div>
-          <button className="calendar__arrow" aria-label="Previous">
+          <button className="calendar__arrow" onClick={() => step(-1)} aria-label="Previous">
             ◀
           </button>
-          <button className="calendar__arrow" aria-label="Next">
+          <button className="calendar__arrow" onClick={() => step(1)} aria-label="Next">
             ▶
           </button>
         </div>
       </div>
 
       {mode === 'Month' ? (
-        <MonthView events={events} onSelect={onSelect} />
+        <MonthView anchor={anchor} events={events} onSelect={onSelect} />
       ) : (
-        <WeekView events={events} onSelect={onSelect} />
+        <WeekView anchor={anchor} events={events} onSelect={onSelect} />
       )}
     </div>
   )
