@@ -64,7 +64,7 @@ export default function EventCard({ event, onSelect, variant = 'full' }) {
         )}
 
         <button className="see-details" onClick={() => onSelect(event.id)}>
-          See Details {compact ? '→' : ''}
+          See Details →
         </button>
       </div>
     </article>

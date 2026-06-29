@@ -491,12 +491,12 @@
   position: absolute;
   left: 0.7rem;
   bottom: 0.7rem;
-  background: #ecb84c;
+  background: #e3a035;
   color: #2a2419;
   font-size: 0.95rem;
   padding: 0.25rem 0.9rem;
   border-radius: 10px;
-  border: 2px solid #c5882a;
+  border: 2px solid #c78c2e;
 }
 .ev-card__body {
   padding: 0.9rem 1.1rem 1.1rem;
