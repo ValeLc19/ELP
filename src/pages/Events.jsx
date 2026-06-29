@@ -70,10 +70,11 @@ export default function Events() {
         !q ||
         e.title.toLowerCase().includes(q) ||
         e.address.toLowerCase().includes(q)
-      const dateOk = matchesDateFilter(e, activeDate, win)
+      // Date filters don't apply in calendar view (you navigate by date there).
+      const dateOk = view === 'calendar' || matchesDateFilter(e, activeDate, win)
       return catOk && qOk && dateOk
     })
-  }, [activeCat, activeDate, query])
+  }, [activeCat, activeDate, query, view])
 
   const sorted = useMemo(() => {
     const arr = filtered.slice()
@@ -119,17 +120,19 @@ export default function Events() {
       <div className="filters">
         <span className="filters__label">Filter by:</span>
         <div className="filters__rows">
-          <div className="filters__row">
-            {DATE_FILTERS.map((d) => (
-              <button
-                key={d}
-                className={`chip ${activeDate === d ? 'chip--on-date' : ''}`}
-                onClick={() => setActiveDate(activeDate === d ? null : d)}
-              >
-                {d}
-              </button>
-            ))}
-          </div>
+          {view !== 'calendar' && (
+            <div className="filters__row">
+              {DATE_FILTERS.map((d) => (
+                <button
+                  key={d}
+                  className={`chip ${activeDate === d ? 'chip--on-date' : ''}`}
+                  onClick={() => setActiveDate(activeDate === d ? null : d)}
+                >
+                  {d}
+                </button>
+              ))}
+            </div>
+          )}
           <div className="filters__row">
             {CATEGORY_ORDER.map((c) => (
               <button

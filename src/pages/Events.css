@@ -253,14 +253,16 @@
   background: #fbf1e6;
 }
 .cal-cell__num--today {
-  background: var(--coral);
-  color: #fff;
-  border-radius: 50%;
-  width: 1.6em;
-  height: 1.6em;
+  width: 32px;
+  height: 32px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  background: var(--coral);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 1rem;
+  line-height: 1;
 }
 .cal-cell__num {
   position: absolute;
