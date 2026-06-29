@@ -14,15 +14,18 @@
   color: var(--ink);
   border-radius: 999px;
   padding: clamp(1.2rem, 3vw, 2.4rem) clamp(1.8rem, 4vw, 3.4rem);
-  font-size: clamp(1.8rem, 4.2vw, 3.2rem);
+  font-size: clamp(1.1rem, 4.4vw, 3.2rem);
   line-height: 1.25;
   font-weight: 400;
-  max-width: min(60ch, 70%);
+  max-width: 92vw;
   width: fit-content;
 }
 
+/* Keep each line on a single line so every bubble shows exactly the two
+   lines defined by the <br />, with no extra wrapping. */
 .bubble__text {
   display: block;
+  white-space: nowrap;
 }
 
 .bubble--left {
