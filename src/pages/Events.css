@@ -151,6 +151,30 @@
   display: inline-block;
 }
 
+/* ---------- Segmented toggle (Month/Week, Date/Price) ---------- */
+.seg {
+  display: inline-flex;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.15rem;
+  gap: 0.15rem;
+}
+.seg__btn {
+  font-family: inherit;
+  font-size: 0.95rem;
+  border: none;
+  background: none;
+  border-radius: 6px;
+  padding: 0.2rem 0.7rem;
+  cursor: pointer;
+  color: var(--ink);
+}
+.seg__btn--active {
+  background: var(--coral);
+  color: #241a12;
+}
+
 /* ---------- Map ---------- */
 .map-wrap {
   border-radius: 10px;
@@ -165,6 +189,214 @@
   background: none;
   border: none;
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
+}
+
+/* ---------- Calendar ---------- */
+.calendar {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  padding: 1rem 1.2rem 1.2rem;
+}
+.calendar__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.6rem;
+}
+.calendar__month {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin: 0;
+}
+.calendar__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.calendar__arrow {
+  background: #efe7d6;
+  border: none;
+  border-radius: 6px;
+  width: 30px;
+  height: 26px;
+  cursor: pointer;
+  color: #8a7d68;
+  font-size: 0.8rem;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-left: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+}
+.cal-weekday {
+  font-size: 1rem;
+  padding: 0.4rem 0.5rem;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+.cal-cell {
+  position: relative;
+  min-height: 92px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 0.3rem 0.35rem 0.4rem;
+}
+.cal-cell__num {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.45rem;
+  font-size: 1.15rem;
+}
+.cal-cell__events {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.cal-event {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--ink);
+  text-align: left;
+}
+.cal-event__bar {
+  width: 4px;
+  height: 13px;
+  border-radius: 2px;
+  flex: none;
+}
+.cal-event__name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cal-cell__more {
+  font-size: 0.8rem;
+  color: var(--muted);
+  align-self: flex-end;
+}
+
+/* Week view */
+.cal-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-left: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  min-height: 360px;
+}
+.cal-week__col {
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+}
+.cal-week__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid var(--line);
+}
+.cal-week__day {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.cal-week__num {
+  font-size: 1.15rem;
+}
+.cal-week__events {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem 0.4rem;
+}
+.cal-week__event {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  background: none;
+  border: none;
+  border-left: 3px solid var(--line);
+  padding: 0 0 0 0.4rem;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  color: var(--ink);
+}
+.cal-week__time {
+  font-size: 0.85rem;
+}
+.cal-week__title {
+  font-size: 0.9rem;
+}
+
+/* ---------- List view ---------- */
+.events__controls {
+  max-width: 760px;
+  margin-bottom: 1.2rem;
+}
+.list-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  align-items: start;
+}
+.list-layout--split {
+  grid-template-columns: minmax(0, 1fr) 380px;
+}
+.list-panel {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fbf6ec;
+  padding: 1.2rem 1.4rem 1.4rem;
+}
+.list-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+}
+.list-panel__head .events__panel-title {
+  margin: 0;
+}
+.sort {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.sort__label {
+  font-size: 1rem;
+}
+.list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1.2rem;
+  max-height: 74vh;
+  overflow-y: auto;
+  padding-right: 0.3rem;
+}
+
+/* Compact card */
+.ev-card--compact .ev-card__img {
+  height: 130px;
+}
+.ev-card--compact .ev-card__title {
+  font-size: 1.4rem;
+}
+.ev-card--compact .ev-meta {
+  font-size: 0.9rem;
 }
 
 /* ---------- Right panel ---------- */

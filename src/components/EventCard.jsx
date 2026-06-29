@@ -7,11 +7,12 @@ import {
   UsersIcon,
 } from './icons.jsx'
 
-export default function EventCard({ event, onSelect }) {
+export default function EventCard({ event, onSelect, variant = 'full' }) {
   const color = categoryColor(event.category)
+  const compact = variant === 'compact'
 
   return (
-    <article className="ev-card">
+    <article className={`ev-card ${compact ? 'ev-card--compact' : ''}`}>
       <div
         className="ev-card__img"
         style={{ backgroundImage: `url(${event.image})` }}
@@ -31,26 +32,39 @@ export default function EventCard({ event, onSelect }) {
           </span>
         </div>
 
-        {event.family && (
-          <p className="ev-meta">
-            <UsersIcon /> Family Event
-          </p>
+        {compact ? (
+          <>
+            <p className="ev-meta">
+              <CalendarIcon /> {event.date} &nbsp; {event.time}
+            </p>
+            <p className="ev-meta">
+              <TicketIcon /> {event.price}
+            </p>
+          </>
+        ) : (
+          <>
+            {event.family && (
+              <p className="ev-meta">
+                <UsersIcon /> Family Event
+              </p>
+            )}
+            <p className="ev-meta">
+              <LocationIcon /> {event.address}
+            </p>
+            <p className="ev-meta">
+              <CalendarIcon /> {event.date}
+            </p>
+            <p className="ev-meta">
+              <ClockIcon /> {event.time}
+            </p>
+            <p className="ev-meta">
+              <TicketIcon /> {event.price}
+            </p>
+          </>
         )}
-        <p className="ev-meta">
-          <LocationIcon /> {event.address}
-        </p>
-        <p className="ev-meta">
-          <CalendarIcon /> {event.date}
-        </p>
-        <p className="ev-meta">
-          <ClockIcon /> {event.time}
-        </p>
-        <p className="ev-meta">
-          <TicketIcon /> {event.price}
-        </p>
 
         <button className="see-details" onClick={() => onSelect(event.id)}>
-          See Details
+          See Details {compact ? '→' : ''}
         </button>
       </div>
     </article>
