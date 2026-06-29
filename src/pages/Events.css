@@ -151,6 +151,16 @@
   display: inline-block;
 }
 
+/* Replace the browser's blue focus ring with a subtle coral one,
+   and only show it for keyboard navigation (not mouse clicks). */
+.events button:focus {
+  outline: none;
+}
+.events button:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 2px;
+}
+
 /* ---------- Segmented toggle (Month/Week, Date/Price) ---------- */
 .seg {
   display: inline-flex;
@@ -318,6 +328,12 @@
   border-right: 1px solid var(--line);
   display: flex;
   flex-direction: column;
+}
+.cal-week__col--today {
+  background: #fbf2ec;
+}
+.cal-week__head--today {
+  background: #f2d2ca;
 }
 .cal-week__head {
   display: flex;

@@ -115,17 +115,15 @@ function WeekView({ anchor, events, onSelect }) {
         const dayEvents = (byIso[isoOf(date)] || [])
           .slice()
           .sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time))
+        const isToday = isoOf(date) === TODAY_ISO
         return (
-          <div key={isoOf(date)} className="cal-week__col">
-            <div className="cal-week__head">
+          <div
+            key={isoOf(date)}
+            className={`cal-week__col ${isToday ? 'cal-week__col--today' : ''}`}
+          >
+            <div className={`cal-week__head ${isToday ? 'cal-week__head--today' : ''}`}>
               <span className="cal-week__day">{WEEKDAYS[i].slice(0, 3)}</span>
-              <span
-                className={`cal-week__num ${
-                  isoOf(date) === TODAY_ISO ? 'cal-cell__num--today' : ''
-                }`}
-              >
-                {date.getDate()}
-              </span>
+              <span className="cal-week__num">{date.getDate()}</span>
             </div>
             <div className="cal-week__events">
               {dayEvents.map((e) => (
