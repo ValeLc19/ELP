@@ -3,7 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import 'leaflet/dist/leaflet.css'
 import './Events.css'
 import { EVENTS } from '../data/events.js'
-import { CATEGORY_ORDER, categoryColor, ALL_COLOR } from '../data/categories.js'
+import {
+  CATEGORY_ORDER,
+  categoryColor,
+  categoryTint,
+  hexToRgba,
+  ALL_COLOR,
+} from '../data/categories.js'
 import MapView from '../components/MapView.jsx'
 import EventCard from '../components/EventCard.jsx'
 import EventDetail from '../components/EventDetail.jsx'
@@ -14,8 +20,15 @@ const DATE_FILTERS = ['Today', 'This Weekend', 'This Week']
 export default function Events() {
   const navigate = useNavigate()
   const [activeCat, setActiveCat] = useState('All')
+  const [activeDate, setActiveDate] = useState(null)
   const [query, setQuery] = useState('')
   const [selectedId, setSelectedId] = useState(null)
+
+  const resetFilters = () => {
+    setActiveCat('All')
+    setActiveDate(null)
+    setQuery('')
+  }
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -70,7 +83,11 @@ export default function Events() {
             <div className="filters__rows">
               <div className="filters__row">
                 {DATE_FILTERS.map((d) => (
-                  <button key={d} className="chip chip--date">
+                  <button
+                    key={d}
+                    className={`chip ${activeDate === d ? 'chip--on-date' : ''}`}
+                    onClick={() => setActiveDate(activeDate === d ? null : d)}
+                  >
                     {d}
                   </button>
                 ))}
@@ -79,8 +96,12 @@ export default function Events() {
                 {CATEGORY_ORDER.map((c) => (
                   <button
                     key={c}
-                    className={`chip ${activeCat === c ? 'chip--active' : ''}`}
-                    style={{ borderColor: categoryColor(c) }}
+                    className="chip"
+                    style={{
+                      borderColor: categoryColor(c),
+                      background:
+                        activeCat === c ? categoryTint(c, 0.55) : undefined,
+                    }}
                     onClick={() => setActiveCat(c)}
                   >
                     <span
@@ -91,8 +112,12 @@ export default function Events() {
                   </button>
                 ))}
                 <button
-                  className={`chip chip--all ${activeCat === 'All' ? 'chip--active' : ''}`}
-                  style={{ borderColor: ALL_COLOR }}
+                  className="chip"
+                  style={{
+                    borderColor: ALL_COLOR,
+                    background:
+                      activeCat === 'All' ? hexToRgba(ALL_COLOR, 0.55) : undefined,
+                  }}
                   onClick={() => setActiveCat('All')}
                 >
                   <span className="badge__dot" style={{ background: ALL_COLOR }} />
@@ -118,14 +143,27 @@ export default function Events() {
           ) : (
             <>
               <h2 className="events__panel-title">Events:</h2>
-              <div className="events__list">
-                {filtered.length === 0 && (
-                  <p className="events__empty">No events match your filters.</p>
-                )}
-                {filtered.map((e) => (
-                  <EventCard key={e.id} event={e} onSelect={setSelectedId} />
-                ))}
-              </div>
+              {filtered.length === 0 ? (
+                <div className="empty">
+                  <p className="empty__msg">
+                    Sorry!
+                    <br />
+                    No events found.
+                    <br />
+                    The closest event is:
+                  </p>
+                  <EventCard event={EVENTS[0]} onSelect={setSelectedId} />
+                  <button className="empty__similar" onClick={resetFilters}>
+                    See similar events
+                  </button>
+                </div>
+              ) : (
+                <div className="events__list">
+                  {filtered.map((e) => (
+                    <EventCard key={e.id} event={e} onSelect={setSelectedId} />
+                  ))}
+                </div>
+              )}
             </>
           )}
         </aside>

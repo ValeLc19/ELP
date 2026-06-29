@@ -1,4 +1,4 @@
-import { categoryColor } from '../data/categories.js'
+import { categoryColor, categoryTint } from '../data/categories.js'
 import {
   LocationIcon,
   CalendarIcon,
@@ -22,7 +22,10 @@ export default function EventCard({ event, onSelect }) {
       <div className="ev-card__body">
         <div className="ev-card__head">
           <h3 className="ev-card__title">{event.title}</h3>
-          <span className="badge" style={{ color, borderColor: color }}>
+          <span
+            className="badge badge--filled"
+            style={{ background: categoryTint(event.category), color: 'var(--ink)' }}
+          >
             <span className="badge__dot" style={{ background: color }} />
             {event.category}
           </span>

@@ -95,7 +95,7 @@
 }
 .tab--active {
   background: var(--coral);
-  color: #fff;
+  color: #241a12;
 }
 
 /* Filter block: label on the left, two indented rows of chips
@@ -138,11 +138,11 @@
 .chip:hover {
   transform: translateY(-1px);
 }
-.chip--active {
-  background: #f3e7c9;
-}
-.chip--all.chip--active {
-  background: #f6dca2;
+/* Active date filter: coral fill with dark text */
+.chip--on-date {
+  background: var(--coral);
+  border-color: var(--coral);
+  color: #241a12;
 }
 .badge__dot {
   width: 9px;
@@ -185,8 +185,31 @@
   overflow-y: auto;
   padding-right: 0.4rem;
 }
-.events__empty {
-  color: var(--muted);
+/* ---------- Empty state ---------- */
+.empty {
+  text-align: center;
+}
+.empty__msg {
+  font-weight: 700;
+  font-size: 1.7rem;
+  line-height: 1.3;
+  margin: 0.5rem 0 1.6rem;
+  color: var(--ink);
+}
+.empty .ev-card {
+  text-align: left;
+}
+.empty__similar {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink);
+  margin-top: 1.4rem;
+}
+.empty__similar:hover {
+  text-decoration: underline;
 }
 
 /* ---------- Event card ---------- */
