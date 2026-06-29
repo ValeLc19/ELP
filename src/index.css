@@ -4,7 +4,10 @@
   --cream: #f6f2ea;
   --ink: #1c1c1c;
 
+  /* Antic Didone is reserved for brand/display text (ELP, "Events:", event names).
+     Mulish is the default for everything else. */
   --serif: 'Antic Didone', Georgia, 'Times New Roman', serif;
+  --sans: 'Mulish', system-ui, -apple-system, sans-serif;
 }
 
 * {
@@ -19,7 +22,7 @@ body,
 
 body {
   margin: 0;
-  font-family: var(--serif);
+  font-family: var(--sans);
   color: var(--ink);
   background: var(--beige);
   -webkit-font-smoothing: antialiased;

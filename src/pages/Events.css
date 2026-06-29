@@ -21,6 +21,7 @@
   margin-bottom: 1.6rem;
 }
 .events__logo {
+  font-family: var(--serif);
   font-size: clamp(2.4rem, 5vw, 3.6rem);
   margin: 0;
   letter-spacing: 0.04em;
@@ -74,17 +75,21 @@
 }
 
 .tabs {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.7rem;
+  display: inline-flex;
+  gap: 0.3rem;
+  margin-bottom: 0.8rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.25rem;
 }
 .tab {
   font-family: inherit;
   font-size: 1.05rem;
   background: none;
   border: none;
-  padding: 0.2rem 0.6rem;
-  border-radius: 8px;
+  padding: 0.25rem 0.7rem;
+  border-radius: 7px;
   cursor: pointer;
   color: var(--ink);
 }
@@ -93,18 +98,28 @@
   color: #fff;
 }
 
+/* Filter block: label on the left, two indented rows of chips
+   (date filters above category filters, both aligned). */
 .filters {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.6rem;
+  align-items: flex-start;
+  gap: 0.7rem;
+  margin-bottom: 1rem;
 }
 .filters__label {
   font-size: 1.05rem;
+  white-space: nowrap;
+  padding-top: 0.45rem;
 }
-.filters--cats {
-  margin-bottom: 1rem;
+.filters__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.filters__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 .chip {
   display: inline-flex;
@@ -158,6 +173,7 @@
   top: 1rem;
 }
 .events__panel-title {
+  font-family: var(--serif);
   font-size: 2rem;
   margin: 0 0 1rem;
 }
@@ -179,6 +195,7 @@
   border: 1px solid var(--line);
   border-radius: 16px;
   overflow: hidden;
+  flex: 0 0 auto; /* don't let the scrolling column squash the cards */
 }
 .ev-card__img {
   height: 150px;
@@ -207,6 +224,7 @@
   margin-bottom: 0.4rem;
 }
 .ev-card__title {
+  font-family: var(--serif);
   font-size: 1.6rem;
   margin: 0;
 }
@@ -283,6 +301,7 @@
   overflow-y: auto;
 }
 .detail__title {
+  font-family: var(--serif);
   font-size: 1.9rem;
   margin: 0 0 0.5rem;
 }

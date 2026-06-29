@@ -67,36 +67,39 @@ export default function Events() {
 
           <div className="filters">
             <span className="filters__label">Filter by:</span>
-            {DATE_FILTERS.map((d) => (
-              <button key={d} className="chip chip--date">
-                {d}
-              </button>
-            ))}
-          </div>
-
-          <div className="filters filters--cats">
-            {CATEGORY_ORDER.map((c) => (
-              <button
-                key={c}
-                className={`chip ${activeCat === c ? 'chip--active' : ''}`}
-                style={{ borderColor: categoryColor(c) }}
-                onClick={() => setActiveCat(c)}
-              >
-                <span
-                  className="badge__dot"
-                  style={{ background: categoryColor(c) }}
-                />
-                {c}
-              </button>
-            ))}
-            <button
-              className={`chip chip--all ${activeCat === 'All' ? 'chip--active' : ''}`}
-              style={{ borderColor: ALL_COLOR }}
-              onClick={() => setActiveCat('All')}
-            >
-              <span className="badge__dot" style={{ background: ALL_COLOR }} />
-              All
-            </button>
+            <div className="filters__rows">
+              <div className="filters__row">
+                {DATE_FILTERS.map((d) => (
+                  <button key={d} className="chip chip--date">
+                    {d}
+                  </button>
+                ))}
+              </div>
+              <div className="filters__row">
+                {CATEGORY_ORDER.map((c) => (
+                  <button
+                    key={c}
+                    className={`chip ${activeCat === c ? 'chip--active' : ''}`}
+                    style={{ borderColor: categoryColor(c) }}
+                    onClick={() => setActiveCat(c)}
+                  >
+                    <span
+                      className="badge__dot"
+                      style={{ background: categoryColor(c) }}
+                    />
+                    {c}
+                  </button>
+                ))}
+                <button
+                  className={`chip chip--all ${activeCat === 'All' ? 'chip--active' : ''}`}
+                  style={{ borderColor: ALL_COLOR }}
+                  onClick={() => setActiveCat('All')}
+                >
+                  <span className="badge__dot" style={{ background: ALL_COLOR }} />
+                  All
+                </button>
+              </div>
+            </div>
           </div>
 
           <div className="map-wrap">

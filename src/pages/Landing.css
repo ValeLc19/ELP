@@ -10,6 +10,7 @@
 /* Shared cream "pill" bubble */
 .bubble {
   margin: 0;
+  font-family: var(--serif);
   background: var(--cream);
   color: var(--ink);
   border-radius: 999px;
