@@ -1,0 +1,55 @@
+.landing {
+  min-height: 100vh;
+  padding: clamp(2rem, 6vh, 5rem) clamp(1rem, 5vw, 4rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(2rem, 6vh, 4rem);
+}
+
+/* Shared cream "pill" bubble */
+.bubble {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: clamp(1.2rem, 3vw, 2.4rem) clamp(1.8rem, 4vw, 3.4rem);
+  font-size: clamp(1.8rem, 4.2vw, 3.2rem);
+  line-height: 1.25;
+  font-weight: 500;
+  max-width: min(60ch, 70%);
+  width: fit-content;
+}
+
+.bubble--left {
+  align-self: flex-start;
+  text-align: left;
+}
+
+.bubble--right {
+  align-self: flex-end;
+  text-align: right;
+}
+
+.bubble--center {
+  align-self: center;
+  text-align: center;
+}
+
+/* The clickable call-to-action */
+.bubble--cta {
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.bubble--cta:hover {
+  background: #fffdf8;
+  box-shadow: 0 10px 30px rgba(28, 28, 28, 0.12);
+}
+
+.bubble--cta:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
