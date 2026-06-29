@@ -1,0 +1,55 @@
+import { categoryColor } from '../data/categories.js'
+import {
+  LocationIcon,
+  CalendarIcon,
+  ClockIcon,
+  TicketIcon,
+  UsersIcon,
+} from './icons.jsx'
+
+export default function EventCard({ event, onSelect }) {
+  const color = categoryColor(event.category)
+
+  return (
+    <article className="ev-card">
+      <div
+        className="ev-card__img"
+        style={{ backgroundImage: `url(${event.image})` }}
+      >
+        <span className="ev-card__price-tag">{event.price}</span>
+      </div>
+
+      <div className="ev-card__body">
+        <div className="ev-card__head">
+          <h3 className="ev-card__title">{event.title}</h3>
+          <span className="badge" style={{ color, borderColor: color }}>
+            <span className="badge__dot" style={{ background: color }} />
+            {event.category}
+          </span>
+        </div>
+
+        {event.family && (
+          <p className="ev-meta">
+            <UsersIcon /> Family Event
+          </p>
+        )}
+        <p className="ev-meta">
+          <LocationIcon /> {event.address}
+        </p>
+        <p className="ev-meta">
+          <CalendarIcon /> {event.date}
+        </p>
+        <p className="ev-meta">
+          <ClockIcon /> {event.time}
+        </p>
+        <p className="ev-meta">
+          <TicketIcon /> {event.price}
+        </p>
+
+        <button className="see-details" onClick={() => onSelect(event.id)}>
+          See Details
+        </button>
+      </div>
+    </article>
+  )
+}
