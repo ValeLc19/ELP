@@ -21,6 +21,10 @@
   width: fit-content;
 }
 
+.bubble__text {
+  display: block;
+}
+
 .bubble--left {
   align-self: flex-start;
   text-align: left;

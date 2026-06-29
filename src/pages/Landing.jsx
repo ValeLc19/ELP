@@ -2,16 +2,49 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import './Landing.css'
 
-// Blur-to-sharp fade-in. Each phrase reuses this and only differs by `delay`,
-// so the sequence is: left (0) -> right (1) -> middle (2).
-const phrase = {
-  hidden: { opacity: 0, filter: 'blur(14px)', y: 10 },
-  show: (delay) => ({
-    opacity: 1,
-    filter: 'blur(0px)',
-    y: 0,
-    transition: { duration: 1.1, delay, ease: [0.22, 1, 0.36, 1] },
-  }),
+const ease = [0.22, 1, 0.36, 1]
+
+// Each phrase animates in two beats:
+//   1. the white pill slides in (from `from`)
+//   2. the text fades/de-blurs in, after the pill has arrived
+function Phrase({ className, from, pillDelay, onClick, children }) {
+  const pill = {
+    initial: { opacity: 0, ...from },
+    animate: { opacity: 1, x: 0, y: 0 },
+    transition: { duration: 0.7, delay: pillDelay, ease },
+  }
+  const text = {
+    initial: { opacity: 0, filter: 'blur(8px)' },
+    animate: { opacity: 1, filter: 'blur(0px)' },
+    transition: { duration: 0.6, delay: pillDelay + 0.6, ease },
+  }
+
+  const inner = (
+    <motion.span className="bubble__text" {...text}>
+      {children}
+    </motion.span>
+  )
+
+  if (onClick) {
+    return (
+      <motion.button
+        type="button"
+        className={`${className} bubble--cta`}
+        onClick={onClick}
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.98 }}
+        {...pill}
+      >
+        {inner}
+      </motion.button>
+    )
+  }
+
+  return (
+    <motion.div className={className} {...pill}>
+      {inner}
+    </motion.div>
+  )
 }
 
 export default function Landing() {
@@ -19,43 +52,29 @@ export default function Landing() {
 
   return (
     <main className="landing">
-      <motion.p
-        className="bubble bubble--left"
-        variants={phrase}
-        custom={0.3}
-        initial="hidden"
-        animate="show"
-      >
+      {/* left slides in from the left */}
+      <Phrase className="bubble bubble--left" from={{ x: -80 }} pillDelay={0.3}>
         Every event around El Paso,
         <br />
         in one place.
-      </motion.p>
+      </Phrase>
 
-      <motion.p
-        className="bubble bubble--right"
-        variants={phrase}
-        custom={1.5}
-        initial="hidden"
-        animate="show"
-      >
+      {/* right slides in from the right */}
+      <Phrase className="bubble bubble--right" from={{ x: 80 }} pillDelay={1.7}>
         You don&apos;t have to know anybody
         <br />
         to belong here. Just show up
-      </motion.p>
+      </Phrase>
 
-      <motion.button
-        type="button"
-        className="bubble bubble--center bubble--cta"
-        variants={phrase}
-        custom={2.7}
-        initial="hidden"
-        animate="show"
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.98 }}
+      {/* middle slides up from the bottom; clickable */}
+      <Phrase
+        className="bubble bubble--center"
+        from={{ y: 60 }}
+        pillDelay={3.1}
         onClick={() => navigate('/events')}
       >
         See what&apos;s happening
-      </motion.button>
+      </Phrase>
     </main>
   )
 }
