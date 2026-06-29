@@ -11,12 +11,12 @@ function Phrase({ className, from, pillDelay, onClick, children }) {
   const pill = {
     initial: { opacity: 0, ...from },
     animate: { opacity: 1, x: 0, y: 0 },
-    transition: { duration: 0.7, delay: pillDelay, ease },
+    transition: { duration: 1.4, delay: pillDelay, ease },
   }
   const text = {
     initial: { opacity: 0, filter: 'blur(8px)' },
     animate: { opacity: 1, filter: 'blur(0px)' },
-    transition: { duration: 0.6, delay: pillDelay + 0.6, ease },
+    transition: { duration: 1.2, delay: pillDelay + 1.2, ease },
   }
 
   const inner = (
@@ -53,14 +53,14 @@ export default function Landing() {
   return (
     <main className="landing">
       {/* left slides in from the left */}
-      <Phrase className="bubble bubble--left" from={{ x: -80 }} pillDelay={0.3}>
+      <Phrase className="bubble bubble--left" from={{ x: -80 }} pillDelay={0.6}>
         Every event around El Paso,
         <br />
         in one place.
       </Phrase>
 
       {/* right slides in from the right */}
-      <Phrase className="bubble bubble--right" from={{ x: 80 }} pillDelay={1.7}>
+      <Phrase className="bubble bubble--right" from={{ x: 80 }} pillDelay={3.4}>
         You don&apos;t have to know anybody
         <br />
         to belong here. Just show up
@@ -70,7 +70,7 @@ export default function Landing() {
       <Phrase
         className="bubble bubble--center"
         from={{ y: 60 }}
-        pillDelay={3.1}
+        pillDelay={6.2}
         onClick={() => navigate('/events')}
       >
         See what&apos;s happening
