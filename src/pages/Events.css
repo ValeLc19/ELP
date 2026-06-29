@@ -260,19 +260,10 @@
   background: #faf6ee;
 }
 .cal-cell--today {
-  background: #fbf1e6;
+  background: #f7e3dc;
 }
-.cal-cell__num--today {
-  width: 32px;
-  height: 32px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--coral);
-  color: #fff;
-  border-radius: 50%;
-  font-size: 1rem;
-  line-height: 1;
+.cal-event--selected .cal-event__name {
+  font-weight: 700;
 }
 .cal-cell__num {
   position: absolute;
@@ -374,6 +365,10 @@
 }
 .cal-week__title {
   font-size: 0.9rem;
+}
+.cal-week__event--selected .cal-week__time,
+.cal-week__event--selected .cal-week__title {
+  font-weight: 700;
 }
 
 /* ---------- List view ---------- */
@@ -662,7 +657,7 @@
 /* Pinned footer with the blue separator line */
 .detail__footer {
   flex: none;
-  border-top: 2px solid #5b8fd6;
+  border-top: 1.5px solid #2b2b2b;
   padding: 1rem 1.3rem 1.2rem;
 }
 .register {

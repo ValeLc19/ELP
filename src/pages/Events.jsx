@@ -264,7 +264,11 @@ export default function Events() {
                 />
               </div>
             ) : (
-              <CalendarView events={filtered} onSelect={setSelectedId} />
+              <CalendarView
+                events={filtered}
+                selectedId={selectedId}
+                onSelect={setSelectedId}
+              />
             )}
           </div>
         </section>

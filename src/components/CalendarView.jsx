@@ -47,7 +47,7 @@ function eventsByIso(events) {
   return map
 }
 
-function MonthView({ anchor, events, onSelect }) {
+function MonthView({ anchor, events, selectedId, onSelect }) {
   const year = anchor.getFullYear()
   const month = anchor.getMonth()
   const byIso = eventsByIso(events)
@@ -77,14 +77,12 @@ function MonthView({ anchor, events, onSelect }) {
         const isToday = isoOf(date) === TODAY_ISO
         return (
           <div key={isoOf(date)} className={`cal-cell ${isToday ? 'cal-cell--today' : ''}`}>
-            <span className={`cal-cell__num ${isToday ? 'cal-cell__num--today' : ''}`}>
-              {date.getDate()}
-            </span>
+            <span className="cal-cell__num">{date.getDate()}</span>
             <div className="cal-cell__events">
               {shown.map((e) => (
                 <button
                   key={e.id}
-                  className="cal-event"
+                  className={`cal-event ${e.id === selectedId ? 'cal-event--selected' : ''}`}
                   onClick={() => onSelect(e.id)}
                   title={e.title}
                 >
@@ -104,7 +102,7 @@ function MonthView({ anchor, events, onSelect }) {
   )
 }
 
-function WeekView({ anchor, events, onSelect }) {
+function WeekView({ anchor, events, selectedId, onSelect }) {
   const byIso = eventsByIso(events)
   const start = sundayOf(anchor)
   const days = Array.from({ length: 7 }, (_, i) => addDays(start, i))
@@ -129,7 +127,9 @@ function WeekView({ anchor, events, onSelect }) {
               {dayEvents.map((e) => (
                 <button
                   key={e.id}
-                  className="cal-week__event"
+                  className={`cal-week__event ${
+                    e.id === selectedId ? 'cal-week__event--selected' : ''
+                  }`}
                   onClick={() => onSelect(e.id)}
                   style={{ borderColor: categoryColor(e.category) }}
                 >
@@ -145,7 +145,7 @@ function WeekView({ anchor, events, onSelect }) {
   )
 }
 
-export default function CalendarView({ events, onSelect }) {
+export default function CalendarView({ events, selectedId, onSelect }) {
   const [mode, setMode] = useState('Month')
   const [anchor, setAnchor] = useState(startOfToday)
 
@@ -193,9 +193,19 @@ export default function CalendarView({ events, onSelect }) {
       </div>
 
       {mode === 'Month' ? (
-        <MonthView anchor={anchor} events={events} onSelect={onSelect} />
+        <MonthView
+          anchor={anchor}
+          events={events}
+          selectedId={selectedId}
+          onSelect={onSelect}
+        />
       ) : (
-        <WeekView anchor={anchor} events={events} onSelect={onSelect} />
+        <WeekView
+          anchor={anchor}
+          events={events}
+          selectedId={selectedId}
+          onSelect={onSelect}
+        />
       )}
     </div>
   )
