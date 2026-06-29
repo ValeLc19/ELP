@@ -52,6 +52,27 @@ export const SearchIcon = (p) => (
   </svg>
 )
 
+export const ChatIcon = (p) => (
+  <svg {...base} {...p}>
+    <path d="M21 12a8 8 0 0 1-11.5 7.2L4 20l1-4.4A8 8 0 1 1 21 12z" />
+    <path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01" />
+  </svg>
+)
+
+export const ShareIcon = (p) => (
+  <svg {...base} {...p}>
+    <path d="M14 3h7v7M21 3l-9 9" />
+    <path d="M19 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5" />
+  </svg>
+)
+
+export const CopyIcon = (p) => (
+  <svg {...base} {...p}>
+    <rect x="9" y="9" width="11" height="11" rx="2" />
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+  </svg>
+)
+
 export const ScanFaceIcon = (p) => (
   <svg {...base} width={34} height={34} {...p}>
     <path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2" />
