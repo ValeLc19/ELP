@@ -664,8 +664,7 @@
 /* Pinned footer with the blue separator line */
 .detail__footer {
   flex: none;
-  border-top: 1.5px solid #2b2b2b;
-  padding: 1rem 1.3rem 1.2rem;
+  padding: 0.6rem 1.3rem 1.2rem;
 }
 .register {
   display: block;
