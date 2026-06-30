@@ -18,6 +18,17 @@ import { SearchIcon, ScanFaceIcon } from '../components/icons.jsx'
 
 const DATE_FILTERS = ['Today', 'This Weekend', 'This Week']
 
+const PRICE_CHIPS = [
+  { label: 'Free', val: 'Free', color: '#e0a83e' },
+  { label: 'Cost', val: 'Cost', color: '#2e8b57' },
+]
+const AUDIENCE_CHIPS = [
+  { label: 'Kids', val: 'Kids', color: '#d36fa6' },
+  { label: '18+/21+', val: 'Adults', color: '#b03a2e' },
+]
+
+const isFree = (e) => /free/i.test(e.price)
+
 function priceValue(p) {
   if (/free/i.test(p)) return 0
   const m = p.match(/[\d.]+/)
@@ -54,6 +65,8 @@ export default function Events() {
   const [view, setView] = useState('map') // 'map' | 'calendar' | 'list'
   const [activeCat, setActiveCat] = useState('All')
   const [activeDate, setActiveDate] = useState(null)
+  const [priceFilter, setPriceFilter] = useState(null) // 'Free' | 'Cost'
+  const [audienceFilter, setAudienceFilter] = useState(null) // 'Kids' | 'Adults'
   const [sortBy, setSortBy] = useState('Date')
   const [query, setQuery] = useState('')
   const [selectedId, setSelectedId] = useState(null)
@@ -61,6 +74,8 @@ export default function Events() {
   const resetFilters = () => {
     setActiveCat('All')
     setActiveDate(null)
+    setPriceFilter(null)
+    setAudienceFilter(null)
     setQuery('')
   }
 
@@ -75,9 +90,15 @@ export default function Events() {
         e.address.toLowerCase().includes(q)
       // Date filters don't apply in calendar view (you navigate by date there).
       const dateOk = view === 'calendar' || matchesDateFilter(e, activeDate, win)
-      return catOk && qOk && dateOk
+      const priceOk =
+        !priceFilter ||
+        (priceFilter === 'Free' ? isFree(e) : !isFree(e))
+      const audienceOk =
+        !audienceFilter ||
+        (audienceFilter === 'Kids' ? e.family : !!e.ageNote)
+      return catOk && qOk && dateOk && priceOk && audienceOk
     })
-  }, [activeCat, activeDate, query, view])
+  }, [activeCat, activeDate, priceFilter, audienceFilter, query, view])
 
   const sorted = useMemo(() => {
     const arr = filtered.slice()
@@ -166,6 +187,42 @@ export default function Events() {
               <span className="badge__dot" style={{ background: ALL_COLOR }} />
               All
             </button>
+          </div>
+          <div className="filters__row">
+            {PRICE_CHIPS.map((c) => (
+              <button
+                key={c.val}
+                className="chip"
+                style={{
+                  borderColor: c.color,
+                  background:
+                    priceFilter === c.val ? hexToRgba(c.color, 0.55) : undefined,
+                }}
+                onClick={() =>
+                  setPriceFilter(priceFilter === c.val ? null : c.val)
+                }
+              >
+                <span className="badge__dot" style={{ background: c.color }} />
+                {c.label}
+              </button>
+            ))}
+            {AUDIENCE_CHIPS.map((c) => (
+              <button
+                key={c.val}
+                className="chip"
+                style={{
+                  borderColor: c.color,
+                  background:
+                    audienceFilter === c.val ? hexToRgba(c.color, 0.55) : undefined,
+                }}
+                onClick={() =>
+                  setAudienceFilter(audienceFilter === c.val ? null : c.val)
+                }
+              >
+                <span className="badge__dot" style={{ background: c.color }} />
+                {c.label}
+              </button>
+            ))}
           </div>
         </div>
       </div>
