@@ -12,7 +12,18 @@ export default function EventCard({ event, onSelect, variant = 'full' }) {
   const compact = variant === 'compact'
 
   return (
-    <article className={`ev-card ${compact ? 'ev-card--compact' : ''}`}>
+    <article
+      className={`ev-card ${compact ? 'ev-card--compact' : ''}`}
+      role="button"
+      tabIndex={0}
+      onClick={() => onSelect(event.id)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          onSelect(event.id)
+        }
+      }}
+    >
       <div
         className="ev-card__img"
         style={{ backgroundImage: `url(${event.image})` }}

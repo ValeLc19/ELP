@@ -23,7 +23,9 @@ export default function EventDetail({ event, onBack }) {
         <div
           className="detail__img"
           style={{ backgroundImage: `url(${event.image})` }}
-        />
+        >
+          <span className="ev-card__price-tag">{event.price}</span>
+        </div>
 
         <div className="detail__body">
           <h2 className="detail__title">{event.title}</h2>
