@@ -732,6 +732,9 @@
   padding: 0.35rem 1.8rem;
   cursor: pointer;
   transition: filter 0.15s ease;
+  text-align: center;
+  text-decoration: none;
+  box-sizing: border-box;
 }
 .register:hover {
   filter: brightness(1.04);

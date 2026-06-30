@@ -21,6 +21,7 @@ function ordinal(n) {
 const RAW = [
   {
     id: 'cool-canyon-nights',
+    sourceUrl: '',
     recur: { every: 7, until: '2026-07-30' },
     title: 'Cool Canyon Nights',
     short: 'Canyon Nights',
@@ -40,6 +41,7 @@ const RAW = [
   },
   {
     id: 'free-curator-tour',
+    sourceUrl: '',
     title: 'Free Curator Tour',
     short: 'Curator Tour',
     category: 'Arts',
@@ -58,6 +60,7 @@ const RAW = [
   },
   {
     id: 'free-yoga-thursdays',
+    sourceUrl: '',
     recur: { every: 7, until: '2026-09-30' },
     title: 'Free Yoga Thursdays',
     short: 'Yoga',
@@ -77,6 +80,7 @@ const RAW = [
   },
   {
     id: 'free-yoga-saturdays',
+    sourceUrl: '',
     recur: { every: 7, until: '2026-09-30' },
     title: 'Free Yoga Saturdays',
     short: 'Yoga',
@@ -96,6 +100,7 @@ const RAW = [
   },
   {
     id: 'consequences-pecan-grill',
+    sourceUrl: '',
     title: 'The Consequences Band',
     short: 'Live Music',
     category: 'Music',
@@ -113,6 +118,7 @@ const RAW = [
   },
   {
     id: 'america250-fashion-outlets',
+    sourceUrl: '',
     title: 'America 250 Fashion Show',
     short: 'Fashion Show',
     category: 'Arts',
@@ -131,6 +137,7 @@ const RAW = [
   },
   {
     id: '250-fest-outlets',
+    sourceUrl: '',
     title: '250 Fest',
     short: '250 Fest',
     category: 'Markets',
@@ -149,6 +156,7 @@ const RAW = [
   },
   {
     id: 'free-ice-cream-cielo-vista',
+    sourceUrl: '',
     title: 'Free Ice Cream Celebration',
     short: 'Free Ice Cream',
     category: 'Food',
@@ -166,6 +174,7 @@ const RAW = [
   },
   {
     id: 'freedom-banner-making',
+    sourceUrl: '',
     title: 'Freedom Banner-Making',
     short: 'Banner-Making',
     category: 'Arts',
@@ -183,6 +192,7 @@ const RAW = [
   },
   {
     id: 'america250-celebration',
+    sourceUrl: '',
     title: 'America 250 Celebration',
     short: 'America 250',
     category: 'Music',
@@ -201,6 +211,7 @@ const RAW = [
   },
   {
     id: 'fourth-july-festival',
+    sourceUrl: '',
     title: '4th of July Festival & Fireworks',
     short: 'Fireworks',
     category: 'Outdoors',
@@ -219,6 +230,7 @@ const RAW = [
   },
   {
     id: 'chihuahuas-fireworks',
+    sourceUrl: '',
     title: 'Chihuahuas Firework Night',
     short: 'Chihuahuas',
     category: 'Sports',
@@ -237,6 +249,7 @@ const RAW = [
   },
   {
     id: 'sizzle-smoke-zin-valle',
+    sourceUrl: '',
     title: 'Wine + Premium BBQ Buffet',
     short: 'BBQ & Wine',
     category: 'Food',
@@ -256,6 +269,7 @@ const RAW = [
   },
   {
     id: 'weekend-wine-shuttle',
+    sourceUrl: '',
     title: 'Weekend Wine Shuttle',
     short: 'Wine Shuttle',
     category: 'Food',
@@ -275,6 +289,7 @@ const RAW = [
   },
   {
     id: 'the-market-ep',
+    sourceUrl: '',
     recur: { every: 7, until: '2026-09-30' },
     title: 'The Market EP',
     short: 'The Market',
@@ -294,6 +309,7 @@ const RAW = [
   },
   {
     id: 'mission-trail-art-market',
+    sourceUrl: '',
     recur: { monthly: true, until: '2026-12-31' },
     title: 'Mission Trail Art Market',
     short: 'Art Market',
@@ -312,6 +328,7 @@ const RAW = [
   },
   {
     id: 'viva-el-paso',
+    sourceUrl: '',
     title: 'Viva! El Paso',
     short: 'Viva! El Paso',
     category: 'Arts',
@@ -330,6 +347,7 @@ const RAW = [
   },
   {
     id: 'plaza-classic-film-festival',
+    sourceUrl: '',
     title: 'Plaza Classic Film Festival',
     short: 'Film Festival',
     category: 'Arts',
@@ -350,6 +368,7 @@ const RAW = [
   // ----- Marquee annual events & festivals (visitelpaso.com/annual-events) -----
   {
     id: 'el-fresco-cumbias',
+    sourceUrl: '',
     title: 'El Fresco: Noche de Cumbias',
     short: 'El Fresco',
     category: 'Music',
@@ -369,6 +388,7 @@ const RAW = [
   },
   {
     id: 'vivamos-mexico-grito',
+    sourceUrl: '',
     title: 'Vivamos México! Grito Celebration',
     short: 'Grito',
     category: 'Music',
@@ -388,6 +408,7 @@ const RAW = [
   },
   {
     id: 'ep-film-festival',
+    sourceUrl: '',
     title: 'El Paso Film Festival',
     short: 'Film Festival',
     category: 'Arts',
@@ -407,6 +428,7 @@ const RAW = [
   },
   {
     id: 'way-out-west-fest',
+    sourceUrl: '',
     title: 'Way Out West Festival',
     short: 'Way Out West',
     category: 'Food',
@@ -426,6 +448,7 @@ const RAW = [
   },
   {
     id: 'chalk-the-block',
+    sourceUrl: '',
     title: 'Chalk the Block',
     short: 'Chalk the Block',
     category: 'Arts',
@@ -445,6 +468,7 @@ const RAW = [
   },
   {
     id: 'amigo-airsho',
+    sourceUrl: '',
     title: 'Amigo Airsho',
     short: 'Amigo Airsho',
     category: 'Outdoors',
@@ -464,6 +488,7 @@ const RAW = [
   },
   {
     id: 'dia-de-muertos-parade',
+    sourceUrl: '',
     title: 'Día de Los Muertos Parade',
     short: 'Día de Muertos',
     category: 'Arts',
@@ -483,6 +508,7 @@ const RAW = [
   },
   {
     id: 'flying-horse-half-marathon',
+    sourceUrl: '',
     title: 'Flying Horse Half Marathon',
     short: 'Half Marathon',
     category: 'Sports',
@@ -502,6 +528,7 @@ const RAW = [
   },
   {
     id: 'winterfest',
+    sourceUrl: '',
     title: 'WinterFest',
     short: 'WinterFest',
     category: 'Markets',
@@ -521,6 +548,7 @@ const RAW = [
   },
   {
     id: 'sun-bowl-parade',
+    sourceUrl: '',
     title: 'Sun Bowl Thanksgiving Parade',
     short: 'Sun Bowl Parade',
     category: 'Arts',
@@ -539,6 +567,7 @@ const RAW = [
   },
   {
     id: 'tony-tiger-sun-bowl',
+    sourceUrl: '',
     title: 'Tony the Tiger Sun Bowl',
     short: 'Sun Bowl',
     category: 'Sports',
@@ -560,6 +589,7 @@ const RAW = [
   // ----- More free public events (visitelpaso.com/events/free) -----
   {
     id: 'blast-exhibition',
+    sourceUrl: '',
     title: 'Blast: Trancazos de la Vida Real',
     short: 'Art Exhibit',
     category: 'Arts',
@@ -579,6 +609,7 @@ const RAW = [
   },
   {
     id: 'armijo-craft-series',
+    sourceUrl: '',
     title: 'Armijo Library Craft Series',
     short: 'Craft Series',
     category: 'Arts',
@@ -598,6 +629,7 @@ const RAW = [
   },
   {
     id: 'austin-jimmy-murphy',
+    sourceUrl: '',
     recur: { every: 7, until: '2026-08-31' },
     title: 'Austin Jimmy Murphy',
     short: 'Live Music',
@@ -618,6 +650,7 @@ const RAW = [
   },
   {
     id: 'salsa-fest',
+    sourceUrl: '',
     title: 'Salsa Tasting Fest',
     short: 'Salsa Fest',
     category: 'Food',
@@ -637,6 +670,7 @@ const RAW = [
   },
   {
     id: 'gear-up-sunrise',
+    sourceUrl: '',
     title: 'Gear Up and Go: Scenic Sunrise',
     short: 'Sunrise Hike',
     category: 'Outdoors',
@@ -655,6 +689,7 @@ const RAW = [
   },
   {
     id: 'san-eli-walking-tours',
+    sourceUrl: '',
     recur: { monthly: true, until: '2026-12-31' },
     title: 'San Elizario Walking Tours',
     short: 'Walking Tours',
@@ -675,6 +710,7 @@ const RAW = [
   },
   {
     id: 'market-under-stars',
+    sourceUrl: '',
     recur: { monthly: true, until: '2026-12-31' },
     title: 'The Market Under the Stars',
     short: 'Night Market',
@@ -695,6 +731,7 @@ const RAW = [
   },
   {
     id: 'third-thursdays',
+    sourceUrl: '',
     recur: { monthly: true, until: '2026-12-31' },
     title: 'Third Thursdays Arts District',
     short: 'Third Thursdays',
@@ -715,6 +752,7 @@ const RAW = [
   },
   {
     id: 'party-plaza-salsa',
+    sourceUrl: '',
     recur: { monthly: true, until: '2026-09-30' },
     title: 'Party on the Plaza: Salsa Night',
     short: 'Salsa Night',
@@ -736,6 +774,7 @@ const RAW = [
   // ----- Recurring nightlife series (one entry each) -----
   {
     id: 'geeks-who-drink',
+    sourceUrl: '',
     recur: { every: 14, until: '2026-09-30' },
     title: 'Geeks Who Drink Trivia',
     short: 'Trivia Night',
@@ -755,6 +794,7 @@ const RAW = [
   },
   {
     id: 'karayoke-elmont',
+    sourceUrl: '',
     recur: { every: 14, until: '2026-09-30' },
     title: 'ka-RAY-oke @ The Elmont',
     short: 'Karaoke',
@@ -774,6 +814,7 @@ const RAW = [
   },
   {
     id: 'boombox-bingo-elmont',
+    sourceUrl: '',
     recur: { every: 14, until: '2026-09-30' },
     title: 'Boombox Bingo @ The Elmont',
     short: 'Music Bingo',
@@ -793,6 +834,7 @@ const RAW = [
   },
   {
     id: 'el-fresco-allstars',
+    sourceUrl: '',
     title: 'El Fresco: All Stars',
     short: 'El Fresco',
     category: 'Music',
@@ -811,6 +853,7 @@ const RAW = [
   },
   {
     id: 'el-fresco-country',
+    sourceUrl: '',
     title: 'El Fresco: Country Spotlight',
     short: 'El Fresco',
     category: 'Music',
@@ -829,6 +872,7 @@ const RAW = [
   },
   {
     id: 'el-tormento-de-pablo',
+    sourceUrl: '',
     title: 'El Tormento de Pablo',
     short: 'El Tormento',
     category: 'Arts',
@@ -848,6 +892,7 @@ const RAW = [
   },
   {
     id: 'neighborhoods-austin-terrace',
+    sourceUrl: '',
     title: 'Neighborhoods and Shared Memories: Austin Terrace',
     short: 'Exhibition',
     category: 'Arts',
@@ -866,6 +911,7 @@ const RAW = [
   },
   {
     id: 'el-noa-noa',
+    sourceUrl: '',
     title: 'El Noa Noa: Queer Spaces in Chihuahua',
     short: 'Exhibition',
     category: 'Arts',
@@ -884,6 +930,7 @@ const RAW = [
   },
   {
     id: 'billy-the-kid-show',
+    sourceUrl: '',
     recur: { monthly: true, until: '2026-12-31' },
     title: 'Billy The Kid Breakout Show',
     short: 'Billy the Kid',
@@ -903,6 +950,7 @@ const RAW = [
   },
   {
     id: 'authentic-presence',
+    sourceUrl: '',
     recur: { every: 7, until: '2026-07-25' },
     title: 'Authentic Presence: Creative Marketing',
     short: 'Marketing Class',
@@ -923,6 +971,7 @@ const RAW = [
   },
   {
     id: 'gear-up-intermedia',
+    sourceUrl: '',
     title: 'Gear Up and Go: Intermedia Course',
     short: 'Hiking Course',
     category: 'Outdoors',
@@ -942,6 +991,7 @@ const RAW = [
   },
   {
     id: 'chamizal-library-july4',
+    sourceUrl: '',
     title: 'Chamizal Library 4th of July Crafts',
     short: 'Library Crafts',
     category: 'Arts',
@@ -960,6 +1010,7 @@ const RAW = [
   },
   {
     id: 'hope-mobile-clinic',
+    sourceUrl: '',
     title: 'H.O.P.E+ Mobile Clinic & Health Fair',
     short: 'Health Fair',
     category: 'Markets',
@@ -979,6 +1030,7 @@ const RAW = [
   },
   {
     id: 'consequences-deadbeach',
+    sourceUrl: '',
     title: 'The Consequences Band at DeadBeach',
     short: 'Live Music',
     category: 'Music',
@@ -997,6 +1049,7 @@ const RAW = [
   },
   {
     id: 'cielo-vista-saleabration',
+    sourceUrl: '',
     title: "It's a Sale-Abration at Cielo Vista Mall",
     short: 'Sale-Abration',
     category: 'Markets',
@@ -1015,6 +1068,7 @@ const RAW = [
   },
   {
     id: 'usa-250-airport',
+    sourceUrl: '',
     title: "Celebrating USA's 250th at the Airport",
     short: 'Airport 250',
     category: 'Markets',
@@ -1033,6 +1087,7 @@ const RAW = [
   },
   {
     id: 'san-eli-guided-tour',
+    sourceUrl: '',
     recur: { monthly: true, until: '2026-12-31' },
     title: 'San Elizario Guided Tour',
     short: 'Guided Tour',

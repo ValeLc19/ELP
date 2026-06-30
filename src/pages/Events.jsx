@@ -23,7 +23,7 @@ const PRICE_CHIPS = [
 ]
 const AUDIENCE_CHIPS = [
   { label: 'Kids', val: 'Kids', color: '#d36fa6' },
-  { label: '18+', val: 'Adults', color: '#b03a2e' },
+  { label: '18+', val: 'Adults', color: '#e08a7b' },
 ]
 
 const isFree = (e) => /free/i.test(e.price)

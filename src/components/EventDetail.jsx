@@ -7,7 +7,6 @@ import {
   TicketIcon,
   UsersIcon,
   ChatIcon,
-  ShareIcon,
   CopyIcon,
   CheckIcon,
 } from './icons.jsx'
@@ -25,22 +24,6 @@ export default function EventDetail({ event, onBack }) {
       setTimeout(() => setCopied(false), 1800)
     } catch {
       /* clipboard unavailable */
-    }
-  }
-
-  const shareEvent = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: event.title,
-          text: `${event.title} — ${event.date}, ${event.address}`,
-          url: eventUrl,
-        })
-      } catch {
-        /* user dismissed share */
-      }
-    } else {
-      copyLink()
     }
   }
 
@@ -120,9 +103,6 @@ export default function EventDetail({ event, onBack }) {
               </div>
               <div className="detail__host-actions">
                 {copied && <span className="copied-toast">Copied!</span>}
-                <button onClick={shareEvent} aria-label="Share event">
-                  <ShareIcon width={15} height={15} />
-                </button>
                 <button
                   onClick={copyLink}
                   aria-label="Copy event link"
@@ -140,9 +120,18 @@ export default function EventDetail({ event, onBack }) {
         </div>
       </div>
 
-      <div className="detail__footer">
-        <button className="register">Register</button>
-      </div>
+      {event.sourceUrl && (
+        <div className="detail__footer">
+          <a
+            className="register"
+            href={event.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            More Info →
+          </a>
+        </div>
+      )}
     </div>
   )
 }
