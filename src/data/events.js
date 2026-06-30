@@ -21,6 +21,7 @@ function ordinal(n) {
 const RAW = [
   {
     id: 'cool-canyon-nights',
+    recur: { every: 7, until: '2026-07-30' },
     title: 'Cool Canyon Nights',
     short: 'Canyon Nights',
     category: 'Music',
@@ -57,6 +58,7 @@ const RAW = [
   },
   {
     id: 'free-yoga-thursdays',
+    recur: { every: 7, until: '2026-09-30' },
     title: 'Free Yoga Thursdays',
     short: 'Yoga',
     category: 'Sports',
@@ -75,6 +77,7 @@ const RAW = [
   },
   {
     id: 'free-yoga-saturdays',
+    recur: { every: 7, until: '2026-09-30' },
     title: 'Free Yoga Saturdays',
     short: 'Yoga',
     category: 'Sports',
@@ -272,6 +275,7 @@ const RAW = [
   },
   {
     id: 'the-market-ep',
+    recur: { every: 7, until: '2026-09-30' },
     title: 'The Market EP',
     short: 'The Market',
     category: 'Markets',
@@ -290,6 +294,7 @@ const RAW = [
   },
   {
     id: 'mission-trail-art-market',
+    recur: { monthly: true, until: '2026-12-31' },
     title: 'Mission Trail Art Market',
     short: 'Art Market',
     category: 'Markets',
@@ -593,6 +598,7 @@ const RAW = [
   },
   {
     id: 'austin-jimmy-murphy',
+    recur: { every: 7, until: '2026-08-31' },
     title: 'Austin Jimmy Murphy',
     short: 'Live Music',
     category: 'Music',
@@ -649,6 +655,7 @@ const RAW = [
   },
   {
     id: 'san-eli-walking-tours',
+    recur: { monthly: true, until: '2026-12-31' },
     title: 'San Elizario Walking Tours',
     short: 'Walking Tours',
     category: 'Arts',
@@ -668,6 +675,7 @@ const RAW = [
   },
   {
     id: 'market-under-stars',
+    recur: { monthly: true, until: '2026-12-31' },
     title: 'The Market Under the Stars',
     short: 'Night Market',
     category: 'Markets',
@@ -687,6 +695,7 @@ const RAW = [
   },
   {
     id: 'third-thursdays',
+    recur: { monthly: true, until: '2026-12-31' },
     title: 'Third Thursdays Arts District',
     short: 'Third Thursdays',
     category: 'Arts',
@@ -706,6 +715,7 @@ const RAW = [
   },
   {
     id: 'party-plaza-salsa',
+    recur: { monthly: true, until: '2026-09-30' },
     title: 'Party on the Plaza: Salsa Night',
     short: 'Salsa Night',
     category: 'Music',
@@ -726,6 +736,7 @@ const RAW = [
   // ----- Recurring nightlife series (one entry each) -----
   {
     id: 'geeks-who-drink',
+    recur: { every: 14, until: '2026-09-30' },
     title: 'Geeks Who Drink Trivia',
     short: 'Trivia Night',
     category: 'Food',
@@ -744,6 +755,7 @@ const RAW = [
   },
   {
     id: 'karayoke-elmont',
+    recur: { every: 14, until: '2026-09-30' },
     title: 'ka-RAY-oke @ The Elmont',
     short: 'Karaoke',
     category: 'Music',
@@ -762,6 +774,7 @@ const RAW = [
   },
   {
     id: 'boombox-bingo-elmont',
+    recur: { every: 14, until: '2026-09-30' },
     title: 'Boombox Bingo @ The Elmont',
     short: 'Music Bingo',
     category: 'Music',
@@ -796,16 +809,113 @@ const RAW = [
     additionalInfo: 'Bring a chair; food vendors on site.',
     host: 'Destination El Paso',
   },
+  {
+    id: 'el-fresco-country',
+    title: 'El Fresco: Country Spotlight',
+    short: 'El Fresco',
+    category: 'Music',
+    image:
+      'https://visit-el-paso-2-production.s3.amazonaws.com/events/images/000/048/649/optimized/El_Fresco_26_Digital_Ads_Graphics_FINAL_930x560_Country.png?1782848742',
+    family: true,
+    address: 'El Paso Convention Center, 1 Civic Center Plaza',
+    lat: 31.75744,
+    lng: -106.49186,
+    dateISO: '2026-08-21',
+    time: '6:00 pm',
+    price: 'Free',
+    about: "A free outdoor concert in El Paso's summer music series — country night.",
+    additionalInfo: 'Bring a chair; food vendors on site.',
+    host: 'Destination El Paso',
+  },
+  {
+    id: 'el-tormento-de-pablo',
+    title: 'El Tormento de Pablo',
+    short: 'El Tormento',
+    category: 'Arts',
+    image:
+      'https://visit-el-paso-2-production.s3.amazonaws.com/events/images/000/049/902/optimized/image0.jpeg?1781817451',
+    family: true,
+    address: 'Los Portales Museum / San Elizario Placita',
+    lat: 31.58521,
+    lng: -106.27352,
+    dateISO: '2026-08-22',
+    time: '7:00 pm',
+    price: 'Free',
+    about:
+      'A free outdoor play directed by Debra Venegas, staged in the historic San Elizario Placita.',
+    additionalInfo: 'Free and open to anyone.',
+    host: 'San Elizario',
+  },
+  {
+    id: 'san-eli-guided-tour',
+    recur: { monthly: true, until: '2026-12-31' },
+    title: 'San Elizario Guided Tour',
+    short: 'Guided Tour',
+    category: 'Arts',
+    image:
+      'https://visit-el-paso-2-production.s3.amazonaws.com/events/images/000/034/246/optimized/TOURS2.jpg?1770952918',
+    family: true,
+    address: 'San Elizario Historic District, 1501 Main St',
+    lat: 31.58521,
+    lng: -106.27352,
+    dateISO: '2026-07-26',
+    time: '1:00 pm',
+    price: 'Free',
+    about:
+      'A free slow walking tour of the San Elizario Historic District — over 400 years of history.',
+    additionalInfo: 'Meet at Main Street Mercantile, 4th Sunday monthly.',
+    host: 'San Elizario Historic District',
+  },
 ]
 
-// Derive real dates from each event's fixed ISO date.
-export const EVENTS = RAW.map((e) => {
-  const d = new Date(`${e.dateISO}T00:00:00`)
+// Build one dated instance of an event.
+function makeInstance(e, d, first) {
   return {
     ...e,
+    id: first ? e.id : `${e.id}-${isoOf(d)}`,
     dateObj: d,
-    iso: e.dateISO,
+    iso: isoOf(d),
     day: d.getDate(),
     date: `${MONTHS[d.getMonth()]} ${ordinal(d.getDate())}`,
   }
+}
+
+// The nth occurrence of a weekday in a given month (e.g., 3rd Thursday).
+function nthWeekday(year, month, weekday, nth) {
+  const first = new Date(year, month, 1)
+  const day = 1 + ((weekday - first.getDay() + 7) % 7) + (nth - 1) * 7
+  const d = new Date(year, month, day)
+  return d.getMonth() === month ? d : null
+}
+
+// Expand recurring events into real dated instances within their horizon.
+//   recur: { every: 7 | 14, until }   -> every N days
+//   recur: { monthly: true, until }   -> same nth-weekday each month
+export const EVENTS = RAW.flatMap((e) => {
+  const start = new Date(`${e.dateISO}T00:00:00`)
+  if (!e.recur) return [makeInstance(e, start, true)]
+
+  const until = new Date(`${e.recur.until}T00:00:00`)
+  const out = []
+
+  if (e.recur.monthly) {
+    const weekday = start.getDay()
+    const nth = Math.ceil(start.getDate() / 7)
+    let y = start.getFullYear()
+    let m = start.getMonth()
+    for (let guard = 0; guard < 24; guard++) {
+      const d = nthWeekday(y, m, weekday, nth)
+      if (d && d >= start && d <= until) out.push(makeInstance(e, d, out.length === 0))
+      m += 1
+      if (m > 11) { m = 0; y += 1 }
+      if (new Date(y, m, 1) > until) break
+    }
+  } else {
+    let d = new Date(start)
+    while (d <= until) {
+      out.push(makeInstance(e, d, out.length === 0))
+      d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + e.recur.every)
+    }
+  }
+  return out
 })
