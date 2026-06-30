@@ -29,13 +29,18 @@ export default function EventDetail({ event, onBack }) {
 
         <div className="detail__body">
           <h2 className="detail__title">{event.title}</h2>
-          <span
-            className="badge badge--filled"
-            style={{ background: categoryTint(event.category), color: 'var(--ink)' }}
-          >
-            <span className="badge__dot" style={{ background: color }} />
-            {event.category}
-          </span>
+          <div className="ev-card__tags">
+            <span
+              className="badge badge--filled"
+              style={{ background: categoryTint(event.category), color: 'var(--ink)' }}
+            >
+              <span className="badge__dot" style={{ background: color }} />
+              {event.category}
+            </span>
+            {event.recurLabel && (
+              <span className="recur-tag">{event.recurLabel}</span>
+            )}
+          </div>
 
           <hr className="detail__rule" />
 
@@ -55,9 +60,6 @@ export default function EventDetail({ event, onBack }) {
             </p>
             <p className="ev-meta">
               <CalendarIcon /> {event.date}
-              {event.recurLabel && (
-                <span className="recur-tag">{event.recurLabel}</span>
-              )}
             </p>
             <p className="ev-meta">
               <ClockIcon /> {event.time}

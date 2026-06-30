@@ -544,8 +544,14 @@
   color: var(--muted);
 }
 
+.ev-card__tags {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
 .recur-tag {
-  margin-left: 0.5rem;
   font-size: 0.72rem;
   letter-spacing: 0.03em;
   text-transform: uppercase;
