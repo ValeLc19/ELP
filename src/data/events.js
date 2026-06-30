@@ -868,11 +868,21 @@ const RAW = [
   },
 ]
 
+function recurLabel(recur) {
+  if (!recur) return null
+  if (recur.monthly) return 'Monthly'
+  if (recur.every === 7) return 'Weekly'
+  if (recur.every === 14) return 'Biweekly'
+  return 'Recurring'
+}
+
 // Build one dated instance of an event.
 function makeInstance(e, d, first) {
   return {
     ...e,
     id: first ? e.id : `${e.id}-${isoOf(d)}`,
+    seriesId: e.id,
+    recurLabel: recurLabel(e.recur),
     dateObj: d,
     iso: isoOf(d),
     day: d.getDate(),

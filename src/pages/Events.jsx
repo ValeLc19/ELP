@@ -29,6 +29,35 @@ const AUDIENCE_CHIPS = [
 
 const isFree = (e) => /free/i.test(e.price)
 
+// Collapse recurring series to a single representative instance — the soonest
+// upcoming occurrence (or the most recent past one if all are over). Used for
+// the Map and List so a weekly event shows once instead of 13 times.
+function collapseSeries(list) {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const t = today.getTime()
+  const groups = new Map()
+  for (const e of list) {
+    const key = e.seriesId || e.id
+    const cur = groups.get(key)
+    if (!cur) {
+      groups.set(key, e)
+      continue
+    }
+    const fa = e.dateObj.getTime()
+    const fb = cur.dateObj.getTime()
+    const aUp = fa >= t
+    const bUp = fb >= t
+    let better
+    if (aUp && bUp) better = fa <= fb ? e : cur
+    else if (aUp) better = e
+    else if (bUp) better = cur
+    else better = fa >= fb ? e : cur
+    groups.set(key, better)
+  }
+  return [...groups.values()]
+}
+
 function priceValue(p) {
   if (/free/i.test(p)) return 0
   const m = p.match(/[\d.]+/)
@@ -100,13 +129,18 @@ export default function Events() {
     })
   }, [activeCat, activeDate, priceFilter, audienceFilter, query, view])
 
+  // Map and List show one card/pin per series; the calendar keeps every date.
+  const collapsed = useMemo(() => collapseSeries(filtered), [filtered])
+
   const sorted = useMemo(() => {
-    const arr = filtered.slice()
+    const arr = collapsed.slice()
     arr.sort((a, b) =>
-      sortBy === 'Price' ? priceValue(a.price) - priceValue(b.price) : a.day - b.day
+      sortBy === 'Price'
+        ? priceValue(a.price) - priceValue(b.price)
+        : a.dateObj - b.dateObj
     )
     return arr
-  }, [filtered, sortBy])
+  }, [collapsed, sortBy])
 
   const selected = EVENTS.find((e) => e.id === selectedId) || null
 
@@ -318,7 +352,7 @@ export default function Events() {
             {view === 'map' ? (
               <div className="map-wrap">
                 <MapView
-                  events={filtered}
+                  events={collapsed}
                   selectedId={selectedId}
                   onSelectPin={setSelectedId}
                 />
@@ -339,11 +373,11 @@ export default function Events() {
           ) : (
             <>
               <h2 className="events__panel-title">Events:</h2>
-              {filtered.length === 0 ? (
+              {collapsed.length === 0 ? (
                 emptyState
               ) : (
                 <div className="events__list">
-                  {filtered.map((e) => (
+                  {sorted.map((e) => (
                     <EventCard key={e.id} event={e} onSelect={setSelectedId} />
                   ))}
                 </div>

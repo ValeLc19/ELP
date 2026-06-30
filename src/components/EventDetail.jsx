@@ -55,6 +55,9 @@ export default function EventDetail({ event, onBack }) {
             </p>
             <p className="ev-meta">
               <CalendarIcon /> {event.date}
+              {event.recurLabel && (
+                <span className="recur-tag">{event.recurLabel}</span>
+              )}
             </p>
             <p className="ev-meta">
               <ClockIcon /> {event.time}

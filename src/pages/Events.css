@@ -544,6 +544,17 @@
   color: var(--muted);
 }
 
+.recur-tag {
+  margin-left: 0.5rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: #efe7d6;
+  border-radius: 5px;
+  padding: 0.05rem 0.4rem;
+}
+
 .see-details {
   display: block;
   margin-left: auto;

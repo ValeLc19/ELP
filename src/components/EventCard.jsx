@@ -47,6 +47,9 @@ export default function EventCard({ event, onSelect, variant = 'full' }) {
           <>
             <p className="ev-meta">
               <CalendarIcon /> {event.date} &nbsp; {event.time}
+              {event.recurLabel && (
+                <span className="recur-tag">{event.recurLabel}</span>
+              )}
             </p>
             <p className="ev-meta">
               <TicketIcon /> {event.price}
@@ -64,6 +67,9 @@ export default function EventCard({ event, onSelect, variant = 'full' }) {
             </p>
             <p className="ev-meta">
               <CalendarIcon /> {event.date}
+              {event.recurLabel && (
+                <span className="recur-tag">{event.recurLabel}</span>
+              )}
             </p>
             <p className="ev-meta">
               <ClockIcon /> {event.time}
