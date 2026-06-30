@@ -40,8 +40,11 @@ function matchesDateFilter(event, filter, win) {
   if (filter === 'Today') return d.getTime() === win.today.getTime()
   if (filter === 'This Week') return d >= win.weekStart && d <= win.weekEnd
   if (filter === 'This Weekend') {
-    const weekend = d.getDay() === 0 || d.getDay() === 6
-    return weekend && d >= win.today && d <= win.weekEnd
+    // The upcoming Saturday and Sunday.
+    const daysToSat = (6 - win.today.getDay() + 7) % 7
+    const sat = addDays(win.today, daysToSat)
+    const sun = addDays(sat, 1)
+    return d.getTime() === sat.getTime() || d.getTime() === sun.getTime()
   }
   return true
 }
