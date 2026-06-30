@@ -40,7 +40,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) 380px;
   gap: clamp(1rem, 3vw, 2.5rem);
-  align-items: start;
+  align-items: stretch;
 }
 @media (max-width: 860px) {
   .events__layout {
@@ -380,7 +380,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: clamp(1rem, 3vw, 2.5rem);
-  align-items: start;
+  align-items: stretch;
 }
 .list-layout--split {
   grid-template-columns: minmax(0, 1fr) 380px;
@@ -432,6 +432,9 @@
 .events__panel {
   position: sticky;
   top: 1rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 .events__panel-title {
   font-family: var(--serif);
@@ -566,6 +569,8 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-height: 0;
   max-height: 84vh;
 }
 .detail__back {
@@ -587,6 +592,7 @@
 .detail__scroll {
   overflow-y: auto;
   flex: 1;
+  min-height: 0;
 }
 .detail__img {
   position: relative;
