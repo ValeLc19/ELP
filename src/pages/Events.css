@@ -507,7 +507,7 @@
   border: 3px solid #fdf4f1;
 }
 .ev-card__body {
-  padding: 0.9rem 1.1rem 1.1rem;
+  padding: 1.25rem 1.1rem 1.1rem;
   display: flex;
   flex-direction: column;
   flex: 1;
