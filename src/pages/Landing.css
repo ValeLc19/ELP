@@ -55,6 +55,9 @@
 .bubble--cta:hover {
   background: #fffdf8;
   box-shadow: 0 10px 30px rgba(28, 28, 28, 0.12);
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 1px;
 }
 
 .bubble--cta:focus-visible {
