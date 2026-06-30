@@ -90,7 +90,7 @@ function MonthView({ anchor, events, selectedId, onSelect }) {
                     className="cal-event__bar"
                     style={{ background: categoryColor(e.category) }}
                   />
-                  <span className="cal-event__name">{e.title}</span>
+                  <span className="cal-event__name">{e.short || e.title}</span>
                 </button>
               ))}
               {extra > 0 && <span className="cal-cell__more">+{extra}</span>}
@@ -134,7 +134,7 @@ function WeekView({ anchor, events, selectedId, onSelect }) {
                   style={{ borderColor: categoryColor(e.category) }}
                 >
                   <span className="cal-week__time">{e.time}</span>
-                  <span className="cal-week__title">{e.title}</span>
+                  <span className="cal-week__title">{e.short || e.title}</span>
                 </button>
               ))}
             </div>

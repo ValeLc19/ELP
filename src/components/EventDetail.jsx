@@ -22,7 +22,7 @@ export default function EventDetail({ event, onBack }) {
       <div className="detail__scroll">
         <div
           className="detail__img"
-          style={{ backgroundImage: `url(${event.image})` }}
+          style={{ backgroundImage: `url("${event.image}")` }}
         >
           <span className="ev-card__price-tag">{event.price}</span>
         </div>

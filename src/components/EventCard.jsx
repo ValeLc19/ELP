@@ -26,7 +26,7 @@ export default function EventCard({ event, onSelect, variant = 'full' }) {
     >
       <div
         className="ev-card__img"
-        style={{ backgroundImage: `url(${event.image})` }}
+        style={{ backgroundImage: `url("${event.image}")` }}
       >
         <span className="ev-card__price-tag">{event.price}</span>
       </div>
