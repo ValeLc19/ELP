@@ -8,7 +8,6 @@ import {
   categoryColor,
   categoryTint,
   hexToRgba,
-  ALL_COLOR,
 } from '../data/categories.js'
 import MapView from '../components/MapView.jsx'
 import CalendarView from '../components/CalendarView.jsx'
@@ -20,11 +19,11 @@ const DATE_FILTERS = ['Today', 'This Weekend', 'This Week']
 
 const PRICE_CHIPS = [
   { label: 'Free', val: 'Free', color: '#e0a83e' },
-  { label: 'Cost', val: 'Cost', color: '#2e8b57' },
+  { label: 'Paid', val: 'Paid', color: '#2e8b57' },
 ]
 const AUDIENCE_CHIPS = [
   { label: 'Kids', val: 'Kids', color: '#d36fa6' },
-  { label: '18+/21+', val: 'Adults', color: '#b03a2e' },
+  { label: '18+', val: 'Adults', color: '#b03a2e' },
 ]
 
 const isFree = (e) => /free/i.test(e.price)
@@ -176,10 +175,10 @@ export default function Events() {
       {tabs}
 
       <div className="filters">
-        <span className="filters__label">Filter by:</span>
-        <div className="filters__rows">
-          {view !== 'calendar' && (
-            <div className="filters__row">
+        {view !== 'calendar' && (
+          <div className="filters__group">
+            <span className="filters__label">When</span>
+            <div className="filters__chips">
               {DATE_FILTERS.map((d) => (
                 <button
                   key={d}
@@ -190,8 +189,12 @@ export default function Events() {
                 </button>
               ))}
             </div>
-          )}
-          <div className="filters__row">
+          </div>
+        )}
+
+        <div className="filters__group">
+          <span className="filters__label">Category</span>
+          <div className="filters__chips">
             {CATEGORY_ORDER.map((c) => (
               <button
                 key={c}
@@ -200,7 +203,7 @@ export default function Events() {
                   borderColor: categoryColor(c),
                   background: activeCat === c ? categoryTint(c, 0.55) : undefined,
                 }}
-                onClick={() => setActiveCat(c)}
+                onClick={() => setActiveCat(activeCat === c ? 'All' : c)}
               >
                 <span
                   className="badge__dot"
@@ -209,20 +212,12 @@ export default function Events() {
                 {c}
               </button>
             ))}
-            <button
-              className="chip"
-              style={{
-                borderColor: ALL_COLOR,
-                background:
-                  activeCat === 'All' ? hexToRgba(ALL_COLOR, 0.55) : undefined,
-              }}
-              onClick={() => setActiveCat('All')}
-            >
-              <span className="badge__dot" style={{ background: ALL_COLOR }} />
-              All
-            </button>
           </div>
-          <div className="filters__row">
+        </div>
+
+        <div className="filters__group">
+          <span className="filters__label">Price</span>
+          <div className="filters__chips">
             {PRICE_CHIPS.map((c) => (
               <button
                 key={c.val}
@@ -240,6 +235,12 @@ export default function Events() {
                 {c.label}
               </button>
             ))}
+          </div>
+        </div>
+
+        <div className="filters__group">
+          <span className="filters__label">Good for</span>
+          <div className="filters__chips">
             {AUDIENCE_CHIPS.map((c) => (
               <button
                 key={c.val}
@@ -258,6 +259,13 @@ export default function Events() {
               </button>
             ))}
           </div>
+        </div>
+
+        <div className="filters__group">
+          <span className="filters__label" aria-hidden="true" />
+          <button className="filters__clear" onClick={resetFilters}>
+            Clear filters
+          </button>
         </div>
       </div>
     </>

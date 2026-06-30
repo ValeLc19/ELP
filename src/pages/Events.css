@@ -98,28 +98,45 @@
   color: #241a12;
 }
 
-/* Filter block: label on the left, two indented rows of chips
-   (date filters above category filters, both aligned). */
+/* Filter block: one labeled group per job (When / Category / Price /
+   Good for), each on its own row with the label aligned to the left. */
 .filters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+.filters__group {
   display: flex;
   align-items: flex-start;
   gap: 0.7rem;
-  margin-bottom: 1rem;
 }
 .filters__label {
-  font-size: 1.05rem;
+  min-width: 88px;
+  flex: none;
+  font-size: 1rem;
+  color: var(--muted);
   white-space: nowrap;
-  padding-top: 0.45rem;
+  padding-top: 0.42rem;
 }
-.filters__rows {
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-}
-.filters__row {
+.filters__chips {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+.filters__clear {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.3rem 0.9rem;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+.filters__clear:hover {
+  background: #efe7d6;
+  color: var(--ink);
 }
 .chip {
   display: inline-flex;
