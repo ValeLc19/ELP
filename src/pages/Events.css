@@ -430,10 +430,7 @@
 
 /* ---------- Right panel ---------- */
 .events__panel {
-  position: sticky;
-  top: 1rem;
-  display: flex;
-  flex-direction: column;
+  position: relative;
   min-height: 0;
 }
 .events__panel-title {
@@ -561,17 +558,17 @@
 }
 
 /* ---------- Detail view ---------- */
+/* Fill the panel exactly (which is stretched to the left component's height),
+   so the card's bottom always lines up with the map/calendar/list. */
 .detail {
-  position: relative;
+  position: absolute;
+  inset: 0;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 22px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  flex: 1;
-  min-height: 0;
-  max-height: 84vh;
 }
 .detail__back {
   position: absolute;
