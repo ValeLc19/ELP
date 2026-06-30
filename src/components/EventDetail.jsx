@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { categoryColor, categoryTint } from '../data/categories.js'
 import {
   LocationIcon,
@@ -8,10 +9,40 @@ import {
   ChatIcon,
   ShareIcon,
   CopyIcon,
+  CheckIcon,
 } from './icons.jsx'
 
 export default function EventDetail({ event, onBack }) {
   const color = categoryColor(event.category)
+  const [copied, setCopied] = useState(false)
+
+  const eventUrl = `${window.location.origin}${window.location.pathname}?event=${encodeURIComponent(event.id)}`
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(eventUrl)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1800)
+    } catch {
+      /* clipboard unavailable */
+    }
+  }
+
+  const shareEvent = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: event.title,
+          text: `${event.title} — ${event.date}, ${event.address}`,
+          url: eventUrl,
+        })
+      } catch {
+        /* user dismissed share */
+      }
+    } else {
+      copyLink()
+    }
+  }
 
   return (
     <div className="detail">
@@ -88,11 +119,20 @@ export default function EventDetail({ event, onBack }) {
                 <p className="detail__text">{event.host}</p>
               </div>
               <div className="detail__host-actions">
-                <button aria-label="Share host">
+                {copied && <span className="copied-toast">Copied!</span>}
+                <button onClick={shareEvent} aria-label="Share event">
                   <ShareIcon width={15} height={15} />
                 </button>
-                <button aria-label="Copy host">
-                  <CopyIcon width={15} height={15} />
+                <button
+                  onClick={copyLink}
+                  aria-label="Copy event link"
+                  className={copied ? 'is-copied' : ''}
+                >
+                  {copied ? (
+                    <CheckIcon width={15} height={15} />
+                  ) : (
+                    <CopyIcon width={15} height={15} />
+                  )}
                 </button>
               </div>
             </div>

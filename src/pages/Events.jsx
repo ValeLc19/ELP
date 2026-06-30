@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import 'leaflet/dist/leaflet.css'
 import './Events.css'
@@ -106,6 +106,20 @@ export default function Events() {
     setAudienceFilter(null)
     setQuery('')
   }
+
+  // Open a shared event link (?event=<id>) on first load.
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get('event')
+    if (id && EVENTS.some((e) => e.id === id)) setSelectedId(id)
+  }, [])
+
+  // Keep the URL in sync with the open event so it's always shareable.
+  useEffect(() => {
+    const url = new URL(window.location.href)
+    if (selectedId) url.searchParams.set('event', selectedId)
+    else url.searchParams.delete('event')
+    window.history.replaceState({}, '', url)
+  }, [selectedId])
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()

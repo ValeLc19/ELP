@@ -73,6 +73,12 @@ export const CopyIcon = (p) => (
   </svg>
 )
 
+export const CheckIcon = (p) => (
+  <svg {...base} {...p}>
+    <path d="M20 6 9 17l-5-5" />
+  </svg>
+)
+
 export const ScanFaceIcon = (p) => (
   <svg {...base} width={34} height={34} {...p}>
     <path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2" />

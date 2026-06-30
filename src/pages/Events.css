@@ -689,7 +689,18 @@
 }
 .detail__host-actions {
   display: flex;
+  align-items: center;
   gap: 0.4rem;
+}
+.copied-toast {
+  font-size: 0.8rem;
+  color: #5a7d6b;
+  margin-right: 0.1rem;
+}
+.detail__host-actions .is-copied {
+  background: #e3efe6;
+  border-color: #6fae6f;
+  color: #3f7a55;
 }
 .detail__host-actions button {
   width: 30px;
