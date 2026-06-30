@@ -847,6 +847,26 @@ const RAW = [
     host: 'San Elizario',
   },
   {
+    id: 'vida-sana-danzon',
+    recur: { every: 7, until: '2026-07-31' },
+    title: 'Vida Sana: Danzón para Adultos Mayores',
+    short: 'Danzón Class',
+    category: 'Arts',
+    image:
+      'https://visit-el-paso-2-production.s3.amazonaws.com/events/images/000/049/246/optimized/Screenshot_2026-06-01_170224.png?1780355637',
+    family: false,
+    address: 'MACC - Estudio de Baile, El Paso',
+    lat: 31.76041,
+    lng: -106.49088,
+    dateISO: '2026-07-03',
+    time: '10:00 am',
+    price: 'Free',
+    about:
+      'Learn to dance Danzón with maestra Elizabeth Flores in this 10-week class series — perfect for older beginners exploring its origins.',
+    additionalInfo: 'Registration required. Ages 50+.',
+    host: 'MACC',
+  },
+  {
     id: 'san-eli-guided-tour',
     recur: { monthly: true, until: '2026-12-31' },
     title: 'San Elizario Guided Tour',
