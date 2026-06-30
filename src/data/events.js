@@ -4,6 +4,42 @@
 // are geocoded from the venues, and `short` is a concise calendar label.
 const S3 = 'https://visit-el-paso-2-production.s3.amazonaws.com/events/images'
 
+// Free-license stock photos (Unsplash) keyed by event theme, so we don't use
+// the venues' copyrighted promotional art. Swap any URL freely.
+const STOCK = (id) =>
+  `https://images.unsplash.com/photo-${id}?w=800&q=80&auto=format&fit=crop`
+const THEME_IMAGES = {
+  concert: STOCK('1501386761578-eac5c94b800a'),
+  music: STOCK('1511671782779-c97d3d27a1d4'),
+  guitar: STOCK('1471478331149-c72f17e33c73'),
+  microphone: STOCK('1516280440614-37939bbacd81'),
+  dance: STOCK('1504609773096-104ff2c73ba4'),
+  theater: STOCK('1503095396549-807759245b35'),
+  film: STOCK('1489599849927-2ee91cede3ba'),
+  artgallery: STOCK('1531058020387-3be344556be6'),
+  crafts: STOCK('1513364776144-60967b0f800f'),
+  fashion: STOCK('1469334031218-e382a71b716b'),
+  yoga: STOCK('1506126613408-eca07ce68773'),
+  running: STOCK('1452626038306-9aae5e071dd3'),
+  hiking: STOCK('1551632811-561732d1e306'),
+  mountains: STOCK('1454942901704-3c44c11b2ad1'),
+  baseball: STOCK('1508344928928-7165b67de128'),
+  football: STOCK('1566577739112-5180d4bf9390'),
+  airshow: STOCK('1436491865332-7a61a109cc05'),
+  airport: STOCK('1530521954074-e64f6810b32d'),
+  market: STOCK('1488459716781-31db52582fe9'),
+  festival: STOCK('1459749411175-04bf5292ceea'),
+  fireworks: STOCK('1467810563316-b5476525c0f9'),
+  holiday: STOCK('1512389142860-9c449e58a543'),
+  historic: STOCK('1505761671935-60b3a7427bad'),
+  workshop: STOCK('1552581234-26160f608093'),
+  pub: STOCK('1514933651103-005eec06c04b'),
+  icecream: STOCK('1488900128323-21503983a07e'),
+  bbq: STOCK('1529193591184-b1d58069ecdd'),
+  wine: STOCK('1510812431401-41d2bd2722f3'),
+  restaurant: STOCK('1414235077428-338989a2e8c0'),
+}
+
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December',
@@ -21,6 +57,7 @@ function ordinal(n) {
 const RAW = [
   {
     id: 'cool-canyon-nights',
+    theme: 'concert',
     sourceUrl: '',
     recur: { every: 7, until: '2026-07-30' },
     title: 'Cool Canyon Nights',
@@ -41,6 +78,7 @@ const RAW = [
   },
   {
     id: 'free-curator-tour',
+    theme: 'artgallery',
     sourceUrl: '',
     title: 'Free Curator Tour',
     short: 'Curator Tour',
@@ -60,6 +98,7 @@ const RAW = [
   },
   {
     id: 'free-yoga-thursdays',
+    theme: 'yoga',
     sourceUrl: '',
     recur: { every: 7, until: '2026-09-30' },
     title: 'Free Yoga Thursdays',
@@ -80,6 +119,7 @@ const RAW = [
   },
   {
     id: 'free-yoga-saturdays',
+    theme: 'yoga',
     sourceUrl: '',
     recur: { every: 7, until: '2026-09-30' },
     title: 'Free Yoga Saturdays',
@@ -100,6 +140,7 @@ const RAW = [
   },
   {
     id: 'consequences-pecan-grill',
+    theme: 'guitar',
     sourceUrl: '',
     title: 'The Consequences Band',
     short: 'Live Music',
@@ -118,6 +159,7 @@ const RAW = [
   },
   {
     id: 'america250-fashion-outlets',
+    theme: 'fashion',
     sourceUrl: '',
     title: 'America 250 Fashion Show',
     short: 'Fashion Show',
@@ -137,6 +179,7 @@ const RAW = [
   },
   {
     id: '250-fest-outlets',
+    theme: 'festival',
     sourceUrl: '',
     title: '250 Fest',
     short: '250 Fest',
@@ -156,6 +199,7 @@ const RAW = [
   },
   {
     id: 'free-ice-cream-cielo-vista',
+    theme: 'icecream',
     sourceUrl: '',
     title: 'Free Ice Cream Celebration',
     short: 'Free Ice Cream',
@@ -174,6 +218,7 @@ const RAW = [
   },
   {
     id: 'freedom-banner-making',
+    theme: 'crafts',
     sourceUrl: '',
     title: 'Freedom Banner-Making',
     short: 'Banner-Making',
@@ -192,6 +237,7 @@ const RAW = [
   },
   {
     id: 'america250-celebration',
+    theme: 'fireworks',
     sourceUrl: '',
     title: 'America 250 Celebration',
     short: 'America 250',
@@ -211,6 +257,7 @@ const RAW = [
   },
   {
     id: 'fourth-july-festival',
+    theme: 'fireworks',
     sourceUrl: '',
     title: '4th of July Festival & Fireworks',
     short: 'Fireworks',
@@ -230,6 +277,7 @@ const RAW = [
   },
   {
     id: 'chihuahuas-fireworks',
+    theme: 'baseball',
     sourceUrl: '',
     title: 'Chihuahuas Firework Night',
     short: 'Chihuahuas',
@@ -249,6 +297,7 @@ const RAW = [
   },
   {
     id: 'sizzle-smoke-zin-valle',
+    theme: 'bbq',
     sourceUrl: '',
     title: 'Wine + Premium BBQ Buffet',
     short: 'BBQ & Wine',
@@ -269,6 +318,7 @@ const RAW = [
   },
   {
     id: 'weekend-wine-shuttle',
+    theme: 'wine',
     sourceUrl: '',
     title: 'Weekend Wine Shuttle',
     short: 'Wine Shuttle',
@@ -289,6 +339,7 @@ const RAW = [
   },
   {
     id: 'the-market-ep',
+    theme: 'market',
     sourceUrl: '',
     recur: { every: 7, until: '2026-09-30' },
     title: 'The Market EP',
@@ -309,6 +360,7 @@ const RAW = [
   },
   {
     id: 'mission-trail-art-market',
+    theme: 'market',
     sourceUrl: '',
     recur: { monthly: true, until: '2026-12-31' },
     title: 'Mission Trail Art Market',
@@ -328,6 +380,7 @@ const RAW = [
   },
   {
     id: 'viva-el-paso',
+    theme: 'theater',
     sourceUrl: '',
     title: 'Viva! El Paso',
     short: 'Viva! El Paso',
@@ -347,6 +400,7 @@ const RAW = [
   },
   {
     id: 'plaza-classic-film-festival',
+    theme: 'film',
     sourceUrl: '',
     title: 'Plaza Classic Film Festival',
     short: 'Film Festival',
@@ -368,6 +422,7 @@ const RAW = [
   // ----- Marquee annual events & festivals (visitelpaso.com/annual-events) -----
   {
     id: 'el-fresco-cumbias',
+    theme: 'concert',
     sourceUrl: '',
     title: 'El Fresco: Noche de Cumbias',
     short: 'El Fresco',
@@ -388,6 +443,7 @@ const RAW = [
   },
   {
     id: 'vivamos-mexico-grito',
+    theme: 'festival',
     sourceUrl: '',
     title: 'Vivamos México! Grito Celebration',
     short: 'Grito',
@@ -408,6 +464,7 @@ const RAW = [
   },
   {
     id: 'ep-film-festival',
+    theme: 'film',
     sourceUrl: '',
     title: 'El Paso Film Festival',
     short: 'Film Festival',
@@ -428,6 +485,7 @@ const RAW = [
   },
   {
     id: 'way-out-west-fest',
+    theme: 'festival',
     sourceUrl: '',
     title: 'Way Out West Festival',
     short: 'Way Out West',
@@ -448,6 +506,7 @@ const RAW = [
   },
   {
     id: 'chalk-the-block',
+    theme: 'artgallery',
     sourceUrl: '',
     title: 'Chalk the Block',
     short: 'Chalk the Block',
@@ -468,6 +527,7 @@ const RAW = [
   },
   {
     id: 'amigo-airsho',
+    theme: 'airshow',
     sourceUrl: '',
     title: 'Amigo Airsho',
     short: 'Amigo Airsho',
@@ -488,6 +548,7 @@ const RAW = [
   },
   {
     id: 'dia-de-muertos-parade',
+    theme: 'festival',
     sourceUrl: '',
     title: 'Día de Los Muertos Parade',
     short: 'Día de Muertos',
@@ -508,6 +569,7 @@ const RAW = [
   },
   {
     id: 'flying-horse-half-marathon',
+    theme: 'running',
     sourceUrl: '',
     title: 'Flying Horse Half Marathon',
     short: 'Half Marathon',
@@ -528,6 +590,7 @@ const RAW = [
   },
   {
     id: 'winterfest',
+    theme: 'holiday',
     sourceUrl: '',
     title: 'WinterFest',
     short: 'WinterFest',
@@ -548,6 +611,7 @@ const RAW = [
   },
   {
     id: 'sun-bowl-parade',
+    theme: 'festival',
     sourceUrl: '',
     title: 'Sun Bowl Thanksgiving Parade',
     short: 'Sun Bowl Parade',
@@ -567,6 +631,7 @@ const RAW = [
   },
   {
     id: 'tony-tiger-sun-bowl',
+    theme: 'football',
     sourceUrl: '',
     title: 'Tony the Tiger Sun Bowl',
     short: 'Sun Bowl',
@@ -589,6 +654,7 @@ const RAW = [
   // ----- More free public events (visitelpaso.com/events/free) -----
   {
     id: 'blast-exhibition',
+    theme: 'artgallery',
     sourceUrl: '',
     title: 'Blast: Trancazos de la Vida Real',
     short: 'Art Exhibit',
@@ -609,6 +675,7 @@ const RAW = [
   },
   {
     id: 'armijo-craft-series',
+    theme: 'crafts',
     sourceUrl: '',
     title: 'Armijo Library Craft Series',
     short: 'Craft Series',
@@ -629,6 +696,7 @@ const RAW = [
   },
   {
     id: 'austin-jimmy-murphy',
+    theme: 'guitar',
     sourceUrl: '',
     recur: { every: 7, until: '2026-08-31' },
     title: 'Austin Jimmy Murphy',
@@ -650,6 +718,7 @@ const RAW = [
   },
   {
     id: 'salsa-fest',
+    theme: 'restaurant',
     sourceUrl: '',
     title: 'Salsa Tasting Fest',
     short: 'Salsa Fest',
@@ -670,6 +739,7 @@ const RAW = [
   },
   {
     id: 'gear-up-sunrise',
+    theme: 'mountains',
     sourceUrl: '',
     title: 'Gear Up and Go: Scenic Sunrise',
     short: 'Sunrise Hike',
@@ -689,6 +759,7 @@ const RAW = [
   },
   {
     id: 'san-eli-walking-tours',
+    theme: 'historic',
     sourceUrl: '',
     recur: { monthly: true, until: '2026-12-31' },
     title: 'San Elizario Walking Tours',
@@ -710,6 +781,7 @@ const RAW = [
   },
   {
     id: 'market-under-stars',
+    theme: 'market',
     sourceUrl: '',
     recur: { monthly: true, until: '2026-12-31' },
     title: 'The Market Under the Stars',
@@ -731,6 +803,7 @@ const RAW = [
   },
   {
     id: 'third-thursdays',
+    theme: 'artgallery',
     sourceUrl: '',
     recur: { monthly: true, until: '2026-12-31' },
     title: 'Third Thursdays Arts District',
@@ -752,6 +825,7 @@ const RAW = [
   },
   {
     id: 'party-plaza-salsa',
+    theme: 'dance',
     sourceUrl: '',
     recur: { monthly: true, until: '2026-09-30' },
     title: 'Party on the Plaza: Salsa Night',
@@ -774,6 +848,7 @@ const RAW = [
   // ----- Recurring nightlife series (one entry each) -----
   {
     id: 'geeks-who-drink',
+    theme: 'pub',
     sourceUrl: '',
     recur: { every: 14, until: '2026-09-30' },
     title: 'Geeks Who Drink Trivia',
@@ -794,6 +869,7 @@ const RAW = [
   },
   {
     id: 'karayoke-elmont',
+    theme: 'microphone',
     sourceUrl: '',
     recur: { every: 14, until: '2026-09-30' },
     title: 'ka-RAY-oke @ The Elmont',
@@ -814,6 +890,7 @@ const RAW = [
   },
   {
     id: 'boombox-bingo-elmont',
+    theme: 'music',
     sourceUrl: '',
     recur: { every: 14, until: '2026-09-30' },
     title: 'Boombox Bingo @ The Elmont',
@@ -834,6 +911,7 @@ const RAW = [
   },
   {
     id: 'el-fresco-allstars',
+    theme: 'concert',
     sourceUrl: '',
     title: 'El Fresco: All Stars',
     short: 'El Fresco',
@@ -853,6 +931,7 @@ const RAW = [
   },
   {
     id: 'el-fresco-country',
+    theme: 'concert',
     sourceUrl: '',
     title: 'El Fresco: Country Spotlight',
     short: 'El Fresco',
@@ -872,6 +951,7 @@ const RAW = [
   },
   {
     id: 'el-tormento-de-pablo',
+    theme: 'theater',
     sourceUrl: '',
     title: 'El Tormento de Pablo',
     short: 'El Tormento',
@@ -892,6 +972,7 @@ const RAW = [
   },
   {
     id: 'neighborhoods-austin-terrace',
+    theme: 'artgallery',
     sourceUrl: '',
     title: 'Neighborhoods and Shared Memories: Austin Terrace',
     short: 'Exhibition',
@@ -911,6 +992,7 @@ const RAW = [
   },
   {
     id: 'el-noa-noa',
+    theme: 'artgallery',
     sourceUrl: '',
     title: 'El Noa Noa: Queer Spaces in Chihuahua',
     short: 'Exhibition',
@@ -930,6 +1012,7 @@ const RAW = [
   },
   {
     id: 'billy-the-kid-show',
+    theme: 'historic',
     sourceUrl: '',
     recur: { monthly: true, until: '2026-12-31' },
     title: 'Billy The Kid Breakout Show',
@@ -950,6 +1033,7 @@ const RAW = [
   },
   {
     id: 'authentic-presence',
+    theme: 'workshop',
     sourceUrl: '',
     recur: { every: 7, until: '2026-07-25' },
     title: 'Authentic Presence: Creative Marketing',
@@ -971,6 +1055,7 @@ const RAW = [
   },
   {
     id: 'gear-up-intermedia',
+    theme: 'hiking',
     sourceUrl: '',
     title: 'Gear Up and Go: Intermedia Course',
     short: 'Hiking Course',
@@ -991,6 +1076,7 @@ const RAW = [
   },
   {
     id: 'chamizal-library-july4',
+    theme: 'crafts',
     sourceUrl: '',
     title: 'Chamizal Library 4th of July Crafts',
     short: 'Library Crafts',
@@ -1010,6 +1096,7 @@ const RAW = [
   },
   {
     id: 'hope-mobile-clinic',
+    theme: 'festival',
     sourceUrl: '',
     title: 'H.O.P.E+ Mobile Clinic & Health Fair',
     short: 'Health Fair',
@@ -1030,6 +1117,7 @@ const RAW = [
   },
   {
     id: 'consequences-deadbeach',
+    theme: 'guitar',
     sourceUrl: '',
     title: 'The Consequences Band at DeadBeach',
     short: 'Live Music',
@@ -1049,6 +1137,7 @@ const RAW = [
   },
   {
     id: 'cielo-vista-saleabration',
+    theme: 'market',
     sourceUrl: '',
     title: "It's a Sale-Abration at Cielo Vista Mall",
     short: 'Sale-Abration',
@@ -1068,6 +1157,7 @@ const RAW = [
   },
   {
     id: 'usa-250-airport',
+    theme: 'airport',
     sourceUrl: '',
     title: "Celebrating USA's 250th at the Airport",
     short: 'Airport 250',
@@ -1087,6 +1177,7 @@ const RAW = [
   },
   {
     id: 'san-eli-guided-tour',
+    theme: 'historic',
     sourceUrl: '',
     recur: { monthly: true, until: '2026-12-31' },
     title: 'San Elizario Guided Tour',
@@ -1120,6 +1211,7 @@ function recurLabel(recur) {
 function makeInstance(e, d, first) {
   return {
     ...e,
+    image: THEME_IMAGES[e.theme] || e.image,
     id: first ? e.id : `${e.id}-${isoOf(d)}`,
     seriesId: e.id,
     recurLabel: recurLabel(e.recur),
