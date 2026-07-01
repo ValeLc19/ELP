@@ -16,7 +16,7 @@ import EventDetail from '../components/EventDetail.jsx'
 import AuthModal from '../components/AuthModal.jsx'
 import AddBusinessModal from '../components/AddBusinessModal.jsx'
 import Onboarding from '../components/Onboarding.jsx'
-import { useAuth, displayName } from '../lib/auth.js'
+import { useAuth, displayName, demoSignIn } from '../lib/auth.js'
 import { isSaved } from '../lib/saved.js'
 import {
   SearchIcon,
@@ -125,8 +125,10 @@ export default function Events() {
 
   // Open a shared event link (?event=<id>) on first load.
   useEffect(() => {
-    const id = new URLSearchParams(window.location.search).get('event')
+    const params = new URLSearchParams(window.location.search)
+    const id = params.get('event')
     if (id && EVENTS.some((e) => e.id === id)) setSelectedId(id)
+    if (params.get('demo')) demoSignIn() // preview the signed-in state
   }, [])
 
   // Keep the URL in sync with the open event so it's always shareable.

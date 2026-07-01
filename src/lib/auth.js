@@ -60,6 +60,22 @@ export function logOut() {
   emit()
 }
 
+// Preview helper: sign in as a demo account (used by ?demo=1).
+export function demoSignIn() {
+  const users = readUsers()
+  if (!users.some((u) => u.username === 'demo@elp.com')) {
+    users.push({
+      username: 'demo@elp.com',
+      password: 'demo123',
+      interests: ['Music', 'Outdoors', 'Food'],
+    })
+    writeUsers(users)
+  }
+  current = 'demo@elp.com'
+  localStorage.setItem(CUR, current)
+  emit()
+}
+
 // A short display name from the email/username (e.g. user@mail.com -> user).
 export function displayName(user) {
   if (!user) return ''
