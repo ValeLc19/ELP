@@ -1,0 +1,49 @@
+/* Keyframes used by the Hero Map SVG (referenced via inline style="animation:..."). */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+@keyframes sway {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1.8px); }
+}
+@keyframes legf {
+  0%, 100% { transform: rotate(17deg); }
+  50% { transform: rotate(-17deg); }
+}
+@keyframes legb {
+  0%, 100% { transform: rotate(-17deg); }
+  50% { transform: rotate(17deg); }
+}
+@keyframes driveR {
+  from { transform: translateX(-190px); }
+  to { transform: translateX(1740px); }
+}
+@keyframes driveL {
+  from { transform: translateX(1740px); }
+  to { transform: translateX(-190px); }
+}
+@keyframes sunbob {
+  0%, 100% { transform: translateY(-7px); }
+  50% { transform: translateY(10px); }
+}
+
+.hero-map {
+  width: 100%;
+  line-height: 0;
+}
+.hero-map svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-map * {
+    animation: none !important;
+  }
+}

@@ -1,90 +1,134 @@
 .landing {
-  /* Palette (day is the default warm look); dusk/night override below. */
-  --lp-bg: #d8cdbe;
-  --lp-bubble: #f6f2ea;
-  --lp-ink: #1c1c1c;
-  --lp-cta-hover: #fffdf8;
-
-  min-height: 100vh;
-  padding: clamp(2rem, 6vh, 5rem) clamp(1rem, 5vw, 4rem);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: clamp(2rem, 6vh, 4rem);
-  background: var(--lp-bg);
-  transition: background 0.6s ease;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 520px;
+  overflow: hidden;
+  background: #efe4d2;
+  font-family: var(--serif); /* Antic Didone */
 }
 
-/* Around sunset — warm peach-to-rose sky */
-.landing--dusk {
-  --lp-bg: linear-gradient(160deg, #f0b98d 0%, #db9a86 45%, #a9748e 100%);
-  --lp-bubble: #f8efe4;
-  --lp-ink: #33212c;
-  --lp-cta-hover: #fff7ee;
+/* living map background — cover the viewport, drift slowly */
+.landing__map {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: max(100%, 177.78vh);
+  z-index: 0;
+}
+.landing__map-pan {
+  width: 100%;
+  animation: slowPan 34s ease-in-out infinite;
+  transform-origin: center;
 }
 
-/* Night — deep dusk-blue sky, darker bubbles, light text */
-.landing--night {
-  --lp-bg: linear-gradient(160deg, #171d31 0%, #232a46 55%, #2c2442 100%);
-  --lp-bubble: #2c3350;
-  --lp-ink: #f2ede2;
-  --lp-cta-hover: #3a4363;
+.landing__warmth {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(250, 244, 235, 0.35) 0%,
+    rgba(250, 244, 235, 0) 26%
+  );
 }
 
-/* Shared cream "pill" bubble */
-.bubble {
-  margin: 0;
-  font-family: var(--serif);
-  background: var(--lp-bubble);
-  color: var(--lp-ink);
-  border-radius: 999px;
-  padding: clamp(1.2rem, 3vw, 2.4rem) clamp(1.8rem, 4vw, 3.4rem);
-  font-size: clamp(1.1rem, 4.4vw, 3.2rem);
-  line-height: 1.25;
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes slowPan {
+  0% {
+    transform: scale(1.02) translate(0, 0);
+  }
+  50% {
+    transform: scale(1.06) translate(-1.2%, 0.8%);
+  }
+  100% {
+    transform: scale(1.02) translate(0, 0);
+  }
+}
+
+.epc {
+  opacity: 0;
+  animation: fadeUp 0.95s cubic-bezier(0.2, 0.75, 0.2, 1) forwards;
+}
+
+/* shared panel copy */
+.landing__panel-text {
+  font-size: clamp(24px, 3.9vw, 50px);
+  line-height: 1.08;
+  color: #2c231d;
   font-weight: 400;
-  max-width: 92vw;
-  width: fit-content;
 }
 
-/* Keep each line on a single line so every bubble shows exactly the two
-   lines defined by the <br />, with no extra wrapping. */
-.bubble__text {
-  display: block;
-  white-space: nowrap;
+.landing__title {
+  position: absolute;
+  z-index: 2;
+  top: 3%;
+  left: 0;
+  max-width: min(60%, 720px);
+  background: rgba(251, 246, 238, 0.8);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  border-radius: 0 26px 26px 0;
+  padding: clamp(12px, 2.2vh, 24px) clamp(22px, 3vw, 44px)
+    clamp(12px, 2.2vh, 24px) clamp(22px, 3.4vw, 52px);
+  box-shadow: 0 14px 44px -32px rgba(44, 35, 29, 0.4);
+  animation-delay: 0.15s;
 }
 
-.bubble--left {
-  align-self: flex-start;
-  text-align: left;
-}
-
-.bubble--right {
-  align-self: flex-end;
+.landing__middle {
+  position: absolute;
+  z-index: 2;
+  top: 21%;
+  right: 0;
+  max-width: min(66%, 800px);
   text-align: right;
+  background: rgba(251, 246, 238, 0.8);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  border-radius: 26px 0 0 26px;
+  padding: clamp(12px, 2.2vh, 24px) clamp(22px, 3vw, 44px)
+    clamp(12px, 2.2vh, 24px) clamp(30px, 5vw, 72px);
+  animation-delay: 0.55s;
 }
 
-.bubble--center {
-  align-self: center;
-  text-align: center;
+.landing__cta-wrap {
+  position: absolute;
+  z-index: 2;
+  bottom: 13%;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  animation-delay: 0.95s;
 }
-
-/* The clickable call-to-action */
-.bubble--cta {
-  font-family: inherit;
+.landing__cta {
+  font-family: var(--serif);
+  font-size: clamp(17px, 2.3vw, 28px);
+  color: #fbf6ee;
+  background: #2c231d;
   border: none;
+  border-radius: 999px;
+  padding: clamp(10px, 1.4vh, 16px) clamp(24px, 3.2vw, 46px);
+  box-shadow: 0 14px 40px -26px rgba(44, 35, 29, 0.55);
   cursor: pointer;
-  transition: box-shadow 0.3s ease, background 0.3s ease;
+  transition: all 0.3s ease;
 }
-
-.bubble--cta:hover {
-  background: var(--lp-cta-hover);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
-  text-decoration: underline;
-  text-underline-offset: 6px;
-  text-decoration-thickness: 1px;
+.landing__cta:hover {
+  background: #d15a3a;
+  color: #fbf6ee;
+  transform: translateY(-2px);
 }
-
-.bubble--cta:focus-visible {
-  outline: 2px solid var(--lp-ink);
+.landing__cta:focus-visible {
+  outline: 2px solid #2c231d;
   outline-offset: 4px;
 }
