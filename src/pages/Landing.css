@@ -1,4 +1,10 @@
 .landing {
+  /* "ink" scheme from the design: dark panels, light text, gold button */
+  --panel-bg: rgba(26, 22, 18, 0.72);
+  --panel-text: #fbf6ee;
+  --cta-bg: #e3a035;
+  --cta-text: #241e19;
+
   position: relative;
   width: 100%;
   height: 100vh;
@@ -65,7 +71,7 @@
 .landing__panel-text {
   font-size: clamp(24px, 3.9vw, 50px);
   line-height: 1.08;
-  color: #2c231d;
+  color: var(--panel-text);
   font-weight: 400;
 }
 
@@ -75,7 +81,7 @@
   top: 3%;
   left: 0;
   max-width: min(60%, 720px);
-  background: rgba(251, 246, 238, 0.8);
+  background: var(--panel-bg);
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
   border-radius: 0 26px 26px 0;
@@ -92,7 +98,7 @@
   right: 0;
   max-width: min(66%, 800px);
   text-align: right;
-  background: rgba(251, 246, 238, 0.8);
+  background: var(--panel-bg);
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
   border-radius: 26px 0 0 26px;
@@ -114,8 +120,8 @@
 .landing__cta {
   font-family: var(--serif);
   font-size: clamp(17px, 2.3vw, 28px);
-  color: #fbf6ee;
-  background: #2c231d;
+  color: var(--cta-text);
+  background: var(--cta-bg);
   border: none;
   border-radius: 999px;
   padding: clamp(10px, 1.4vh, 16px) clamp(24px, 3.2vw, 46px);
@@ -129,6 +135,6 @@
   transform: translateY(-2px);
 }
 .landing__cta:focus-visible {
-  outline: 2px solid #2c231d;
+  outline: 2px solid #fbf6ee;
   outline-offset: 4px;
 }
