@@ -1,14 +1,19 @@
 import { categoryColor, categoryTint } from '../data/categories.js'
+import { useSaved } from '../lib/saved.js'
 import {
   LocationIcon,
   CalendarIcon,
   TicketIcon,
   UsersIcon,
+  HeartIcon,
 } from './icons.jsx'
 
 export default function EventCard({ event, onSelect, variant = 'full' }) {
   const color = categoryColor(event.category)
   const compact = variant === 'compact'
+  const { isSaved, toggle } = useSaved()
+  const saveKey = event.seriesId || event.id
+  const saved = isSaved(saveKey)
 
   return (
     <article
@@ -28,6 +33,18 @@ export default function EventCard({ event, onSelect, variant = 'full' }) {
         style={{ backgroundImage: `url("${event.image}")` }}
       >
         <span className="ev-card__price-tag">{event.price}</span>
+        <button
+          className={`save-heart ${saved ? 'is-saved' : ''}`}
+          aria-label={saved ? 'Remove from saved' : 'Save event'}
+          aria-pressed={saved}
+          onClick={(e) => {
+            e.stopPropagation()
+            toggle(saveKey)
+          }}
+          onKeyDown={(e) => e.stopPropagation()}
+        >
+          <HeartIcon filled={saved} />
+        </button>
       </div>
 
       <div className="ev-card__body">

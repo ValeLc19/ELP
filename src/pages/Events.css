@@ -523,6 +523,34 @@
   background-position: center;
   position: relative;
 }
+/* Save/like heart — white rounded chip so it stays visible on photos */
+.save-heart {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  color: #9a9a9a; /* neutral gray outline when not saved */
+  transition: color 0.15s ease, transform 0.12s ease;
+}
+.save-heart:not(.is-saved):hover {
+  color: #e2a08d; /* light clay tint hints it's tappable */
+}
+.save-heart.is-saved {
+  color: #d15a3a; /* clay fill when saved */
+}
+.save-heart:active {
+  transform: scale(0.9);
+}
+
 .ev-card__price-tag {
   position: absolute;
   left: 0.7rem;

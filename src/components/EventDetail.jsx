@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { categoryColor, categoryTint } from '../data/categories.js'
+import { useSaved } from '../lib/saved.js'
 import {
   LocationIcon,
   CalendarIcon,
@@ -9,11 +10,15 @@ import {
   ChatIcon,
   CopyIcon,
   CheckIcon,
+  HeartIcon,
 } from './icons.jsx'
 
 export default function EventDetail({ event, onBack }) {
   const color = categoryColor(event.category)
   const [copied, setCopied] = useState(false)
+  const { isSaved, toggle } = useSaved()
+  const saveKey = event.seriesId || event.id
+  const saved = isSaved(saveKey)
 
   const eventUrl = `${window.location.origin}${window.location.pathname}?event=${encodeURIComponent(event.id)}`
 
@@ -39,6 +44,14 @@ export default function EventDetail({ event, onBack }) {
           style={{ backgroundImage: `url("${event.image}")` }}
         >
           <span className="ev-card__price-tag">{event.price}</span>
+          <button
+            className={`save-heart ${saved ? 'is-saved' : ''}`}
+            aria-label={saved ? 'Remove from saved' : 'Save event'}
+            aria-pressed={saved}
+            onClick={() => toggle(saveKey)}
+          >
+            <HeartIcon filled={saved} />
+          </button>
         </div>
 
         <div className="detail__body">
