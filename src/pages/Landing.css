@@ -71,10 +71,11 @@
 
 /* shared panel copy */
 .landing__panel-text {
-  font-size: clamp(24px, 3.9vw, 50px);
+  font-size: clamp(16px, 3.9vw, 50px);
   line-height: 1.08;
   color: var(--panel-text);
   font-weight: 400;
+  white-space: nowrap; /* keep each line to exactly the two <br/> lines */
 }
 
 .landing__title {
