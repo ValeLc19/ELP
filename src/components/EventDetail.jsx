@@ -13,7 +13,7 @@ import {
   HeartIcon,
 } from './icons.jsx'
 
-export default function EventDetail({ event, onBack }) {
+export default function EventDetail({ event, onBack, onRequireAuth }) {
   const color = categoryColor(event.category)
   const [copied, setCopied] = useState(false)
   const { isSaved, toggle } = useSaved()
@@ -48,7 +48,10 @@ export default function EventDetail({ event, onBack }) {
             className={`save-heart ${saved ? 'is-saved' : ''}`}
             aria-label={saved ? 'Remove from saved' : 'Save event'}
             aria-pressed={saved}
-            onClick={() => toggle(saveKey)}
+            onClick={() => {
+              if (onRequireAuth && !onRequireAuth()) return
+              toggle(saveKey)
+            }}
           >
             <HeartIcon filled={saved} />
           </button>

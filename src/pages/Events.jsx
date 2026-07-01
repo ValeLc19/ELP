@@ -13,7 +13,17 @@ import MapView from '../components/MapView.jsx'
 import CalendarView from '../components/CalendarView.jsx'
 import EventCard from '../components/EventCard.jsx'
 import EventDetail from '../components/EventDetail.jsx'
-import { SearchIcon, ScanFaceIcon } from '../components/icons.jsx'
+import AuthModal from '../components/AuthModal.jsx'
+import AddBusinessModal from '../components/AddBusinessModal.jsx'
+import Onboarding from '../components/Onboarding.jsx'
+import { useAuth, displayName } from '../lib/auth.js'
+import { isSaved } from '../lib/saved.js'
+import {
+  SearchIcon,
+  ScanFaceIcon,
+  PlusBoxIcon,
+  SavedIcon,
+} from '../components/icons.jsx'
 
 const DATE_FILTERS = ['Today', 'This Weekend', 'This Week']
 
@@ -99,6 +109,12 @@ export default function Events() {
   const [query, setQuery] = useState('')
   const [selectedId, setSelectedId] = useState(null)
 
+  const { user, logOut } = useAuth()
+  const [authOpen, setAuthOpen] = useState(false)
+  const [onboarding, setOnboarding] = useState(false)
+  const [savedOnly, setSavedOnly] = useState(false)
+  const [addBizOpen, setAddBizOpen] = useState(false)
+
   const resetFilters = () => {
     setActiveCat('All')
     setActiveDate(null)
@@ -138,9 +154,19 @@ export default function Events() {
       const audienceOk =
         !audienceFilter ||
         (audienceFilter === 'Kids' ? e.family : !!e.ageNote)
-      return catOk && qOk && dateOk && priceOk && audienceOk
+      const savedOk = !savedOnly || isSaved(e.seriesId || e.id)
+      return catOk && qOk && dateOk && priceOk && audienceOk && savedOk
     })
-  }, [activeCat, activeDate, priceFilter, audienceFilter, query, view])
+  }, [activeCat, activeDate, priceFilter, audienceFilter, query, view, savedOnly])
+
+  // Saving requires an account — open the auth modal if logged out.
+  const requireAuth = () => {
+    if (!user) {
+      setAuthOpen(true)
+      return false
+    }
+    return true
+  }
 
   // Map and List show one card/pin per series; the calendar keeps every date.
   const collapsed = useMemo(() => collapseSeries(filtered), [filtered])
@@ -294,24 +320,75 @@ export default function Events() {
         <br />
         The closest event is:
       </p>
-      <EventCard event={EVENTS[0]} onSelect={setSelectedId} />
+      <EventCard event={EVENTS[0]} onSelect={setSelectedId} onRequireAuth={requireAuth} />
       <button className="empty__similar" onClick={resetFilters}>
         See similar events
       </button>
     </div>
   )
 
-  const detailPanel = <EventDetail event={selected} onBack={() => setSelectedId(null)} />
+  const detailPanel = (
+    <EventDetail
+      event={selected}
+      onBack={() => setSelectedId(null)}
+      onRequireAuth={requireAuth}
+    />
+  )
 
   const header = (
     <header className="events__header">
       <h1 className="events__logo" onClick={() => navigate('/')} title="Back to home">
         ELP
       </h1>
-      <button className="events__profile" aria-label="Profile">
-        <ScanFaceIcon />
-      </button>
+      {user && <span className="events__welcome">Welcome {displayName(user)}</span>}
+      <div className="events__actions">
+        {user && (
+          <>
+            <button
+              className="events__icon-btn"
+              aria-label="Add a business"
+              title="Add a local business to pull in their events"
+              onClick={() => setAddBizOpen(true)}
+            >
+              <PlusBoxIcon />
+            </button>
+            <button
+              className={`events__icon-btn ${savedOnly ? 'is-active' : ''}`}
+              aria-label="Saved events"
+              aria-pressed={savedOnly}
+              title="Your saved events"
+              onClick={() => setSavedOnly((s) => !s)}
+            >
+              <SavedIcon />
+            </button>
+          </>
+        )}
+        <button
+          className="events__profile"
+          aria-label={user ? 'Account' : 'Log in or sign up'}
+          title={user ? 'Log out' : 'Log in / Sign up'}
+          onClick={() => (user ? logOut() : setAuthOpen(true))}
+        >
+          <ScanFaceIcon />
+        </button>
+      </div>
     </header>
+  )
+
+  const overlays = (
+    <>
+      {authOpen && (
+        <AuthModal
+          onClose={() => setAuthOpen(false)}
+          onSignedUp={() => {
+            setAuthOpen(false)
+            setOnboarding(true)
+          }}
+        />
+      )}
+      {onboarding && <Onboarding onDone={() => setOnboarding(false)} />}
+      {addBizOpen && <AddBusinessModal onClose={() => setAddBizOpen(false)} />}
+    </>
   )
 
   // ---------- List view ----------
@@ -351,6 +428,7 @@ export default function Events() {
                     event={e}
                     variant="compact"
                     onSelect={setSelectedId}
+                    onRequireAuth={requireAuth}
                   />
                 ))}
               </div>
@@ -359,6 +437,7 @@ export default function Events() {
 
           {selected && <aside className="events__panel">{detailPanel}</aside>}
         </div>
+        {overlays}
       </div>
     )
   }
@@ -400,7 +479,12 @@ export default function Events() {
               ) : (
                 <div className="events__list">
                   {sorted.map((e) => (
-                    <EventCard key={e.id} event={e} onSelect={setSelectedId} />
+                    <EventCard
+                      key={e.id}
+                      event={e}
+                      onSelect={setSelectedId}
+                      onRequireAuth={requireAuth}
+                    />
                   ))}
                 </div>
               )}
@@ -408,6 +492,7 @@ export default function Events() {
           )}
         </aside>
       </div>
+      {overlays}
     </div>
   )
 }

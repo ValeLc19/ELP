@@ -95,6 +95,26 @@ export const CheckIcon = (p) => (
   </svg>
 )
 
+export const PlusBoxIcon = (p) => (
+  <svg {...base} width={26} height={26} {...p}>
+    <rect x="3.5" y="3.5" width="17" height="17" rx="4" />
+    <path d="M12 8.5v7M8.5 12h7" />
+  </svg>
+)
+
+export const SavedIcon = (p) => (
+  <svg {...base} width={26} height={26} {...p}>
+    <path d="M3.5 7a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2z" />
+    <path d="M12 11.4c1-1.2 3.2-.5 3.2 1.1 0 1.3-1.7 2.3-3.2 3.3-1.5-1-3.2-2-3.2-3.3 0-1.6 2.2-2.3 3.2-1.1z" />
+  </svg>
+)
+
+export const XIcon = (p) => (
+  <svg {...base} {...p}>
+    <path d="M18 6 6 18M6 6l12 12" />
+  </svg>
+)
+
 export const ScanFaceIcon = (p) => (
   <svg {...base} width={34} height={34} {...p}>
     <path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2" />

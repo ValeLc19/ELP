@@ -1,0 +1,191 @@
+.auth {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #f8f2e6;
+  color: #1c1c1c;
+  overflow-y: auto;
+  padding: clamp(1rem, 3vw, 2.5rem);
+  animation: authFadeIn 0.3s ease;
+}
+@keyframes authFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.auth__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #1c1c1c;
+  padding-bottom: 0.6rem;
+}
+.auth__logo {
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  margin: 0;
+  letter-spacing: 0.04em;
+}
+.auth__close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #1c1c1c;
+  padding: 0.4rem;
+}
+
+.auth__body {
+  max-width: 620px;
+  margin: clamp(1.5rem, 5vh, 3rem) auto 0;
+  text-align: center;
+}
+.auth__scan {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.4rem;
+}
+
+.auth__title {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  letter-spacing: 0.08em;
+  margin: 0.2rem 0 0.2rem;
+}
+
+/* choice screen */
+.auth__choice {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+.auth__link {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #1c1c1c;
+  padding: 0.3rem 0.6rem;
+}
+.auth__link:hover { color: #d15a3a; }
+
+/* forms */
+.auth__form {
+  text-align: left;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+.auth__business {
+  align-self: center;
+  background: none;
+  border: none;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  color: #4a4038;
+  cursor: pointer;
+  margin-bottom: 1.2rem;
+}
+.auth__business.is-on { color: #2e8b57; }
+
+.auth__label {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  margin: 0.8rem 0 0.4rem;
+}
+.auth__field {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.auth__input {
+  flex: 1;
+  font-family: inherit;
+  font-size: 1.1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d8cdbe;
+  border-radius: 10px;
+  background: #fffdf8;
+  color: #1c1c1c;
+  outline: none;
+}
+.auth__input::placeholder {
+  color: #b3a894;
+  font-style: italic;
+}
+.auth__input:focus {
+  border-color: #b89a6a;
+}
+.auth__mark {
+  width: 28px;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.auth__remember {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-style: italic;
+  margin-top: 0.8rem;
+  font-size: 1.05rem;
+}
+.auth__remember input { width: 16px; height: 16px; }
+
+.auth__interests-q {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  margin: 1.4rem 0 0.8rem;
+}
+.auth__interests {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  background: #efe7d6;
+  border-radius: 12px;
+  padding: 0.9rem;
+}
+/* reuse .chip / .badge__dot from Events.css; is-on gives the filled look */
+
+.auth__error {
+  color: #c0564a;
+  font-style: italic;
+  margin: 1rem 0 0.4rem;
+}
+.auth__error--big {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  text-align: center;
+  font-style: normal;
+}
+
+.auth__done {
+  align-self: center;
+  margin-top: 1.2rem;
+  background: #d15a3a;
+  color: #241a12;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  padding: 0.4rem 2rem;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+.auth__done:hover { filter: brightness(1.05); }
+
+.auth__switch {
+  align-self: center;
+  margin-top: 1rem;
+  background: none;
+  border: none;
+  color: #5a7d6b;
+  cursor: pointer;
+  text-decoration: underline;
+  font-family: inherit;
+  font-size: 0.95rem;
+}

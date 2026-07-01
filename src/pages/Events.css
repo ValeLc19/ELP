@@ -45,6 +45,34 @@
   color: var(--ink);
   padding: 0.3rem;
 }
+.events__welcome {
+  flex: 1;
+  font-family: var(--serif);
+  font-size: clamp(1.2rem, 2.6vw, 1.9rem);
+  color: var(--ink);
+  margin-left: 1.4rem;
+}
+.events__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.events__icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink);
+  padding: 0.35rem;
+  border-radius: 8px;
+  display: inline-flex;
+}
+.events__icon-btn:hover {
+  background: #efe7d6;
+}
+.events__icon-btn.is-active {
+  background: #f4d9cf;
+  color: #d15a3a;
+}
 
 /* ---------- Layout ---------- */
 .events__layout {

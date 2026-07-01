@@ -8,7 +8,12 @@ import {
   HeartIcon,
 } from './icons.jsx'
 
-export default function EventCard({ event, onSelect, variant = 'full' }) {
+export default function EventCard({
+  event,
+  onSelect,
+  onRequireAuth,
+  variant = 'full',
+}) {
   const color = categoryColor(event.category)
   const compact = variant === 'compact'
   const { isSaved, toggle } = useSaved()
@@ -39,6 +44,7 @@ export default function EventCard({ event, onSelect, variant = 'full' }) {
           aria-pressed={saved}
           onClick={(e) => {
             e.stopPropagation()
+            if (onRequireAuth && !onRequireAuth()) return
             toggle(saveKey)
           }}
           onKeyDown={(e) => e.stopPropagation()}
