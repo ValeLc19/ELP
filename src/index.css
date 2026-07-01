@@ -24,7 +24,8 @@ body {
   margin: 0;
   font-family: var(--sans);
   color: var(--ink);
-  background: var(--beige);
+  /* warm cream behind everything so page-to-page fades stay seamless */
+  background: #efe4d2;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }

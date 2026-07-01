@@ -9,6 +9,17 @@
   background: var(--page);
   padding: clamp(1rem, 3vw, 2.5rem);
   color: var(--ink);
+  animation: eventsFadeIn 1s ease both;
+}
+
+/* Gentle fade-in when arriving from the landing page */
+@keyframes eventsFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* ---------- Header ---------- */

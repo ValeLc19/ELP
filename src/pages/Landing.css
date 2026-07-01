@@ -12,6 +12,14 @@
   overflow: hidden;
   background: #efe4d2;
   font-family: var(--serif); /* Antic Didone */
+  transition: opacity 1.3s ease, transform 1.3s ease;
+}
+
+/* Slow fade-away when leaving for the events page */
+.landing--leaving {
+  opacity: 0;
+  transform: scale(1.02);
+  pointer-events: none;
 }
 
 /* living map background — cover the viewport, drift slowly */
