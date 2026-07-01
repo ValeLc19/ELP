@@ -62,9 +62,11 @@
   }
 }
 
+/* The map holds alone for 3s, then each hero fades up over 3s.
+   Starts are staggered ~1.5s so the reveal keeps breathing (settles ~9s). */
 .epc {
   opacity: 0;
-  animation: fadeUp 0.95s cubic-bezier(0.2, 0.75, 0.2, 1) forwards;
+  animation: fadeUp 3s cubic-bezier(0.2, 0.75, 0.2, 1) forwards;
 }
 
 /* shared panel copy */
@@ -88,7 +90,7 @@
   padding: clamp(12px, 2.2vh, 24px) clamp(22px, 3vw, 44px)
     clamp(12px, 2.2vh, 24px) clamp(22px, 3.4vw, 52px);
   box-shadow: 0 14px 44px -32px rgba(44, 35, 29, 0.4);
-  animation-delay: 0.15s;
+  animation-delay: 3s;
 }
 
 .landing__middle {
@@ -104,7 +106,7 @@
   border-radius: 26px 0 0 26px;
   padding: clamp(12px, 2.2vh, 24px) clamp(22px, 3vw, 44px)
     clamp(12px, 2.2vh, 24px) clamp(30px, 5vw, 72px);
-  animation-delay: 0.55s;
+  animation-delay: 4.5s;
 }
 
 .landing__cta-wrap {
@@ -115,7 +117,7 @@
   right: 0;
   display: flex;
   justify-content: center;
-  animation-delay: 0.95s;
+  animation-delay: 6s;
 }
 .landing__cta {
   font-family: var(--serif);
