@@ -131,6 +131,14 @@
 .auth__input:focus {
   border-color: #b89a6a;
 }
+/* verified e-mail turns green */
+.auth__input--ok {
+  border-color: #6fae6f;
+  box-shadow: 0 0 0 1px #6fae6f;
+}
+.auth__input--ok:focus {
+  border-color: #6fae6f;
+}
 .auth__mark {
   width: 44px;
   display: inline-flex;

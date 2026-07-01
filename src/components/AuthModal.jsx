@@ -72,7 +72,6 @@ export default function AuthModal({ onClose, onSignedUp }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [remember, setRemember] = useState(false)
-  const [isBusiness, setIsBusiness] = useState(false)
   const [interests, setInterests] = useState([])
   const [error, setError] = useState('')
 
@@ -96,7 +95,6 @@ export default function AuthModal({ onClose, onSignedUp }) {
       username: email.trim(),
       password,
       interests,
-      isBusiness,
     })
     if (!res.ok) setError(res.error)
     else onSignedUp()
@@ -131,9 +129,9 @@ export default function AuthModal({ onClose, onSignedUp }) {
             onSubmit={(e) => { e.preventDefault(); doLogin() }}
           >
             <h2 className="auth__title">LOG IN</h2>
-            <label className="auth__label">Username:</label>
+            <label className="auth__label">E-mail:</label>
             <input
-              className="auth__input"
+              className={`auth__input ${email && emailOk(email) ? 'auth__input--ok' : ''}`}
               type="email"
               placeholder="user@mail.com"
               value={email}
@@ -169,18 +167,11 @@ export default function AuthModal({ onClose, onSignedUp }) {
             onSubmit={(e) => { e.preventDefault(); doSignup() }}
           >
             <h2 className="auth__title">SIGN UP</h2>
-            <button
-              type="button"
-              className={`auth__business ${isBusiness ? 'is-on' : ''}`}
-              onClick={() => setIsBusiness((b) => !b)}
-            >
-              Are you a business?{isBusiness ? ' ✓' : ''}
-            </button>
 
-            <label className="auth__label">Username</label>
+            <label className="auth__label">E-mail</label>
             <div className="auth__field">
               <input
-                className="auth__input"
+                className={`auth__input ${email && emailOk(email) ? 'auth__input--ok' : ''}`}
                 type="email"
                 placeholder="user@mail.com"
                 value={email}
