@@ -1,18 +1,42 @@
 .landing {
+  /* Palette (day is the default warm look); dusk/night override below. */
+  --lp-bg: #d8cdbe;
+  --lp-bubble: #f6f2ea;
+  --lp-ink: #1c1c1c;
+  --lp-cta-hover: #fffdf8;
+
   min-height: 100vh;
   padding: clamp(2rem, 6vh, 5rem) clamp(1rem, 5vw, 4rem);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: clamp(2rem, 6vh, 4rem);
+  background: var(--lp-bg);
+  transition: background 0.6s ease;
+}
+
+/* Around sunset — warm peach-to-rose sky */
+.landing--dusk {
+  --lp-bg: linear-gradient(160deg, #f0b98d 0%, #db9a86 45%, #a9748e 100%);
+  --lp-bubble: #f8efe4;
+  --lp-ink: #33212c;
+  --lp-cta-hover: #fff7ee;
+}
+
+/* Night — deep dusk-blue sky, darker bubbles, light text */
+.landing--night {
+  --lp-bg: linear-gradient(160deg, #171d31 0%, #232a46 55%, #2c2442 100%);
+  --lp-bubble: #2c3350;
+  --lp-ink: #f2ede2;
+  --lp-cta-hover: #3a4363;
 }
 
 /* Shared cream "pill" bubble */
 .bubble {
   margin: 0;
   font-family: var(--serif);
-  background: var(--cream);
-  color: var(--ink);
+  background: var(--lp-bubble);
+  color: var(--lp-ink);
   border-radius: 999px;
   padding: clamp(1.2rem, 3vw, 2.4rem) clamp(1.8rem, 4vw, 3.4rem);
   font-size: clamp(1.1rem, 4.4vw, 3.2rem);
@@ -53,14 +77,14 @@
 }
 
 .bubble--cta:hover {
-  background: #fffdf8;
-  box-shadow: 0 10px 30px rgba(28, 28, 28, 0.12);
+  background: var(--lp-cta-hover);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
   text-decoration: underline;
   text-underline-offset: 6px;
   text-decoration-thickness: 1px;
 }
 
 .bubble--cta:focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--lp-ink);
   outline-offset: 4px;
 }

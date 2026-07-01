@@ -47,11 +47,20 @@ function Phrase({ className, from, pillDelay, onClick, children }) {
   )
 }
 
+// Pick the palette from the current hour: day, dusk (around sunset), or night.
+function timeOfDay() {
+  const h = new Date().getHours()
+  if (h >= 20 || h < 6) return 'night'
+  if (h >= 17) return 'dusk'
+  return 'day'
+}
+
 export default function Landing() {
   const navigate = useNavigate()
+  const mode = timeOfDay()
 
   return (
-    <main className="landing">
+    <main className={`landing landing--${mode}`}>
       {/* left slides in from the left */}
       <Phrase className="bubble bubble--left" from={{ x: -80 }} pillDelay={0.6}>
         Every event around El Paso,
