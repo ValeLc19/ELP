@@ -132,9 +132,42 @@
   border-color: #b89a6a;
 }
 .auth__mark {
-  width: 28px;
+  width: 44px;
   display: inline-flex;
   justify-content: center;
+}
+
+/* Animated validation marker: circle draws, then check/X strokes in */
+.authmark__circle {
+  stroke-dasharray: 151;
+  stroke-dashoffset: 151;
+  animation: authRing 0.5s ease forwards;
+}
+@keyframes authRing {
+  to { stroke-dashoffset: 0; }
+}
+.authmark__check {
+  stroke-dasharray: 44;
+  stroke-dashoffset: 44;
+  animation: authDraw 0.35s 0.42s ease forwards;
+}
+.authmark__x {
+  stroke-dasharray: 22;
+  stroke-dashoffset: 22;
+  animation: authDraw 0.24s ease forwards;
+}
+.authmark__x1 { animation-delay: 0.42s; }
+.authmark__x2 { animation-delay: 0.62s; }
+@keyframes authDraw {
+  to { stroke-dashoffset: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .authmark__circle,
+  .authmark__check,
+  .authmark__x {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
 }
 
 .auth__remember {

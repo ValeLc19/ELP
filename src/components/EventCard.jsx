@@ -1,5 +1,6 @@
 import { categoryColor, categoryTint } from '../data/categories.js'
 import { useSaved } from '../lib/saved.js'
+import { useAuth } from '../lib/auth.js'
 import {
   LocationIcon,
   CalendarIcon,
@@ -17,6 +18,7 @@ export default function EventCard({
   const color = categoryColor(event.category)
   const compact = variant === 'compact'
   const { isSaved, toggle } = useSaved()
+  const { user } = useAuth()
   const saveKey = event.seriesId || event.id
   const saved = isSaved(saveKey)
 
@@ -38,19 +40,20 @@ export default function EventCard({
         style={{ backgroundImage: `url("${event.image}")` }}
       >
         <span className="ev-card__price-tag">{event.price}</span>
-        <button
-          className={`save-heart ${saved ? 'is-saved' : ''}`}
-          aria-label={saved ? 'Remove from saved' : 'Save event'}
-          aria-pressed={saved}
-          onClick={(e) => {
-            e.stopPropagation()
-            if (onRequireAuth && !onRequireAuth()) return
-            toggle(saveKey)
-          }}
-          onKeyDown={(e) => e.stopPropagation()}
-        >
-          <HeartIcon filled={saved} />
-        </button>
+        {user && (
+          <button
+            className={`save-heart ${saved ? 'is-saved' : ''}`}
+            aria-label={saved ? 'Remove from saved' : 'Save event'}
+            aria-pressed={saved}
+            onClick={(e) => {
+              e.stopPropagation()
+              toggle(saveKey)
+            }}
+            onKeyDown={(e) => e.stopPropagation()}
+          >
+            <HeartIcon filled={saved} />
+          </button>
+        )}
       </div>
 
       <div className="ev-card__body">

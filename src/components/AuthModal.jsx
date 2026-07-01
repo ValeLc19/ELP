@@ -1,8 +1,57 @@
 import { useState } from 'react'
 import { useAuth } from '../lib/auth.js'
 import { CATEGORY_ORDER, categoryColor, categoryTint } from '../data/categories.js'
-import { ScanFaceIcon, CheckIcon, XIcon } from './icons.jsx'
+import { ScanFaceIcon, XIcon } from './icons.jsx'
 import './AuthModal.css'
+
+// Animated circle marker: green circle+check when valid, red circle+X when not.
+// Keyed by state so it re-draws its animation each time the state flips.
+function AuthMark({ ok }) {
+  const color = ok ? '#6fae6f' : '#c0564a'
+  return (
+    <svg className="authmark" viewBox="0 0 52 52" width="40" height="40">
+      <circle
+        className="authmark__circle"
+        cx="26"
+        cy="26"
+        r="24"
+        fill="none"
+        stroke={color}
+        strokeWidth="3"
+      />
+      {ok ? (
+        <path
+          className="authmark__check"
+          d="M15 27 l7 7 l15 -16"
+          fill="none"
+          stroke={color}
+          strokeWidth="4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      ) : (
+        <>
+          <path
+            className="authmark__x authmark__x1"
+            d="M19 19 L33 33"
+            fill="none"
+            stroke={color}
+            strokeWidth="4"
+            strokeLinecap="round"
+          />
+          <path
+            className="authmark__x authmark__x2"
+            d="M33 19 L19 33"
+            fill="none"
+            stroke={color}
+            strokeWidth="4"
+            strokeLinecap="round"
+          />
+        </>
+      )}
+    </svg>
+  )
+}
 
 const INTERESTS = [
   ...CATEGORY_ORDER.map((c) => ({ label: c, color: categoryColor(c) })),
@@ -138,9 +187,9 @@ export default function AuthModal({ onClose, onSignedUp }) {
                 onChange={(e) => setEmail(e.target.value)}
               />
               <span className="auth__mark">
-                {email && (emailOk(email)
-                  ? <CheckIcon width={26} height={26} color="#6fae6f" />
-                  : <XIcon width={24} height={24} color="#c0564a" />)}
+                {email && (
+                  <AuthMark key={emailOk(email) ? 'ok' : 'no'} ok={emailOk(email)} />
+                )}
               </span>
             </div>
 
@@ -154,9 +203,9 @@ export default function AuthModal({ onClose, onSignedUp }) {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <span className="auth__mark">
-                {password && (pwOk(password)
-                  ? <CheckIcon width={26} height={26} color="#6fae6f" />
-                  : <XIcon width={24} height={24} color="#c0564a" />)}
+                {password && (
+                  <AuthMark key={pwOk(password) ? 'ok' : 'no'} ok={pwOk(password)} />
+                )}
               </span>
             </div>
 

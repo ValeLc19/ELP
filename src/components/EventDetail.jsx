@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { categoryColor, categoryTint } from '../data/categories.js'
 import { useSaved } from '../lib/saved.js'
+import { useAuth } from '../lib/auth.js'
 import {
   LocationIcon,
   CalendarIcon,
@@ -17,6 +18,7 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
   const color = categoryColor(event.category)
   const [copied, setCopied] = useState(false)
   const { isSaved, toggle } = useSaved()
+  const { user } = useAuth()
   const saveKey = event.seriesId || event.id
   const saved = isSaved(saveKey)
 
@@ -44,17 +46,16 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
           style={{ backgroundImage: `url("${event.image}")` }}
         >
           <span className="ev-card__price-tag">{event.price}</span>
-          <button
-            className={`save-heart ${saved ? 'is-saved' : ''}`}
-            aria-label={saved ? 'Remove from saved' : 'Save event'}
-            aria-pressed={saved}
-            onClick={() => {
-              if (onRequireAuth && !onRequireAuth()) return
-              toggle(saveKey)
-            }}
-          >
-            <HeartIcon filled={saved} />
-          </button>
+          {user && (
+            <button
+              className={`save-heart ${saved ? 'is-saved' : ''}`}
+              aria-label={saved ? 'Remove from saved' : 'Save event'}
+              aria-pressed={saved}
+              onClick={() => toggle(saveKey)}
+            >
+              <HeartIcon filled={saved} />
+            </button>
+          )}
         </div>
 
         <div className="detail__body">
