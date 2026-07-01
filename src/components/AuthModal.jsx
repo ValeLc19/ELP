@@ -55,16 +55,14 @@ export default function AuthModal({ onClose, onSignedUp }) {
 
   return (
     <div className="auth" role="dialog" aria-modal="true">
-      <header className="auth__header">
-        <h1 className="auth__logo">ELP</h1>
+      <div className="auth__backdrop" onClick={onClose} />
+      <div className={`auth__card auth__card--${view}`}>
         <button className="auth__close" onClick={onClose} aria-label="Close">
           <XIcon />
         </button>
-      </header>
 
-      <div className="auth__body">
         <div className="auth__scan">
-          <ScanFaceIcon width={64} height={64} />
+          <ScanFaceIcon width={54} height={54} />
         </div>
 
         {view === 'choice' && (

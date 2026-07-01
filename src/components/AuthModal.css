@@ -2,47 +2,58 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: #f8f2e6;
-  color: #1c1c1c;
-  overflow-y: auto;
-  padding: clamp(1rem, 3vw, 2.5rem);
-  animation: authFadeIn 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.auth__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(28, 22, 18, 0.5);
+  animation: authFadeIn 0.25s ease;
 }
 @keyframes authFadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-.auth__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 2px solid #1c1c1c;
-  padding-bottom: 0.6rem;
+/* the pop-up card */
+.auth__card {
+  position: relative;
+  z-index: 1;
+  width: min(420px, 94vw);
+  max-height: 92vh;
+  overflow-y: auto;
+  background: #f8f2e6;
+  color: #1c1c1c;
+  border-radius: 20px;
+  padding: 1.6rem 1.8rem 1.8rem;
+  box-shadow: 0 26px 64px -24px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  animation: authPop 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.auth__logo {
-  font-family: var(--serif);
-  font-size: clamp(2.2rem, 5vw, 3.4rem);
-  margin: 0;
-  letter-spacing: 0.04em;
+.auth__card--signup {
+  width: min(560px, 94vw);
+}
+@keyframes authPop {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 .auth__close {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
   background: none;
   border: none;
   cursor: pointer;
-  color: #1c1c1c;
-  padding: 0.4rem;
-}
-
-.auth__body {
-  max-width: 620px;
-  margin: clamp(1.5rem, 5vh, 3rem) auto 0;
-  text-align: center;
+  color: #6b6257;
+  padding: 0.2rem;
 }
 .auth__scan {
   display: flex;
   justify-content: center;
-  margin-bottom: 0.4rem;
+  margin: 0.4rem 0 0.2rem;
 }
 
 .auth__title {
