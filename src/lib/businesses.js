@@ -129,20 +129,28 @@ function domainOf(raw) {
 const SOCIAL_DOMAINS = ['instagram.', 'facebook.', 'fb.', 'twitter.', 'x.com', 'tiktok.']
 const isSocialDomain = (d) => SOCIAL_DOMAINS.some((s) => d.includes(s))
 
+// Optional unavatar Pro key (set VITE_UNAVATAR_KEY in a .env file). With it,
+// Instagram/Twitter profile photos work; without it, those fall back to initials.
+const UNAVATAR_KEY = import.meta.env.VITE_UNAVATAR_KEY || ''
+const unavatar = (path) =>
+  `https://unavatar.io/${path}?fallback=false${
+    UNAVATAR_KEY ? `&apiKey=${UNAVATAR_KEY}` : ''
+  }`
+
 // Candidate profile/logo URLs to try in order; the card falls back to initials
 // if all fail. Website links use the site's favicon/logo; social handles try
-// unavatar (note: Instagram/Twitter require an unavatar pro plan).
+// unavatar (Instagram/Twitter need the Pro key above).
 export function avatarCandidates(raw) {
   const name = cleanName(raw)
   const p = platformOf(raw)
   const domain = domainOf(raw)
   const urls = []
-  if (p) urls.push(`https://unavatar.io/${p}/${name}?fallback=false`)
+  if (p) urls.push(unavatar(`${p}/${name}`))
   if (domain && !isSocialDomain(domain)) {
-    urls.push(`https://unavatar.io/${domain}?fallback=false`)
+    urls.push(unavatar(domain))
     urls.push(`https://www.google.com/s2/favicons?domain=${domain}&sz=128`)
   }
-  urls.push(`https://unavatar.io/${name}?fallback=false`)
+  urls.push(unavatar(name))
   return urls
 }
 function avatarUrl(raw) {
