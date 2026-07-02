@@ -15,10 +15,11 @@ import EventCard from '../components/EventCard.jsx'
 import EventDetail from '../components/EventDetail.jsx'
 import AuthModal from '../components/AuthModal.jsx'
 import AddBusinessModal from '../components/AddBusinessModal.jsx'
-import MarketModal from '../components/MarketModal.jsx'
+import BusinessCard from '../components/BusinessCard.jsx'
 import Onboarding from '../components/Onboarding.jsx'
 import { useAuth, displayName, demoSignIn } from '../lib/auth.js'
 import { isSaved } from '../lib/saved.js'
+import { useBusinesses } from '../lib/businesses.js'
 import { useLang } from '../lib/i18n.js'
 import {
   SearchIcon,
@@ -120,7 +121,8 @@ export default function Events() {
   const [savedScreen, setSavedScreen] = useState(false) // dedicated saved-events screen
   const [savedTab, setSavedTab] = useState('next') // next | past
   const [addBizOpen, setAddBizOpen] = useState(false)
-  const [marketOpen, setMarketOpen] = useState(false)
+  const [bizScreen, setBizScreen] = useState(false) // My Local Business screen
+  const { items: businesses, remove: removeBusiness, isNew } = useBusinesses()
 
   const resetFilters = () => {
     setActiveCat('All')
@@ -202,9 +204,10 @@ export default function Events() {
       {['map', 'calendar', 'list'].map((key) => (
         <button
           key={key}
-          className={`tab ${!savedScreen && view === key ? 'tab--active' : ''}`}
+          className={`tab ${!savedScreen && !bizScreen && view === key ? 'tab--active' : ''}`}
           onClick={() => {
             setSavedScreen(false)
+            setBizScreen(false)
             setView(key)
           }}
         >
@@ -402,10 +405,15 @@ export default function Events() {
               <PlusBoxIcon />
             </button>
             <button
-              className="events__icon-btn"
+              className={`events__icon-btn ${bizScreen ? 'is-active' : ''}`}
               aria-label="Local businesses"
-              title="Local businesses"
-              onClick={() => setMarketOpen(true)}
+              aria-pressed={bizScreen}
+              title="My local businesses"
+              onClick={() => {
+                setSelectedId(null)
+                setSavedScreen(false)
+                setBizScreen((s) => !s)
+              }}
             >
               <ShopIcon />
             </button>
@@ -417,6 +425,7 @@ export default function Events() {
               title="Your saved events"
               onClick={() => {
                 setSelectedId(null)
+                setBizScreen(false)
                 setSavedScreen((s) => !s)
               }}
             >
@@ -432,6 +441,7 @@ export default function Events() {
             if (user) {
               logOut()
               setSavedScreen(false)
+              setBizScreen(false)
               setSavedFilter(false)
             } else {
               setAuthOpen(true)
@@ -457,9 +467,33 @@ export default function Events() {
       )}
       {onboarding && <Onboarding onDone={() => setOnboarding(false)} />}
       {addBizOpen && <AddBusinessModal onClose={() => setAddBizOpen(false)} />}
-      {marketOpen && <MarketModal onClose={() => setMarketOpen(false)} />}
     </>
   )
+
+  // ---------- My Local Business screen (storefront icon) ----------
+  if (bizScreen) {
+    return (
+      <div className="events">
+        {header}
+        <h2 className="biz-screen__title">{t('myBusinesses')}</h2>
+        {businesses.length === 0 ? (
+          <p className="saved-empty">{t('noBusinesses')}</p>
+        ) : (
+          <div className="biz-grid">
+            {businesses.map((b) => (
+              <BusinessCard
+                key={b.id}
+                biz={b}
+                isNew={isNew(b.id)}
+                onRemove={removeBusiness}
+              />
+            ))}
+          </div>
+        )}
+        {overlays}
+      </div>
+    )
+  }
 
   // ---------- Saved-events screen (folder icon) ----------
   if (savedScreen) {

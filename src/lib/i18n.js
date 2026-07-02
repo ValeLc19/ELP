@@ -97,6 +97,9 @@ const DICT = {
     businessesTitle: 'Local businesses',
     businessesText:
       'The businesses whose accounts you’ve added will show their events here.',
+    myBusinesses: 'My Local Business',
+    noBusinesses: 'You haven’t added any businesses yet.',
+    new: 'New',
     weekdays: [
       'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
     ],
@@ -184,6 +187,9 @@ const DICT = {
     businessesTitle: 'Negocios locales',
     businessesText:
       'Los negocios cuyas cuentas hayas agregado mostrarán sus eventos aquí.',
+    myBusinesses: 'Mis negocios locales',
+    noBusinesses: 'Aún no has agregado negocios.',
+    new: 'Nuevo',
     weekdays: [
       'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado',
     ],

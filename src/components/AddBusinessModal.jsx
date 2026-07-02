@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { XIcon, CheckIcon } from './icons.jsx'
 import { useLang } from '../lib/i18n.js'
+import { addBusiness } from '../lib/businesses.js'
 import './AddBusinessModal.css'
 
 // Front-end stub: collects a business's social handles and simulates verifying
@@ -44,6 +45,13 @@ export default function AddBusinessModal({ onClose }) {
   const addField = () =>
     setFields((fs) => [...fs, { id: ++uid, value: '', status: 'empty' }])
 
+  const done = () => {
+    fields
+      .filter((f) => f.value.trim() && f.status !== 'duplicate')
+      .forEach((f) => addBusiness(f.value.trim()))
+    onClose()
+  }
+
   return (
     <div className="biz" role="dialog" aria-modal="true">
       <div className="biz__backdrop" onClick={onClose} />
@@ -82,7 +90,7 @@ export default function AddBusinessModal({ onClose }) {
           {t('addMore')} +
         </button>
 
-        <button className="biz__done" onClick={onClose}>
+        <button className="biz__done" onClick={done}>
           {t('done')}
         </button>
       </div>

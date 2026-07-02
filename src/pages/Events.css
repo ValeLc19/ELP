@@ -474,6 +474,81 @@
   font-size: 1.2rem;
   padding: 2rem 1rem;
 }
+
+/* ---------- My Local Business screen ---------- */
+.biz-screen__title {
+  font-family: var(--serif);
+  font-size: 2rem;
+  margin: 0 0 1.3rem;
+}
+.biz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 1.3rem;
+}
+.biz-card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1.5rem 1rem 1.1rem;
+  text-align: center;
+}
+.biz-card__new {
+  position: absolute;
+  top: -10px;
+  left: 14px;
+  background: #fbf6ee;
+  border: 1.5px solid #2c231d;
+  border-radius: 999px;
+  font-family: var(--serif);
+  font-size: 0.85rem;
+  padding: 0.08rem 0.7rem;
+}
+.biz-card__avatar {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  margin: 0 auto 0.8rem;
+  color: #fff;
+  font-family: var(--serif);
+  font-size: 1.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.biz-card__name {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  line-height: 1.15;
+  margin: 0 0 1rem;
+}
+.biz-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+}
+.biz-card__act {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+}
+.biz-card__act--del {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #d15a3a;
+  color: #fff;
+}
+.biz-card__act--del:hover {
+  filter: brightness(1.05);
+}
 .list-panel__head {
   display: flex;
   align-items: center;
