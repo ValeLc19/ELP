@@ -493,7 +493,8 @@ export default function Events() {
             aria-label={t('addBizTitle')}
             title={t('addBizTitle')}
           >
-            <PlusBoxIcon width={46} height={46} />
+            <PlusBoxIcon width={38} height={38} />
+            <span className="biz-card__add-label">{t('addBusinessShort')}</span>
           </button>
         </div>
         {overlays}

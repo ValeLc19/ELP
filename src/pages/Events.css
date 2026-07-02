@@ -496,12 +496,19 @@
 }
 .biz-card--add {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   min-height: 210px;
   cursor: pointer;
   color: var(--muted);
+  border-style: dashed;
   transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.biz-card__add-label {
+  font-family: var(--serif);
+  font-size: 1.05rem;
 }
 .biz-card--add:hover {
   color: #d15a3a;

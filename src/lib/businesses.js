@@ -77,6 +77,11 @@ export function prettifyName(raw) {
   } else {
     words = greedySplit(separated.toLowerCase()) || [separated]
   }
+  // drop trailing filler (co, tx, official, ...) for a cleaner, readable name
+  const STRIP = new Set(['co', 'tx', 'nm', 'official', 'hq', 'inc', 'llc', 'ep', 'elp'])
+  while (words.length > 1 && STRIP.has(words[words.length - 1].toLowerCase())) {
+    words.pop()
+  }
   const name = words
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ')
