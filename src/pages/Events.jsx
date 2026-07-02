@@ -128,7 +128,9 @@ export default function Events() {
     const params = new URLSearchParams(window.location.search)
     const id = params.get('event')
     if (id && EVENTS.some((e) => e.id === id)) setSelectedId(id)
-    if (params.get('demo')) demoSignIn() // preview the signed-in state
+    // preview helpers: ?demo=1 signs in; ?onboard=1 also shows the post-signup tour
+    if (params.get('demo') || params.get('onboard')) demoSignIn()
+    if (params.get('onboard')) setOnboarding(true)
   }, [])
 
   // Keep the URL in sync with the open event so it's always shareable.
