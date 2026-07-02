@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useAuth, changePassword } from '../lib/auth.js'
 import { useLang } from '../lib/i18n.js'
 import { XIcon, UserIcon, ShopIcon, LogOutIcon } from './icons.jsx'
+import ConfirmDialog from './ConfirmDialog.jsx'
 import './AccountModal.css'
 
 export default function AccountModal({ onClose, onLogout, onBusinesses }) {
@@ -9,6 +10,7 @@ export default function AccountModal({ onClose, onLogout, onBusinesses }) {
   const { t } = useLang()
   const [infoOpen, setInfoOpen] = useState(false)
   const [changing, setChanging] = useState(false)
+  const [confirmLogout, setConfirmLogout] = useState(false)
   const [pw, setPw] = useState('')
   const [msg, setMsg] = useState('')
   const [err, setErr] = useState('')
@@ -101,7 +103,10 @@ export default function AccountModal({ onClose, onLogout, onBusinesses }) {
           </button>
 
           {/* 3 — Log out */}
-          <button className="acct__row acct__row--logout" onClick={onLogout}>
+          <button
+            className="acct__row acct__row--logout"
+            onClick={() => setConfirmLogout(true)}
+          >
             <span className="acct__row-icon">
               <LogOutIcon width={22} height={22} />
             </span>
@@ -109,6 +114,15 @@ export default function AccountModal({ onClose, onLogout, onBusinesses }) {
           </button>
         </div>
       </div>
+
+      {confirmLogout && (
+        <ConfirmDialog
+          message={t('confirmLogout')}
+          confirmLabel={t('logOut')}
+          onConfirm={onLogout}
+          onCancel={() => setConfirmLogout(false)}
+        />
+      )}
     </div>
   )
 }

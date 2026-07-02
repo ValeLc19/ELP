@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { ShareIcon, TrashIcon, GoogleIcon } from './icons.jsx'
 import { useLang } from '../lib/i18n.js'
 import { avatarCandidates } from '../lib/businesses.js'
+import ConfirmDialog from './ConfirmDialog.jsx'
 
 const AVATAR_COLORS = ['#d15a3a', '#2e6f69', '#9b6fc7', '#e0a83e', '#5b7fd4', '#3aa6a0']
 
@@ -30,6 +31,7 @@ export default function BusinessCard({ biz, onRemove }) {
   const { t } = useLang()
   const candidates = avatarCandidates(biz.handle)
   const [imgIdx, setImgIdx] = useState(0)
+  const [confirming, setConfirming] = useState(false)
   const imgSrc = candidates[imgIdx]
   const dot = newDotOpacity(biz.addedAt)
 
@@ -73,9 +75,9 @@ export default function BusinessCard({ biz, onRemove }) {
         </a>
         <button
           className="biz-card__act biz-card__act--del"
-          onClick={() => onRemove(biz.id)}
-          aria-label="Remove"
-          title="Remove"
+          onClick={() => setConfirming(true)}
+          aria-label={t('remove')}
+          title={t('remove')}
         >
           <TrashIcon width={19} height={19} />
         </button>
@@ -90,6 +92,19 @@ export default function BusinessCard({ biz, onRemove }) {
           <GoogleIcon width={22} height={22} />
         </a>
       </div>
+
+      {confirming && (
+        <ConfirmDialog
+          message={t('confirmRemoveBiz')}
+          confirmLabel={t('remove')}
+          onConfirm={() => {
+            setConfirming(false)
+            onRemove(biz.id)
+          }}
+          onCancel={() => setConfirming(false)}
+        />
+      )}
     </article>
   )
 }
+

@@ -109,6 +109,10 @@ const DICT = {
     logOut: 'Log out',
     passwordChanged: 'Password updated',
     pwTooShort: 'Password must be at least 6 characters',
+    cancel: 'Cancel',
+    remove: 'Remove',
+    confirmRemoveBiz: 'Remove this business?',
+    confirmLogout: 'Log out of your account?',
     weekdays: [
       'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
     ],
@@ -208,6 +212,10 @@ const DICT = {
     logOut: 'Cerrar sesión',
     passwordChanged: 'Contraseña actualizada',
     pwTooShort: 'La contraseña debe tener al menos 6 caracteres',
+    cancel: 'Cancelar',
+    remove: 'Eliminar',
+    confirmRemoveBiz: '¿Eliminar este negocio?',
+    confirmLogout: '¿Cerrar sesión?',
     weekdays: [
       'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado',
     ],
