@@ -118,13 +118,30 @@ function platformOf(raw) {
   if (s.includes('twitter') || s.includes('x.com')) return 'twitter'
   return null
 }
-// Candidate profile-photo URLs to try in order (real photo first, then a
-// broader lookup); the card falls back to initials if all fail.
+function domainOf(raw) {
+  const host = String(raw)
+    .trim()
+    .replace(/^https?:\/\//i, '')
+    .replace(/^www\./i, '')
+    .split('/')[0]
+  return host.includes('.') && !host.startsWith('@') ? host.toLowerCase() : null
+}
+const SOCIAL_DOMAINS = ['instagram.', 'facebook.', 'fb.', 'twitter.', 'x.com', 'tiktok.']
+const isSocialDomain = (d) => SOCIAL_DOMAINS.some((s) => d.includes(s))
+
+// Candidate profile/logo URLs to try in order; the card falls back to initials
+// if all fail. Website links use the site's favicon/logo; social handles try
+// unavatar (note: Instagram/Twitter require an unavatar pro plan).
 export function avatarCandidates(raw) {
   const name = cleanName(raw)
   const p = platformOf(raw)
+  const domain = domainOf(raw)
   const urls = []
   if (p) urls.push(`https://unavatar.io/${p}/${name}?fallback=false`)
+  if (domain && !isSocialDomain(domain)) {
+    urls.push(`https://unavatar.io/${domain}?fallback=false`)
+    urls.push(`https://www.google.com/s2/favicons?domain=${domain}&sz=128`)
+  }
   urls.push(`https://unavatar.io/${name}?fallback=false`)
   return urls
 }
