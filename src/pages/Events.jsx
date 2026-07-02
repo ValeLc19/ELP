@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import 'leaflet/dist/leaflet.css'
 import './Events.css'
 import { EVENTS } from '../data/events.js'
@@ -25,7 +24,6 @@ import { useLang } from '../lib/i18n.js'
 import {
   SearchIcon,
   ScanFaceIcon,
-  HomeIcon,
   PlusBoxIcon,
   ShopIcon,
   SavedIcon,
@@ -105,7 +103,6 @@ function matchesDateFilter(event, filter, win) {
 }
 
 export default function Events() {
-  const navigate = useNavigate()
   const [view, setView] = useState('map') // 'map' | 'calendar' | 'list'
   const [activeCat, setActiveCat] = useState('All')
   const [activeDate, setActiveDate] = useState(null)
@@ -391,7 +388,7 @@ export default function Events() {
 
   const header = (
     <header className="events__header">
-      <h1 className="events__logo" onClick={() => navigate('/')} title="Back to home">
+      <h1 className="events__logo" onClick={goHome} title="Home">
         ELP
       </h1>
       {user && (
@@ -400,14 +397,6 @@ export default function Events() {
         </span>
       )}
       <div className="events__actions">
-        <button
-          className="events__icon-btn"
-          aria-label="Home"
-          title="Home"
-          onClick={goHome}
-        >
-          <HomeIcon />
-        </button>
         <div className="lang-toggle" role="group" aria-label="Language">
           <button
             className={`lang-toggle__btn ${lang === 'en' ? 'is-on' : ''}`}
