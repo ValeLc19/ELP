@@ -414,16 +414,8 @@ export default function Events() {
         {user && (
           <>
             <button
-              className="events__icon-btn"
-              data-onb="add"
-              aria-label="Add a business"
-              title="Add a local business to pull in their events"
-              onClick={() => setAddBizOpen(true)}
-            >
-              <PlusBoxIcon />
-            </button>
-            <button
               className={`events__icon-btn ${bizScreen ? 'is-active' : ''}`}
+              data-onb="add"
               aria-label="Local businesses"
               aria-pressed={bizScreen}
               title="My local businesses"
@@ -491,15 +483,19 @@ export default function Events() {
       <div className="events">
         {header}
         <h2 className="biz-screen__title">{t('myBusinesses')}</h2>
-        {businesses.length === 0 ? (
-          <p className="saved-empty">{t('noBusinesses')}</p>
-        ) : (
-          <div className="biz-grid">
-            {businesses.map((b) => (
-              <BusinessCard key={b.id} biz={b} onRemove={removeBusiness} />
-            ))}
-          </div>
-        )}
+        <div className="biz-grid">
+          {businesses.map((b) => (
+            <BusinessCard key={b.id} biz={b} onRemove={removeBusiness} />
+          ))}
+          <button
+            className="biz-card biz-card--add"
+            onClick={() => setAddBizOpen(true)}
+            aria-label={t('addBizTitle')}
+            title={t('addBizTitle')}
+          >
+            <PlusBoxIcon width={46} height={46} />
+          </button>
+        </div>
         {overlays}
       </div>
     )
