@@ -28,6 +28,7 @@ const DICT = {
     'This Weekend': 'This Weekend',
     'This Week': 'This Week',
     clearFilters: 'Clear filters',
+    savedChip: 'Saved',
     // categories
     cat_Food: 'Food',
     cat_Music: 'Music',
@@ -118,6 +119,7 @@ const DICT = {
     'This Weekend': 'Este fin de semana',
     'This Week': 'Esta semana',
     clearFilters: 'Borrar filtros',
+    savedChip: 'Guardados',
     cat_Food: 'Comida',
     cat_Music: 'Música',
     cat_Arts: 'Arte',

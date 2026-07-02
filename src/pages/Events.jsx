@@ -106,6 +106,7 @@ export default function Events() {
   const [activeDate, setActiveDate] = useState(null)
   const [priceFilter, setPriceFilter] = useState(null) // 'Free' | 'Cost'
   const [audienceFilter, setAudienceFilter] = useState(null) // 'Kids' | 'Adults'
+  const [savedFilter, setSavedFilter] = useState(false) // account-only: saved events only
   const [sortBy, setSortBy] = useState('Date')
   const [query, setQuery] = useState('')
   const [selectedId, setSelectedId] = useState(null)
@@ -123,6 +124,7 @@ export default function Events() {
     setActiveDate(null)
     setPriceFilter(null)
     setAudienceFilter(null)
+    setSavedFilter(false)
     setQuery('')
   }
 
@@ -161,9 +163,10 @@ export default function Events() {
       const audienceOk =
         !audienceFilter ||
         (audienceFilter === 'Kids' ? e.family : !!e.ageNote)
-      return catOk && qOk && dateOk && priceOk && audienceOk
+      const savedOk = !savedFilter || isSaved(e.seriesId || e.id)
+      return catOk && qOk && dateOk && priceOk && audienceOk && savedOk
     })
-  }, [activeCat, activeDate, priceFilter, audienceFilter, query, view])
+  }, [activeCat, activeDate, priceFilter, audienceFilter, savedFilter, query, view])
 
   // Saving requires an account — open the auth modal if logged out.
   const requireAuth = () => {
@@ -309,9 +312,25 @@ export default function Events() {
 
         <div className="filters__group">
           <span className="filters__label" aria-hidden="true" />
-          <button className="filters__clear" onClick={resetFilters}>
-            {t('clearFilters')}
-          </button>
+          <div className="filters__chips">
+            {user && (
+              <button
+                className="chip"
+                aria-pressed={savedFilter}
+                style={{
+                  borderColor: '#d15a3a',
+                  background: savedFilter ? hexToRgba('#d15a3a', 0.5) : undefined,
+                }}
+                onClick={() => setSavedFilter((s) => !s)}
+              >
+                <span className="badge__dot" style={{ background: '#d15a3a' }} />
+                {t('savedChip')}
+              </button>
+            )}
+            <button className="filters__clear" onClick={resetFilters}>
+              {t('clearFilters')}
+            </button>
+          </div>
         </div>
       </div>
     </>
@@ -400,6 +419,7 @@ export default function Events() {
             if (user) {
               logOut()
               setSavedScreen(false)
+              setSavedFilter(false)
             } else {
               setAuthOpen(true)
             }
