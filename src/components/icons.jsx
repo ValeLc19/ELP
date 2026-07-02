@@ -97,9 +97,9 @@ export const CheckIcon = (p) => (
 
 export const HomeIcon = (p) => (
   <svg {...base} width={26} height={26} {...p}>
-    <path d="M4 11.5 12 4l8 7.5" />
-    <path d="M6 10.5V20h12v-9.5" />
-    <path d="M10 20v-5h4v5" />
+    <path d="M3.5 11.7 12 3.7l8.5 8" />
+    <path d="M5.7 10.2V20.3h12.6V10.2" />
+    <path d="M9.7 20.3v-5h4.6v5" />
   </svg>
 )
 
@@ -112,17 +112,17 @@ export const PlusBoxIcon = (p) => (
 
 export const ShopIcon = (p) => (
   <svg {...base} width={26} height={26} {...p}>
-    <path d="M3.5 9.5 5 5h14l1.5 4.5" />
-    <path d="M5 9.5V19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5" />
-    <path d="M3.5 9.5h17" />
-    <path d="M9.5 20v-4.5h5V20" />
+    <path d="M3.5 9 5 3.9h14l1.5 5.1" />
+    <path d="M5 9v10.6a1.5 1.5 0 0 0 1.5 1.5h11a1.5 1.5 0 0 0 1.5-1.5V9" />
+    <path d="M3.5 9h17" />
+    <path d="M9.5 21.1v-5h5v5" />
   </svg>
 )
 
 export const SavedIcon = (p) => (
   <svg {...base} width={26} height={26} {...p}>
-    <path d="M3.5 7a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2z" />
-    <path d="M12 11.4c1-1.2 3.2-.5 3.2 1.1 0 1.3-1.7 2.3-3.2 3.3-1.5-1-3.2-2-3.2-3.3 0-1.6 2.2-2.3 3.2-1.1z" />
+    <path d="M3.5 6a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2z" />
+    <path d="M12 11.6c1-1.3 3.3-.6 3.3 1.1 0 1.4-1.8 2.5-3.3 3.5-1.5-1-3.3-2.1-3.3-3.5 0-1.7 2.3-2.4 3.3-1.1z" />
   </svg>
 )
 
@@ -163,8 +163,8 @@ export const GoogleIcon = ({ width = 22, height = 22, ...p }) => (
 )
 
 export const ScanFaceIcon = (p) => (
-  <svg {...base} width={34} height={34} {...p}>
-    <path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2" />
+  <svg {...base} width={26} height={26} {...p}>
+    <path d="M3.7 8V5.7a2 2 0 0 1 2-2H8M16 3.7h2.3a2 2 0 0 1 2 2V8M20.3 16v2.3a2 2 0 0 1-2 2H16M8 20.3H5.7a2 2 0 0 1-2-2V16" />
     <path d="M9 10v.5M15 10v.5M12 10v3l-1 1M9.5 15.5c1.4 1 3.6 1 5 0" />
   </svg>
 )
