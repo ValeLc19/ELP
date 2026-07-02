@@ -93,6 +93,9 @@ const DICT = {
     addMore: 'Add more',
     thanks: 'Thanks!',
     close: 'Close',
+    businessesTitle: 'Local businesses',
+    businessesText:
+      'The businesses whose accounts you’ve added will show their events here.',
     weekdays: [
       'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
     ],
@@ -176,6 +179,9 @@ const DICT = {
     addMore: 'Agregar más',
     thanks: '¡Gracias!',
     close: 'Cerrar',
+    businessesTitle: 'Negocios locales',
+    businessesText:
+      'Los negocios cuyas cuentas hayas agregado mostrarán sus eventos aquí.',
     weekdays: [
       'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado',
     ],

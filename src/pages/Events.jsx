@@ -15,6 +15,7 @@ import EventCard from '../components/EventCard.jsx'
 import EventDetail from '../components/EventDetail.jsx'
 import AuthModal from '../components/AuthModal.jsx'
 import AddBusinessModal from '../components/AddBusinessModal.jsx'
+import MarketModal from '../components/MarketModal.jsx'
 import Onboarding from '../components/Onboarding.jsx'
 import { useAuth, displayName, demoSignIn } from '../lib/auth.js'
 import { isSaved } from '../lib/saved.js'
@@ -23,6 +24,7 @@ import {
   SearchIcon,
   ScanFaceIcon,
   PlusBoxIcon,
+  ShopIcon,
   SavedIcon,
 } from '../components/icons.jsx'
 
@@ -118,6 +120,7 @@ export default function Events() {
   const [savedScreen, setSavedScreen] = useState(false) // dedicated saved-events screen
   const [savedTab, setSavedTab] = useState('next') // next | past
   const [addBizOpen, setAddBizOpen] = useState(false)
+  const [marketOpen, setMarketOpen] = useState(false)
 
   const resetFilters = () => {
     setActiveCat('All')
@@ -399,6 +402,14 @@ export default function Events() {
               <PlusBoxIcon />
             </button>
             <button
+              className="events__icon-btn"
+              aria-label="Local businesses"
+              title="Local businesses"
+              onClick={() => setMarketOpen(true)}
+            >
+              <ShopIcon />
+            </button>
+            <button
               className={`events__icon-btn ${savedScreen ? 'is-active' : ''}`}
               data-onb="saved"
               aria-label="Saved events"
@@ -446,6 +457,7 @@ export default function Events() {
       )}
       {onboarding && <Onboarding onDone={() => setOnboarding(false)} />}
       {addBizOpen && <AddBusinessModal onClose={() => setAddBizOpen(false)} />}
+      {marketOpen && <MarketModal onClose={() => setMarketOpen(false)} />}
     </>
   )
 

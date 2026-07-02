@@ -102,6 +102,15 @@ export const PlusBoxIcon = (p) => (
   </svg>
 )
 
+export const ShopIcon = (p) => (
+  <svg {...base} width={26} height={26} {...p}>
+    <path d="M3.5 9.5 5 5h14l1.5 4.5" />
+    <path d="M5 9.5V19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5" />
+    <path d="M3.5 9.5h17" />
+    <path d="M9.5 20v-4.5h5V20" />
+  </svg>
+)
+
 export const SavedIcon = (p) => (
   <svg {...base} width={26} height={26} {...p}>
     <path d="M3.5 7a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2z" />
