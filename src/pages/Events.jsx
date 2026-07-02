@@ -350,6 +350,7 @@ export default function Events() {
           <>
             <button
               className="events__icon-btn"
+              data-onb="add"
               aria-label="Add a business"
               title="Add a local business to pull in their events"
               onClick={() => setAddBizOpen(true)}
@@ -358,6 +359,7 @@ export default function Events() {
             </button>
             <button
               className={`events__icon-btn ${savedOnly ? 'is-active' : ''}`}
+              data-onb="saved"
               aria-label="Saved events"
               aria-pressed={savedOnly}
               title="Your saved events"
