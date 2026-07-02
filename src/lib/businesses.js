@@ -39,7 +39,14 @@ const WORDS = [
   'collective', 'company', 'co', 'and', 'the', 'el', 'paso', 'city', 'local',
   'craft', 'goods', 'makers', 'yoga', 'art', 'arts', 'music', 'sound', 'stage',
   'park', 'garden', 'plaza', 'trail', 'mission', 'downtown', 'social', 'street',
-  'tx', 'nm', 'eats', 'foods', 'events', 'live', 'night', 'nights', 'sun',
+  'tx', 'nm', 'eats', 'foods', 'events', 'live', 'night', 'nights', 'sun', 'sips',
+  'bites', 'brew', 'brews', 'beer', 'ale', 'house', 'juice', 'tea', 'sweet',
+  'sweets', 'treats', 'dessert', 'taco', 'tacos', 'pizza', 'burger', 'burgers',
+  'bbq', 'smoke', 'fire', 'roast', 'bean', 'beans', 'bloom', 'petals', 'flower',
+  'flowers', 'threads', 'stitch', 'ink', 'press', 'print', 'paper', 'candle',
+  'candles', 'soap', 'salt', 'stone', 'clay', 'moon', 'star', 'stars', 'desert',
+  'cactus', 'agave', 'chile', 'chili', 'salsa', 'masa', 'panaderia', 'mercado',
+  'cocina', 'good', 'goods', 'little', 'big', 'old', 'new', 'west', 'east',
 ]
 
 function greedySplit(token) {
@@ -84,11 +91,18 @@ function platformOf(raw) {
   if (s.includes('twitter') || s.includes('x.com')) return 'twitter'
   return null
 }
-function avatarUrl(raw) {
+// Candidate profile-photo URLs to try in order (real photo first, then a
+// broader lookup); the card falls back to initials if all fail.
+export function avatarCandidates(raw) {
   const name = cleanName(raw)
   const p = platformOf(raw)
-  // unavatar pulls the account's real profile photo; falls back to initials in the card
-  return `https://unavatar.io/${p ? p + '/' : ''}${name}?fallback=false`
+  const urls = []
+  if (p) urls.push(`https://unavatar.io/${p}/${name}?fallback=false`)
+  urls.push(`https://unavatar.io/${name}?fallback=false`)
+  return urls
+}
+function avatarUrl(raw) {
+  return avatarCandidates(raw)[0]
 }
 function toUrl(raw) {
   const s = String(raw).trim()

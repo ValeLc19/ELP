@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ShareIcon, TrashIcon, GoogleIcon } from './icons.jsx'
 import { useLang } from '../lib/i18n.js'
+import { avatarCandidates } from '../lib/businesses.js'
 
 const AVATAR_COLORS = ['#d15a3a', '#2e6f69', '#9b6fc7', '#e0a83e', '#5b7fd4', '#3aa6a0']
 
@@ -21,12 +22,15 @@ function newDotOpacity(addedAt) {
   if (!addedAt) return 0
   const age = (Date.now() - addedAt) / 86400000
   if (age >= NEW_WINDOW_DAYS) return 0
-  return Math.max(0.35, 1 - (age / NEW_WINDOW_DAYS) * 0.65)
+  // starts soft (0.8) and eases down to ~0.3 before disappearing
+  return Math.max(0.3, 0.8 - (age / NEW_WINDOW_DAYS) * 0.5)
 }
 
 export default function BusinessCard({ biz, onRemove }) {
   const { t } = useLang()
-  const [imgOk, setImgOk] = useState(true)
+  const candidates = avatarCandidates(biz.handle)
+  const [imgIdx, setImgIdx] = useState(0)
+  const imgSrc = candidates[imgIdx]
   const dot = newDotOpacity(biz.addedAt)
 
   return (
@@ -40,13 +44,13 @@ export default function BusinessCard({ biz, onRemove }) {
         />
       )}
 
-      {imgOk && biz.avatar ? (
+      {imgSrc ? (
         <img
           className="biz-card__avatar biz-card__avatar--img"
-          src={biz.avatar}
+          src={imgSrc}
           alt={biz.name}
           loading="lazy"
-          onError={() => setImgOk(false)}
+          onError={() => setImgIdx((i) => i + 1)}
         />
       ) : (
         <div className="biz-card__avatar" style={{ background: colorFor(biz.name) }}>

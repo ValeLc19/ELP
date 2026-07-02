@@ -24,6 +24,7 @@ import { useLang } from '../lib/i18n.js'
 import {
   SearchIcon,
   ScanFaceIcon,
+  HomeIcon,
   PlusBoxIcon,
   ShopIcon,
   SavedIcon,
@@ -174,6 +175,16 @@ export default function Events() {
       return catOk && qOk && dateOk && priceOk && audienceOk && savedOk
     })
   }, [activeCat, activeDate, priceFilter, audienceFilter, savedFilter, query, view])
+
+  // Go to the events home (default view) — not the landing page.
+  const goHome = () => {
+    setBizScreen(false)
+    setSavedScreen(false)
+    setSelectedId(null)
+    setSavedTab('next')
+    setView('map')
+    resetFilters()
+  }
 
   // Saving requires an account — open the auth modal if logged out.
   const requireAuth = () => {
@@ -379,6 +390,14 @@ export default function Events() {
         </span>
       )}
       <div className="events__actions">
+        <button
+          className="events__icon-btn"
+          aria-label="Home"
+          title="Home"
+          onClick={goHome}
+        >
+          <HomeIcon />
+        </button>
         <div className="lang-toggle" role="group" aria-label="Language">
           <button
             className={`lang-toggle__btn ${lang === 'en' ? 'is-on' : ''}`}

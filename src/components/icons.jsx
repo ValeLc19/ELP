@@ -95,6 +95,14 @@ export const CheckIcon = (p) => (
   </svg>
 )
 
+export const HomeIcon = (p) => (
+  <svg {...base} width={26} height={26} {...p}>
+    <path d="M4 11.5 12 4l8 7.5" />
+    <path d="M6 10.5V20h12v-9.5" />
+    <path d="M10 20v-5h4v5" />
+  </svg>
+)
+
 export const PlusBoxIcon = (p) => (
   <svg {...base} width={26} height={26} {...p}>
     <rect x="3.5" y="3.5" width="17" height="17" rx="4" />
