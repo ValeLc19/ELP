@@ -30,38 +30,60 @@ export function cleanName(raw) {
   return s.replace(/^@/, '') || String(raw)
 }
 
-// Small word list to split run-together handles into a business-style name.
-const WORDS = [
-  'breakroom', 'coffee', 'book', 'books', 'bar', 'notes', 'margin', 'sassy',
-  'sips', 'sunset', 'heights', 'market', 'house', 'kitchen', 'brewery', 'wine',
-  'club', 'shop', 'studio', 'gallery', 'museum', 'theatre', 'theater', 'bakery',
-  'cafe', 'grill', 'tavern', 'lounge', 'roasters', 'records', 'vintage',
-  'collective', 'company', 'co', 'and', 'the', 'el', 'paso', 'city', 'local',
-  'craft', 'goods', 'makers', 'yoga', 'art', 'arts', 'music', 'sound', 'stage',
-  'park', 'garden', 'plaza', 'trail', 'mission', 'downtown', 'social', 'street',
-  'tx', 'nm', 'eats', 'foods', 'events', 'live', 'night', 'nights', 'sun', 'sips',
-  'bites', 'brew', 'brews', 'beer', 'ale', 'house', 'juice', 'tea', 'sweet',
-  'sweets', 'treats', 'dessert', 'taco', 'tacos', 'pizza', 'burger', 'burgers',
-  'bbq', 'smoke', 'fire', 'roast', 'bean', 'beans', 'bloom', 'petals', 'flower',
-  'flowers', 'threads', 'stitch', 'ink', 'press', 'print', 'paper', 'candle',
-  'candles', 'soap', 'salt', 'stone', 'clay', 'moon', 'star', 'stars', 'desert',
-  'cactus', 'agave', 'chile', 'chili', 'salsa', 'masa', 'panaderia', 'mercado',
-  'cocina', 'good', 'goods', 'little', 'big', 'old', 'new', 'west', 'east',
-]
+// A broad common-word dictionary used to segment run-together handles into a
+// readable business name. Not exhaustive, but covers everyday English +
+// common business/food/place vocabulary; unknown chunks are kept whole.
+const WORD_LIST = `the and for you our your are all not our own new old big
+little good great best more most love live life real true home town city local
+here there this that with from into over under about house home place spot room
+corner side street avenue road lane plaza park garden yard field farm ranch
+orchard vineyard winery distillery cellar market mercado bazaar shop store
+boutique goods gifts craft crafts makers works factory lab studio gallery museum
+theatre theater stage sound music records vinyl books book paper press print ink
+threads stitch vintage thrift closet salon spa gym club society union guild
+collective company co inc group project exchange depot station company coffee
+espresso latte mocha bean beans roast roasters brew brews brewery beer ale wine
+juice smoothie tea kitchen grill grille bakery bake cafe cafeteria bistro deli
+diner eatery tavern lounge pub bar cantina taco tacos taqueria burrito pizza
+pizzeria burger burgers bbq smoke smokehouse fire roasted noodle ramen sushi
+donut donuts bagel waffle pancake cupcake cookie cookies cake pie bread cheese
+meat butcher fish seafood sweet sweets treat treats dessert candy chocolate
+flower flowers floral bloom blooms petals candle candles soap salt stone clay
+moon star stars sun sunset sunrise golden silver desert mountain mountains river
+valley springs hill hills heights mesa canyon rio grande blue red green black
+white gold rose wild urban rustic cozy artisan handmade family friends people
+social night nights day days morning eats foods food bites nibbles snack fresh
+farmers pantry table plate spoon fork cup mug pour drip barrel oak vine grape
+yoga wellness fitness art arts studio dance ballet fit health mind body soul
+paso texas nm corner downtown uptown east west north south central mission trail
+casa la el los las san santa mi tu su good goods make made hand shop margin
+notes brewing baking roasting catering trading clothing crossing landing lucky
+cat dog bird fox owl bear wolf hound kitty pup chile chili salsa masa taqueria
+panaderia mercado cocina bakes bakes threads studio market vintage`
+  .split(/\s+/)
+  .filter(Boolean)
+const DICT = new Set(WORD_LIST)
+const MAX_WORD = WORD_LIST.reduce((m, w) => Math.max(m, w.length), 0)
 
-function greedySplit(token) {
-  const out = []
-  let i = 0
-  while (i < token.length) {
-    let match = ''
-    for (const w of WORDS) {
-      if (w.length > match.length && token.startsWith(w, i)) match = w
+// Dynamic-programming word break: covers the string with dictionary words
+// where possible (preferring longer/known words), keeping unknown runs whole.
+function wordBreak(s) {
+  const n = s.length
+  const dp = new Array(n + 1).fill(null)
+  dp[0] = { cost: 0, words: [] }
+  for (let i = 1; i <= n; i++) {
+    for (let j = Math.max(0, i - Math.max(MAX_WORD, 12)); j < i; j++) {
+      if (!dp[j]) continue
+      const w = s.slice(j, i)
+      const known = DICT.has(w)
+      // known word: cheap; single-letter unknowns are almost forbidden; other
+      // unknown chunks cost more with length so runs stay together
+      const cost =
+        dp[j].cost + (known ? 1 : w.length === 1 ? 5000 : 12 + w.length)
+      if (!dp[i] || cost < dp[i].cost) dp[i] = { cost, words: [...dp[j].words, w] }
     }
-    if (!match) return null // couldn't cover it cleanly
-    out.push(match)
-    i += match.length
   }
-  return out
+  return dp[n] ? dp[n].words : [s]
 }
 
 export function prettifyName(raw) {
@@ -75,7 +97,7 @@ export function prettifyName(raw) {
   if (separated.includes(' ')) {
     words = separated.split(/\s+/)
   } else {
-    words = greedySplit(separated.toLowerCase()) || [separated]
+    words = wordBreak(separated.toLowerCase())
   }
   // drop trailing filler (co, tx, official, ...) for a cleaner, readable name
   const STRIP = new Set(['co', 'tx', 'nm', 'official', 'hq', 'inc', 'llc', 'ep', 'elp'])
