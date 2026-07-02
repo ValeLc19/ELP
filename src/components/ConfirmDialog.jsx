@@ -5,7 +5,12 @@ import './ConfirmDialog.css'
 export default function ConfirmDialog({ message, confirmLabel, onConfirm, onCancel }) {
   const { t } = useLang()
   return (
-    <div className="confirm" role="dialog" aria-modal="true">
+    <div
+      className="confirm"
+      role="dialog"
+      aria-modal="true"
+      onClick={(e) => e.stopPropagation()}
+    >
       <div className="confirm__backdrop" onClick={onCancel} />
       <div className="confirm__card">
         <p className="confirm__msg">{message}</p>

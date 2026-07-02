@@ -3,6 +3,7 @@ import { categoryColor, categoryTint } from '../data/categories.js'
 import { useSaved } from '../lib/saved.js'
 import { useAuth } from '../lib/auth.js'
 import { useLang } from '../lib/i18n.js'
+import ConfirmDialog from './ConfirmDialog.jsx'
 import {
   LocationIcon,
   CalendarIcon,
@@ -21,6 +22,7 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
   const { isSaved, toggle } = useSaved()
   const { user } = useAuth()
   const { t } = useLang()
+  const [confirmUnsave, setConfirmUnsave] = useState(false)
   const saveKey = event.seriesId || event.id
   const saved = isSaved(saveKey)
 
@@ -53,7 +55,7 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
               className={`save-heart ${saved ? 'is-saved' : ''}`}
               aria-label={saved ? 'Remove from saved' : 'Save event'}
               aria-pressed={saved}
-              onClick={() => toggle(saveKey)}
+              onClick={() => (saved ? setConfirmUnsave(true) : toggle(saveKey))}
             >
               <HeartIcon filled={saved} />
             </button>
@@ -150,6 +152,18 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
             {t('moreInfo')}
           </a>
         </div>
+      )}
+
+      {confirmUnsave && (
+        <ConfirmDialog
+          message={t('confirmUnsave')}
+          confirmLabel={t('remove')}
+          onConfirm={() => {
+            setConfirmUnsave(false)
+            toggle(saveKey)
+          }}
+          onCancel={() => setConfirmUnsave(false)}
+        />
       )}
     </div>
   )

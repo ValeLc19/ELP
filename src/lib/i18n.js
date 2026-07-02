@@ -113,6 +113,7 @@ const DICT = {
     remove: 'Remove',
     confirmRemoveBiz: 'Remove this business?',
     confirmLogout: 'Log out of your account?',
+    confirmUnsave: 'Remove from saved?',
     weekdays: [
       'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
     ],
@@ -216,6 +217,7 @@ const DICT = {
     remove: 'Eliminar',
     confirmRemoveBiz: '¿Eliminar este negocio?',
     confirmLogout: '¿Cerrar sesión?',
+    confirmUnsave: '¿Quitar de guardados?',
     weekdays: [
       'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado',
     ],

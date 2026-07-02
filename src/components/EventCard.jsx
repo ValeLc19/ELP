@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { categoryColor, categoryTint } from '../data/categories.js'
 import { useSaved } from '../lib/saved.js'
 import { useAuth } from '../lib/auth.js'
 import { useLang } from '../lib/i18n.js'
+import ConfirmDialog from './ConfirmDialog.jsx'
 import {
   LocationIcon,
   CalendarIcon,
@@ -21,6 +23,7 @@ export default function EventCard({
   const { isSaved, toggle } = useSaved()
   const { user } = useAuth()
   const { t } = useLang()
+  const [confirmUnsave, setConfirmUnsave] = useState(false)
   const saveKey = event.seriesId || event.id
   const saved = isSaved(saveKey)
 
@@ -49,12 +52,24 @@ export default function EventCard({
             aria-pressed={saved}
             onClick={(e) => {
               e.stopPropagation()
-              toggle(saveKey)
+              if (saved) setConfirmUnsave(true)
+              else toggle(saveKey)
             }}
             onKeyDown={(e) => e.stopPropagation()}
           >
             <HeartIcon filled={saved} />
           </button>
+        )}
+        {confirmUnsave && (
+          <ConfirmDialog
+            message={t('confirmUnsave')}
+            confirmLabel={t('remove')}
+            onConfirm={() => {
+              setConfirmUnsave(false)
+              toggle(saveKey)
+            }}
+            onCancel={() => setConfirmUnsave(false)}
+          />
         )}
       </div>
 
