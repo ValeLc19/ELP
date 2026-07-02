@@ -87,6 +87,13 @@
   to { transform: rotate(360deg); }
 }
 
+.biz__dup {
+  color: #c0564a;
+  font-style: italic;
+  font-size: 0.95rem;
+  margin: 0.35rem 0 0 0.2rem;
+}
+
 .biz__addmore {
   display: block;
   background: none;

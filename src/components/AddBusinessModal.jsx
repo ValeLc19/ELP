@@ -13,15 +13,25 @@ export default function AddBusinessModal({ onClose }) {
   const timers = useRef({})
 
   const update = (id, value) => {
+    const v = value.trim().toLowerCase()
+    const dup =
+      !!v &&
+      fields.some((f) => f.id !== id && f.value.trim().toLowerCase() === v)
+
     setFields((fs) =>
       fs.map((f) =>
         f.id === id
-          ? { ...f, value, status: value.trim() ? 'verifying' : 'empty' }
+          ? {
+              ...f,
+              value,
+              status: !value.trim() ? 'empty' : dup ? 'duplicate' : 'verifying',
+            }
           : f
       )
     )
+
     clearTimeout(timers.current[id])
-    if (value.trim()) {
+    if (value.trim() && !dup) {
       // simulate verifying the link + fetching the account's info
       timers.current[id] = setTimeout(() => {
         setFields((fs) =>
@@ -57,8 +67,14 @@ export default function AddBusinessModal({ onClose }) {
                 {f.status === 'verified' && (
                   <CheckIcon width={20} height={20} color="#6fae6f" />
                 )}
+                {f.status === 'duplicate' && (
+                  <XIcon width={20} height={20} color="#c0564a" />
+                )}
               </span>
             </div>
+            {f.status === 'duplicate' && (
+              <p className="biz__dup">{t('alreadyAdded')}</p>
+            )}
           </div>
         ))}
 
