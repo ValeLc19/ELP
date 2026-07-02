@@ -90,6 +90,7 @@ const DICT = {
       'Paste a business’s social media handle or page link and we’ll pull in the events they post.',
     addBizPlaceholder: '@elpasomarket or a page link',
     add: 'Add',
+    addMore: 'Add more',
     thanks: 'Thanks!',
     close: 'Close',
     weekdays: [
@@ -172,6 +173,7 @@ const DICT = {
       'Pega el usuario de redes o el enlace de la página de un negocio y traeremos los eventos que publican.',
     addBizPlaceholder: '@elpasomarket o un enlace',
     add: 'Agregar',
+    addMore: 'Agregar más',
     thanks: '¡Gracias!',
     close: 'Cerrar',
     weekdays: [
