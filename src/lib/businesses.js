@@ -12,7 +12,6 @@ function read() {
 }
 
 let items = read()
-const newIds = new Set() // added during this session -> show a "New" badge
 let seq = items.reduce((m, b) => Math.max(m, b.seq || 0), 0)
 const listeners = new Set()
 const emit = () => {
@@ -20,7 +19,7 @@ const emit = () => {
   listeners.forEach((fn) => fn())
 }
 
-// Derive a display name + link from a handle or URL.
+// --- deriving name / avatar / link from a handle or URL -------------------
 export function cleanName(raw) {
   let s = String(raw).trim()
   s = s.replace(/^https?:\/\//i, '').replace(/^www\./i, '')
@@ -28,8 +27,68 @@ export function cleanName(raw) {
     const parts = s.split('/').filter(Boolean)
     s = parts[parts.length - 1]
   }
-  s = s.replace(/^@/, '')
-  return s || raw
+  return s.replace(/^@/, '') || String(raw)
+}
+
+// Small word list to split run-together handles into a business-style name.
+const WORDS = [
+  'breakroom', 'coffee', 'book', 'books', 'bar', 'notes', 'margin', 'sassy',
+  'sips', 'sunset', 'heights', 'market', 'house', 'kitchen', 'brewery', 'wine',
+  'club', 'shop', 'studio', 'gallery', 'museum', 'theatre', 'theater', 'bakery',
+  'cafe', 'grill', 'tavern', 'lounge', 'roasters', 'records', 'vintage',
+  'collective', 'company', 'co', 'and', 'the', 'el', 'paso', 'city', 'local',
+  'craft', 'goods', 'makers', 'yoga', 'art', 'arts', 'music', 'sound', 'stage',
+  'park', 'garden', 'plaza', 'trail', 'mission', 'downtown', 'social', 'street',
+  'tx', 'nm', 'eats', 'foods', 'events', 'live', 'night', 'nights', 'sun',
+]
+
+function greedySplit(token) {
+  const out = []
+  let i = 0
+  while (i < token.length) {
+    let match = ''
+    for (const w of WORDS) {
+      if (w.length > match.length && token.startsWith(w, i)) match = w
+    }
+    if (!match) return null // couldn't cover it cleanly
+    out.push(match)
+    i += match.length
+  }
+  return out
+}
+
+export function prettifyName(raw) {
+  const base = cleanName(raw)
+  const separated = base
+    .replace(/[_.\-]+/g, ' ')
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/([a-zA-Z])(\d)/g, '$1 $2')
+    .trim()
+  let words
+  if (separated.includes(' ')) {
+    words = separated.split(/\s+/)
+  } else {
+    words = greedySplit(separated.toLowerCase()) || [separated]
+  }
+  const name = words
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ')
+  return name || base
+}
+
+function platformOf(raw) {
+  const s = String(raw).toLowerCase()
+  if (s.includes('instagram')) return 'instagram'
+  if (s.includes('facebook')) return 'facebook'
+  if (s.includes('tiktok')) return 'tiktok'
+  if (s.includes('twitter') || s.includes('x.com')) return 'twitter'
+  return null
+}
+function avatarUrl(raw) {
+  const name = cleanName(raw)
+  const p = platformOf(raw)
+  // unavatar pulls the account's real profile photo; falls back to initials in the card
+  return `https://unavatar.io/${p ? p + '/' : ''}${name}?fallback=false`
 }
 function toUrl(raw) {
   const s = String(raw).trim()
@@ -41,22 +100,26 @@ function toUrl(raw) {
 export function addBusiness(raw) {
   const handle = String(raw).trim()
   if (!handle) return
-  const name = cleanName(handle)
-  if (items.some((b) => cleanName(b.handle).toLowerCase() === name.toLowerCase()))
-    return
+  const name = prettifyName(handle)
+  if (items.some((b) => b.name.toLowerCase() === name.toLowerCase())) return
   seq += 1
-  const b = { id: `biz-${seq}`, seq, handle, name, url: toUrl(handle) }
-  items = [...items, b]
-  newIds.add(b.id)
+  items = [
+    ...items,
+    {
+      id: `biz-${seq}`,
+      seq,
+      handle,
+      name,
+      avatar: avatarUrl(handle),
+      url: toUrl(handle),
+      addedAt: Date.now(),
+    },
+  ]
   emit()
 }
 export function removeBusiness(id) {
   items = items.filter((b) => b.id !== id)
-  newIds.delete(id)
   emit()
-}
-export function isNewBusiness(id) {
-  return newIds.has(id)
 }
 
 export function useBusinesses() {
@@ -65,5 +128,5 @@ export function useBusinesses() {
     listeners.add(force)
     return () => listeners.delete(force)
   }, [])
-  return { items, add: addBusiness, remove: removeBusiness, isNew: isNewBusiness }
+  return { items, add: addBusiness, remove: removeBusiness }
 }

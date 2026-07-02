@@ -1,11 +1,13 @@
+import { useState } from 'react'
 import { ShareIcon, TrashIcon, GoogleIcon } from './icons.jsx'
 import { useLang } from '../lib/i18n.js'
 
 const AVATAR_COLORS = ['#d15a3a', '#2e6f69', '#9b6fc7', '#e0a83e', '#5b7fd4', '#3aa6a0']
 
 function initials(name) {
-  const s = name.replace(/[^a-zA-Z0-9]/g, '')
-  return (s.slice(0, 2) || '??').toUpperCase()
+  const parts = name.split(/\s+/).filter(Boolean)
+  const s = parts.length > 1 ? parts[0][0] + parts[1][0] : name.replace(/[^a-z0-9]/gi, '').slice(0, 2)
+  return (s || '??').toUpperCase()
 }
 function colorFor(name) {
   let h = 0
@@ -13,18 +15,47 @@ function colorFor(name) {
   return AVATAR_COLORS[h]
 }
 
-export default function BusinessCard({ biz, isNew, onRemove }) {
+// The "new event" dot lives for a few days, fading as it ages, then disappears.
+const NEW_WINDOW_DAYS = 5
+function newDotOpacity(addedAt) {
+  if (!addedAt) return 0
+  const age = (Date.now() - addedAt) / 86400000
+  if (age >= NEW_WINDOW_DAYS) return 0
+  return Math.max(0.35, 1 - (age / NEW_WINDOW_DAYS) * 0.65)
+}
+
+export default function BusinessCard({ biz, onRemove }) {
   const { t } = useLang()
+  const [imgOk, setImgOk] = useState(true)
+  const dot = newDotOpacity(biz.addedAt)
+
   return (
     <article className="biz-card">
-      {isNew && <span className="biz-card__new">{t('new')}</span>}
-      <div
-        className="biz-card__avatar"
-        style={{ background: colorFor(biz.name) }}
-      >
-        {initials(biz.name)}
-      </div>
+      {dot > 0 && (
+        <span
+          className="biz-card__dot"
+          style={{ opacity: dot }}
+          title={t('new')}
+          aria-label={t('new')}
+        />
+      )}
+
+      {imgOk && biz.avatar ? (
+        <img
+          className="biz-card__avatar biz-card__avatar--img"
+          src={biz.avatar}
+          alt={biz.name}
+          loading="lazy"
+          onError={() => setImgOk(false)}
+        />
+      ) : (
+        <div className="biz-card__avatar" style={{ background: colorFor(biz.name) }}>
+          {initials(biz.name)}
+        </div>
+      )}
+
       <h3 className="biz-card__name">{biz.name}</h3>
+
       <div className="biz-card__actions">
         <a
           className="biz-card__act"
@@ -39,7 +70,7 @@ export default function BusinessCard({ biz, isNew, onRemove }) {
         <button
           className="biz-card__act biz-card__act--del"
           onClick={() => onRemove(biz.id)}
-          aria-label={t('close')}
+          aria-label="Remove"
           title="Remove"
         >
           <TrashIcon width={19} height={19} />

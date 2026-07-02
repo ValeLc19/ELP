@@ -494,16 +494,15 @@
   padding: 1.5rem 1rem 1.1rem;
   text-align: center;
 }
-.biz-card__new {
+/* small clay "new event" dot, top-right — invites rather than nags */
+.biz-card__dot {
   position: absolute;
-  top: -10px;
-  left: 14px;
-  background: #fbf6ee;
-  border: 1.5px solid #2c231d;
-  border-radius: 999px;
-  font-family: var(--serif);
-  font-size: 0.85rem;
-  padding: 0.08rem 0.7rem;
+  top: 12px;
+  right: 12px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #d15a3a;
 }
 .biz-card__avatar {
   width: 84px;
@@ -516,6 +515,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.biz-card__avatar--img {
+  object-fit: cover;
+  background: #efe7d6;
 }
 .biz-card__name {
   font-family: var(--serif);

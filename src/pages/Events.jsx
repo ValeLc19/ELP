@@ -122,7 +122,7 @@ export default function Events() {
   const [savedTab, setSavedTab] = useState('next') // next | past
   const [addBizOpen, setAddBizOpen] = useState(false)
   const [bizScreen, setBizScreen] = useState(false) // My Local Business screen
-  const { items: businesses, remove: removeBusiness, isNew } = useBusinesses()
+  const { items: businesses, remove: removeBusiness } = useBusinesses()
 
   const resetFilters = () => {
     setActiveCat('All')
@@ -481,12 +481,7 @@ export default function Events() {
         ) : (
           <div className="biz-grid">
             {businesses.map((b) => (
-              <BusinessCard
-                key={b.id}
-                biz={b}
-                isNew={isNew(b.id)}
-                onRemove={removeBusiness}
-              />
+              <BusinessCard key={b.id} biz={b} onRemove={removeBusiness} />
             ))}
           </div>
         )}
