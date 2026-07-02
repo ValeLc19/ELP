@@ -133,8 +133,10 @@ export default function Events() {
     const params = new URLSearchParams(window.location.search)
     const id = params.get('event')
     if (id && EVENTS.some((e) => e.id === id)) setSelectedId(id)
-    // preview helpers: ?demo=1 signs in; ?onboard=1 also shows the post-signup tour
-    if (params.get('demo') || params.get('onboard')) demoSignIn()
+    // preview helpers: ?demo=1 signs in; ?onboard=1 also shows the post-signup
+    // tour; ?guest=1 signs out to view the logged-out state
+    if (params.get('guest')) logOut()
+    else if (params.get('demo') || params.get('onboard')) demoSignIn()
     if (params.get('onboard')) setOnboarding(true)
   }, [])
 
