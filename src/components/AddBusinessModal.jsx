@@ -59,11 +59,12 @@ export default function AddBusinessModal({ onClose }) {
                 )}
               </span>
             </div>
-            <button type="button" className="biz__addmore" onClick={addField}>
-              {t('addMore')} +
-            </button>
           </div>
         ))}
+
+        <button type="button" className="biz__addmore" onClick={addField}>
+          {t('addMore')} +
+        </button>
 
         <button className="biz__done" onClick={onClose}>
           {t('done')}

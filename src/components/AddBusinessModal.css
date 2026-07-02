@@ -46,7 +46,7 @@
 }
 
 .biz__field {
-  margin-bottom: 0.4rem;
+  margin-bottom: 1.1rem;
 }
 .biz__row {
   display: flex;
@@ -88,13 +88,14 @@
 }
 
 .biz__addmore {
+  display: block;
   background: none;
   border: none;
   font-family: var(--serif);
   font-size: 1.05rem;
   color: #2c231d;
   cursor: pointer;
-  padding: 0.5rem 0.2rem 0.8rem;
+  padding: 0.2rem 0.2rem 0.4rem;
 }
 .biz__addmore:hover { color: #d15a3a; }
 
