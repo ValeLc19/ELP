@@ -60,6 +60,16 @@ export function logOut() {
   emit()
 }
 
+export function changePassword(newPassword) {
+  const users = readUsers()
+  const u = users.find((x) => x.username === current)
+  if (!u) return { ok: false }
+  u.password = newPassword
+  writeUsers(users)
+  emit()
+  return { ok: true }
+}
+
 // Preview helper: sign in as a demo account (used by ?demo=1).
 export function demoSignIn() {
   const users = readUsers()

@@ -1,0 +1,117 @@
+.acct {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.acct__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(28, 22, 18, 0.5);
+}
+.acct__card {
+  position: relative;
+  z-index: 1;
+  width: min(400px, 94vw);
+  background: #f8f2e6;
+  border-radius: 18px;
+  padding: 1.7rem 1.8rem 1.6rem;
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.6);
+  animation: acctPop 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes acctPop {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.acct__close {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b6257;
+}
+.acct__title {
+  font-family: var(--serif);
+  font-size: 1.9rem;
+  text-align: center;
+  margin: 0.2rem 0 1.2rem;
+}
+.acct__label {
+  display: block;
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  color: #4a4038;
+  margin: 0.9rem 0 0.3rem;
+}
+.acct__value {
+  font-size: 1.1rem;
+  color: #1a1a1a;
+}
+.acct__pw-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.acct__link {
+  background: none;
+  border: none;
+  color: #5a7d6b;
+  cursor: pointer;
+  text-decoration: underline;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+.acct__change {
+  display: flex;
+  gap: 0.6rem;
+}
+.acct__input {
+  flex: 1;
+  font-family: inherit;
+  font-size: 1.05rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #d8cdbe;
+  border-radius: 10px;
+  background: #fffdf8;
+  outline: none;
+}
+.acct__input:focus { border-color: #b89a6a; }
+.acct__save {
+  background: #2c231d;
+  color: #fbf6ee;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  padding: 0 1.2rem;
+  cursor: pointer;
+}
+.acct__err {
+  color: #c0564a;
+  font-style: italic;
+  margin: 0.6rem 0 0;
+}
+.acct__msg {
+  color: #5a7d6b;
+  margin: 0.6rem 0 0;
+}
+.acct__logout {
+  display: block;
+  width: 100%;
+  margin-top: 1.6rem;
+  background: #d15a3a;
+  color: #241a12;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+.acct__logout:hover { filter: brightness(1.05); }

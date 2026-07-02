@@ -14,6 +14,7 @@ import CalendarView from '../components/CalendarView.jsx'
 import EventCard from '../components/EventCard.jsx'
 import EventDetail from '../components/EventDetail.jsx'
 import AuthModal from '../components/AuthModal.jsx'
+import AccountModal from '../components/AccountModal.jsx'
 import AddBusinessModal from '../components/AddBusinessModal.jsx'
 import BusinessCard from '../components/BusinessCard.jsx'
 import Onboarding from '../components/Onboarding.jsx'
@@ -118,6 +119,7 @@ export default function Events() {
   const { user, logOut } = useAuth()
   const { lang, setLang, t } = useLang()
   const [authOpen, setAuthOpen] = useState(false)
+  const [accountOpen, setAccountOpen] = useState(false)
   const [onboarding, setOnboarding] = useState(false)
   const [savedScreen, setSavedScreen] = useState(false) // dedicated saved-events screen
   const [savedTab, setSavedTab] = useState('next') // next | past
@@ -175,6 +177,14 @@ export default function Events() {
       return catOk && qOk && dateOk && priceOk && audienceOk && savedOk
     })
   }, [activeCat, activeDate, priceFilter, audienceFilter, savedFilter, query, view])
+
+  const handleLogout = () => {
+    logOut()
+    setSavedScreen(false)
+    setBizScreen(false)
+    setSavedFilter(false)
+    setAccountOpen(false)
+  }
 
   // Go to the events home (default view) — not the landing page.
   const goHome = () => {
@@ -455,17 +465,8 @@ export default function Events() {
         <button
           className="events__profile"
           aria-label={user ? 'Account' : 'Log in or sign up'}
-          title={user ? 'Log out' : 'Log in / Sign up'}
-          onClick={() => {
-            if (user) {
-              logOut()
-              setSavedScreen(false)
-              setBizScreen(false)
-              setSavedFilter(false)
-            } else {
-              setAuthOpen(true)
-            }
-          }}
+          title={user ? 'Account' : 'Log in / Sign up'}
+          onClick={() => (user ? setAccountOpen(true) : setAuthOpen(true))}
         >
           <ScanFaceIcon />
         </button>
@@ -486,6 +487,12 @@ export default function Events() {
       )}
       {onboarding && <Onboarding onDone={() => setOnboarding(false)} />}
       {addBizOpen && <AddBusinessModal onClose={() => setAddBizOpen(false)} />}
+      {accountOpen && (
+        <AccountModal
+          onClose={() => setAccountOpen(false)}
+          onLogout={handleLogout}
+        />
+      )}
     </>
   )
 
