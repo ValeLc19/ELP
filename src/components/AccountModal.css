@@ -101,10 +101,43 @@
   color: #5a7d6b;
   margin: 0.6rem 0 0;
 }
+.acct__row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.8rem 1rem;
+  background: #fffdf8;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  cursor: pointer;
+  color: var(--ink);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.acct__row:hover {
+  border-color: #d15a3a;
+  background: #fbf1e6;
+}
+.acct__row-icon {
+  display: inline-flex;
+  color: #d15a3a;
+}
+.acct__row-label {
+  flex: 1;
+  text-align: left;
+  font-family: var(--serif);
+  font-size: 1.15rem;
+}
+.acct__row-chev {
+  font-size: 1.4rem;
+  color: var(--muted);
+}
+
 .acct__logout {
   display: block;
   width: 100%;
-  margin-top: 1.6rem;
+  margin-top: 1rem;
   background: #d15a3a;
   color: #241a12;
   border: none;

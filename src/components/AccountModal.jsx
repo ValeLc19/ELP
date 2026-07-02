@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useAuth, changePassword } from '../lib/auth.js'
 import { useLang } from '../lib/i18n.js'
-import { XIcon } from './icons.jsx'
+import { XIcon, ShopIcon } from './icons.jsx'
 import './AccountModal.css'
 
-export default function AccountModal({ onClose, onLogout }) {
+export default function AccountModal({ onClose, onLogout, onBusinesses }) {
   const { user } = useAuth()
   const { t } = useLang()
   const [changing, setChanging] = useState(false)
@@ -69,6 +69,14 @@ export default function AccountModal({ onClose, onLogout }) {
         )}
         {err && <p className="acct__err">{err}</p>}
         {msg && <p className="acct__msg">{msg}</p>}
+
+        <button className="acct__row" onClick={onBusinesses}>
+          <span className="acct__row-icon">
+            <ShopIcon width={22} height={22} />
+          </span>
+          <span className="acct__row-label">{t('myBusinesses')}</span>
+          <span className="acct__row-chev">›</span>
+        </button>
 
         <button className="acct__logout" onClick={onLogout}>
           {t('logOut')}

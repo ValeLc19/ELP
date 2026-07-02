@@ -25,7 +25,6 @@ import {
   SearchIcon,
   ScanFaceIcon,
   PlusBoxIcon,
-  ShopIcon,
   SavedIcon,
 } from '../components/icons.jsx'
 
@@ -414,20 +413,6 @@ export default function Events() {
         {user && (
           <>
             <button
-              className={`events__icon-btn ${bizScreen ? 'is-active' : ''}`}
-              data-onb="add"
-              aria-label="Local businesses"
-              aria-pressed={bizScreen}
-              title="My local businesses"
-              onClick={() => {
-                setSelectedId(null)
-                setSavedScreen(false)
-                setBizScreen((s) => !s)
-              }}
-            >
-              <ShopIcon />
-            </button>
-            <button
               className={`events__icon-btn ${savedScreen ? 'is-active' : ''}`}
               data-onb="saved"
               aria-label="Saved events"
@@ -445,6 +430,7 @@ export default function Events() {
         )}
         <button
           className="events__profile"
+          data-onb="add"
           aria-label={user ? 'Account' : 'Log in or sign up'}
           title={user ? 'Account' : 'Log in / Sign up'}
           onClick={() => (user ? setAccountOpen(true) : setAuthOpen(true))}
@@ -472,6 +458,12 @@ export default function Events() {
         <AccountModal
           onClose={() => setAccountOpen(false)}
           onLogout={handleLogout}
+          onBusinesses={() => {
+            setAccountOpen(false)
+            setSavedScreen(false)
+            setSelectedId(null)
+            setBizScreen(true)
+          }}
         />
       )}
     </>
