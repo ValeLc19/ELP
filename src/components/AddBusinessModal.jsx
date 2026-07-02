@@ -59,7 +59,7 @@ export default function AddBusinessModal({ onClose }) {
         <button className="biz__close" onClick={onClose} aria-label={t('close')}>
           <XIcon />
         </button>
-        <h2 className="biz__title">{t('onb1')}</h2>
+        <h2 className="biz__title">{t('addBizHeading')}</h2>
 
         {fields.map((f) => (
           <div className="biz__field" key={f.id}>
