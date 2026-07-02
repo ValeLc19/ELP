@@ -468,6 +468,12 @@
   background: #fbf6ec;
   padding: 1.2rem 1.4rem 1.4rem;
 }
+.saved-empty {
+  text-align: center;
+  color: var(--muted);
+  font-size: 1.2rem;
+  padding: 2rem 1rem;
+}
 .list-panel__head {
   display: flex;
   align-items: center;

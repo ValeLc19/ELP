@@ -114,7 +114,8 @@ export default function Events() {
   const { lang, setLang, t } = useLang()
   const [authOpen, setAuthOpen] = useState(false)
   const [onboarding, setOnboarding] = useState(false)
-  const [savedOnly, setSavedOnly] = useState(false)
+  const [savedScreen, setSavedScreen] = useState(false) // dedicated saved-events screen
+  const [savedTab, setSavedTab] = useState('next') // next | past
   const [addBizOpen, setAddBizOpen] = useState(false)
 
   const resetFilters = () => {
@@ -160,10 +161,9 @@ export default function Events() {
       const audienceOk =
         !audienceFilter ||
         (audienceFilter === 'Kids' ? e.family : !!e.ageNote)
-      const savedOk = !savedOnly || isSaved(e.seriesId || e.id)
-      return catOk && qOk && dateOk && priceOk && audienceOk && savedOk
+      return catOk && qOk && dateOk && priceOk && audienceOk
     })
-  }, [activeCat, activeDate, priceFilter, audienceFilter, query, view, savedOnly])
+  }, [activeCat, activeDate, priceFilter, audienceFilter, query, view])
 
   // Saving requires an account — open the auth modal if logged out.
   const requireAuth = () => {
@@ -194,8 +194,11 @@ export default function Events() {
       {['map', 'calendar', 'list'].map((key) => (
         <button
           key={key}
-          className={`tab ${view === key ? 'tab--active' : ''}`}
-          onClick={() => setView(key)}
+          className={`tab ${!savedScreen && view === key ? 'tab--active' : ''}`}
+          onClick={() => {
+            setSavedScreen(false)
+            setView(key)
+          }}
         >
           {t(key)}
         </button>
@@ -375,12 +378,15 @@ export default function Events() {
               <PlusBoxIcon />
             </button>
             <button
-              className={`events__icon-btn ${savedOnly ? 'is-active' : ''}`}
+              className={`events__icon-btn ${savedScreen ? 'is-active' : ''}`}
               data-onb="saved"
               aria-label="Saved events"
-              aria-pressed={savedOnly}
+              aria-pressed={savedScreen}
               title="Your saved events"
-              onClick={() => setSavedOnly((s) => !s)}
+              onClick={() => {
+                setSelectedId(null)
+                setSavedScreen((s) => !s)
+              }}
             >
               <SavedIcon />
             </button>
@@ -390,7 +396,14 @@ export default function Events() {
           className="events__profile"
           aria-label={user ? 'Account' : 'Log in or sign up'}
           title={user ? 'Log out' : 'Log in / Sign up'}
-          onClick={() => (user ? logOut() : setAuthOpen(true))}
+          onClick={() => {
+            if (user) {
+              logOut()
+              setSavedScreen(false)
+            } else {
+              setAuthOpen(true)
+            }
+          }}
         >
           <ScanFaceIcon />
         </button>
@@ -413,6 +426,79 @@ export default function Events() {
       {addBizOpen && <AddBusinessModal onClose={() => setAddBizOpen(false)} />}
     </>
   )
+
+  // ---------- Saved-events screen (folder icon) ----------
+  if (savedScreen) {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const q = query.trim().toLowerCase()
+    const savedList = collapseSeries(
+      EVENTS.filter((e) => isSaved(e.seriesId || e.id))
+    ).filter(
+      (e) =>
+        !q ||
+        e.title.toLowerCase().includes(q) ||
+        e.address.toLowerCase().includes(q)
+    )
+    const shown = savedList
+      .filter((e) => (savedTab === 'next' ? e.dateObj >= today : e.dateObj < today))
+      .sort((a, b) =>
+        savedTab === 'next' ? a.dateObj - b.dateObj : b.dateObj - a.dateObj
+      )
+
+    return (
+      <div className="events">
+        {header}
+        <div className="events__controls">
+          <div className="searchbar">
+            <SearchIcon />
+            <input
+              type="text"
+              placeholder="Sunland Park"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+          <div className="tabs">
+            <button
+              className={`tab ${savedTab === 'next' ? 'tab--active' : ''}`}
+              onClick={() => setSavedTab('next')}
+            >
+              {t('nextEvents')}
+            </button>
+            <button
+              className={`tab ${savedTab === 'past' ? 'tab--active' : ''}`}
+              onClick={() => setSavedTab('past')}
+            >
+              {t('pastEvents')}
+            </button>
+          </div>
+        </div>
+
+        <div className={`list-layout ${selected ? 'list-layout--split' : ''}`}>
+          <section className="list-panel">
+            {shown.length === 0 ? (
+              <p className="saved-empty">{t('noSaved')}</p>
+            ) : (
+              <div className="list-grid">
+                {shown.map((e) => (
+                  <EventCard
+                    key={e.id}
+                    event={e}
+                    variant="compact"
+                    onSelect={setSelectedId}
+                    onRequireAuth={requireAuth}
+                  />
+                ))}
+              </div>
+            )}
+          </section>
+          {selected && <aside className="events__panel">{detailPanel}</aside>}
+        </div>
+        {overlays}
+      </div>
+    )
+  }
 
   // ---------- List view ----------
   if (view === 'list') {
