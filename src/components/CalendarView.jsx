@@ -1,19 +1,6 @@
 import { useState } from 'react'
 import { categoryColor } from '../data/categories.js'
-
-const WEEKDAYS = [
-  'Sunday',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-]
-const MONTH_NAMES = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
-]
+import { useLang } from '../lib/i18n.js'
 
 const pad = (n) => String(n).padStart(2, '0')
 const isoOf = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
@@ -48,6 +35,8 @@ function eventsByIso(events) {
 }
 
 function MonthView({ anchor, events, selectedId, onSelect }) {
+  const { t } = useLang()
+  const WEEKDAYS = t('weekdays')
   const year = anchor.getFullYear()
   const month = anchor.getMonth()
   const byIso = eventsByIso(events)
@@ -103,6 +92,8 @@ function MonthView({ anchor, events, selectedId, onSelect }) {
 }
 
 function WeekView({ anchor, events, selectedId, onSelect }) {
+  const { t } = useLang()
+  const WEEKDAYS = t('weekdays')
   const byIso = eventsByIso(events)
   const start = sundayOf(anchor)
   const days = Array.from({ length: 7 }, (_, i) => addDays(start, i))
@@ -146,6 +137,8 @@ function WeekView({ anchor, events, selectedId, onSelect }) {
 }
 
 export default function CalendarView({ events, selectedId, onSelect }) {
+  const { t } = useLang()
+  const MONTH_NAMES = t('months')
   const [mode, setMode] = useState('Month')
   const [anchor, setAnchor] = useState(startOfToday)
 
@@ -174,13 +167,13 @@ export default function CalendarView({ events, selectedId, onSelect }) {
               className={`seg__btn ${mode === 'Month' ? 'seg__btn--active' : ''}`}
               onClick={() => setMode('Month')}
             >
-              Month
+              {t('monthTab')}
             </button>
             <button
               className={`seg__btn ${mode === 'Week' ? 'seg__btn--active' : ''}`}
               onClick={() => setMode('Week')}
             >
-              Week
+              {t('weekTab')}
             </button>
           </div>
           <button className="calendar__arrow" onClick={() => step(-1)} aria-label="Previous">

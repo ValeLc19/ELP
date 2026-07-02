@@ -18,6 +18,7 @@ import AddBusinessModal from '../components/AddBusinessModal.jsx'
 import Onboarding from '../components/Onboarding.jsx'
 import { useAuth, displayName, demoSignIn } from '../lib/auth.js'
 import { isSaved } from '../lib/saved.js'
+import { useLang } from '../lib/i18n.js'
 import {
   SearchIcon,
   ScanFaceIcon,
@@ -110,6 +111,7 @@ export default function Events() {
   const [selectedId, setSelectedId] = useState(null)
 
   const { user, logOut } = useAuth()
+  const { lang, setLang, t } = useLang()
   const [authOpen, setAuthOpen] = useState(false)
   const [onboarding, setOnboarding] = useState(false)
   const [savedOnly, setSavedOnly] = useState(false)
@@ -189,18 +191,15 @@ export default function Events() {
 
   const tabs = (
     <div className="tabs">
-      {['Map', 'Calendar', 'List'].map((t) => {
-        const key = t.toLowerCase()
-        return (
-          <button
-            key={t}
-            className={`tab ${view === key ? 'tab--active' : ''}`}
-            onClick={() => setView(key)}
-          >
-            {t}
-          </button>
-        )
-      })}
+      {['map', 'calendar', 'list'].map((key) => (
+        <button
+          key={key}
+          className={`tab ${view === key ? 'tab--active' : ''}`}
+          onClick={() => setView(key)}
+        >
+          {t(key)}
+        </button>
+      ))}
     </div>
   )
 
@@ -221,7 +220,7 @@ export default function Events() {
       <div className="filters">
         {view !== 'calendar' && (
           <div className="filters__group">
-            <span className="filters__label">When</span>
+            <span className="filters__label">{t('when')}</span>
             <div className="filters__chips">
               {DATE_FILTERS.map((d) => (
                 <button
@@ -229,7 +228,7 @@ export default function Events() {
                   className={`chip ${activeDate === d ? 'chip--on-date' : ''}`}
                   onClick={() => setActiveDate(activeDate === d ? null : d)}
                 >
-                  {d}
+                  {t(d)}
                 </button>
               ))}
             </div>
@@ -237,7 +236,7 @@ export default function Events() {
         )}
 
         <div className="filters__group">
-          <span className="filters__label">Category</span>
+          <span className="filters__label">{t('category')}</span>
           <div className="filters__chips">
             {CATEGORY_ORDER.map((c) => (
               <button
@@ -253,14 +252,14 @@ export default function Events() {
                   className="badge__dot"
                   style={{ background: categoryColor(c) }}
                 />
-                {c}
+                {t(`cat_${c}`)}
               </button>
             ))}
           </div>
         </div>
 
         <div className="filters__group">
-          <span className="filters__label">Price</span>
+          <span className="filters__label">{t('price')}</span>
           <div className="filters__chips">
             {PRICE_CHIPS.map((c) => (
               <button
@@ -276,14 +275,14 @@ export default function Events() {
                 }
               >
                 <span className="badge__dot" style={{ background: c.color }} />
-                {c.label}
+                {t(`chip_${c.label}`)}
               </button>
             ))}
           </div>
         </div>
 
         <div className="filters__group">
-          <span className="filters__label">Good for</span>
+          <span className="filters__label">{t('goodFor')}</span>
           <div className="filters__chips">
             {AUDIENCE_CHIPS.map((c) => (
               <button
@@ -299,7 +298,7 @@ export default function Events() {
                 }
               >
                 <span className="badge__dot" style={{ background: c.color }} />
-                {c.label}
+                {t(`chip_${c.label}`)}
               </button>
             ))}
           </div>
@@ -308,7 +307,7 @@ export default function Events() {
         <div className="filters__group">
           <span className="filters__label" aria-hidden="true" />
           <button className="filters__clear" onClick={resetFilters}>
-            Clear filters
+            {t('clearFilters')}
           </button>
         </div>
       </div>
@@ -318,15 +317,15 @@ export default function Events() {
   const emptyState = (
     <div className="empty">
       <p className="empty__msg">
-        Sorry!
+        {t('empty1')}
         <br />
-        No events found.
+        {t('empty2')}
         <br />
-        The closest event is:
+        {t('empty3')}
       </p>
       <EventCard event={EVENTS[0]} onSelect={setSelectedId} onRequireAuth={requireAuth} />
       <button className="empty__similar" onClick={resetFilters}>
-        See similar events
+        {t('seeSimilar')}
       </button>
     </div>
   )
@@ -344,8 +343,26 @@ export default function Events() {
       <h1 className="events__logo" onClick={() => navigate('/')} title="Back to home">
         ELP
       </h1>
-      {user && <span className="events__welcome">Welcome {displayName(user)}</span>}
+      {user && (
+        <span className="events__welcome">
+          {t('welcome')} {displayName(user)}
+        </span>
+      )}
       <div className="events__actions">
+        <div className="lang-toggle" role="group" aria-label="Language">
+          <button
+            className={`lang-toggle__btn ${lang === 'en' ? 'is-on' : ''}`}
+            onClick={() => setLang('en')}
+          >
+            {t('langEN')}
+          </button>
+          <button
+            className={`lang-toggle__btn ${lang === 'es' ? 'is-on' : ''}`}
+            onClick={() => setLang('es')}
+          >
+            {t('langES')}
+          </button>
+        </div>
         {user && (
           <>
             <button
@@ -407,9 +424,9 @@ export default function Events() {
         <div className={`list-layout ${selected ? 'list-layout--split' : ''}`}>
           <section className="list-panel">
             <div className="list-panel__head">
-              <h2 className="events__panel-title">Events:</h2>
+              <h2 className="events__panel-title">{t('events')}</h2>
               <div className="sort">
-                <span className="sort__label">Sort by:</span>
+                <span className="sort__label">{t('sortBy')}</span>
                 <div className="seg">
                   {['Date', 'Price'].map((s) => (
                     <button
@@ -417,7 +434,7 @@ export default function Events() {
                       className={`seg__btn ${sortBy === s ? 'seg__btn--active' : ''}`}
                       onClick={() => setSortBy(s)}
                     >
-                      {s}
+                      {s === 'Date' ? t('sortDate') : t('sortPrice')}
                     </button>
                   ))}
                 </div>
@@ -479,7 +496,7 @@ export default function Events() {
             detailPanel
           ) : (
             <>
-              <h2 className="events__panel-title">Events:</h2>
+              <h2 className="events__panel-title">{t('events')}</h2>
               {collapsed.length === 0 ? (
                 emptyState
               ) : (

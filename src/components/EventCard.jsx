@@ -1,6 +1,7 @@
 import { categoryColor, categoryTint } from '../data/categories.js'
 import { useSaved } from '../lib/saved.js'
 import { useAuth } from '../lib/auth.js'
+import { useLang } from '../lib/i18n.js'
 import {
   LocationIcon,
   CalendarIcon,
@@ -19,6 +20,7 @@ export default function EventCard({
   const compact = variant === 'compact'
   const { isSaved, toggle } = useSaved()
   const { user } = useAuth()
+  const { t } = useLang()
   const saveKey = event.seriesId || event.id
   const saved = isSaved(saveKey)
 
@@ -64,7 +66,7 @@ export default function EventCard({
             style={{ background: categoryTint(event.category), color: 'var(--ink)' }}
           >
             <span className="badge__dot" style={{ background: color }} />
-            {event.category}
+            {t(`cat_${event.category}`)}
           </span>
         </div>
 
@@ -72,14 +74,14 @@ export default function EventCard({
           <p className="ev-meta">
             <CalendarIcon /> {event.date} · {event.time}
             {event.recurLabel && (
-              <span className="recur-tag">{event.recurLabel}</span>
+              <span className="recur-tag">{t(`recur_${event.recurLabel}`)}</span>
             )}
           </p>
         ) : (
           <>
             {event.family && (
               <p className="ev-meta">
-                <UsersIcon /> Family Event
+                <UsersIcon /> {t('familyEvent')}
               </p>
             )}
             <p className="ev-meta">
@@ -88,7 +90,7 @@ export default function EventCard({
             <p className="ev-meta">
               <CalendarIcon /> {event.date} · {event.time}
               {event.recurLabel && (
-                <span className="recur-tag">{event.recurLabel}</span>
+                <span className="recur-tag">{t(`recur_${event.recurLabel}`)}</span>
               )}
             </p>
             <p className="ev-meta">
@@ -98,7 +100,7 @@ export default function EventCard({
         )}
 
         <button className="see-details" onClick={() => onSelect(event.id)}>
-          See Details →
+          {t('seeDetails')} →
         </button>
       </div>
     </article>

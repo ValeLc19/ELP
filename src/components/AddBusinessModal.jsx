@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { XIcon } from './icons.jsx'
+import { useLang } from '../lib/i18n.js'
 import './AddBusinessModal.css'
 
 // Front-end stub: captures a business's social handle. Real pull-in of their
 // posted events would need a backend integration.
 export default function AddBusinessModal({ onClose }) {
+  const { t } = useLang()
   const [handle, setHandle] = useState('')
   const [done, setDone] = useState(false)
 
@@ -17,22 +19,19 @@ export default function AddBusinessModal({ onClose }) {
         </button>
         {done ? (
           <>
-            <h2 className="biz__title">Thanks!</h2>
+            <h2 className="biz__title">{t('thanks')}</h2>
             <p className="biz__text">
-              We’ll start pulling in events from <strong>{handle}</strong> soon.
+              <strong>{handle}</strong>
             </p>
-            <button className="biz__done" onClick={onClose}>Close</button>
+            <button className="biz__done" onClick={onClose}>{t('close')}</button>
           </>
         ) : (
           <>
-            <h2 className="biz__title">Add a local business</h2>
-            <p className="biz__text">
-              Paste a business’s social media handle or page link and we’ll pull
-              in the events they post.
-            </p>
+            <h2 className="biz__title">{t('addBizTitle')}</h2>
+            <p className="biz__text">{t('addBizText')}</p>
             <input
               className="biz__input"
-              placeholder="@elpasomarket or a page link"
+              placeholder={t('addBizPlaceholder')}
               value={handle}
               onChange={(e) => setHandle(e.target.value)}
             />
@@ -41,7 +40,7 @@ export default function AddBusinessModal({ onClose }) {
               disabled={!handle.trim()}
               onClick={() => setDone(true)}
             >
-              Add
+              {t('add')}
             </button>
           </>
         )}

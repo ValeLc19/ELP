@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../lib/auth.js'
+import { useLang } from '../lib/i18n.js'
 import { CATEGORY_ORDER, categoryColor, categoryTint } from '../data/categories.js'
 import { ScanFaceIcon, XIcon } from './icons.jsx'
 import './AuthModal.css'
@@ -66,6 +67,7 @@ const pwOk = (v) => v.length >= 6
 
 export default function AuthModal({ onClose, onSignedUp }) {
   const { logIn, signUp } = useAuth()
+  const { t } = useLang()
   const [view, setView] = useState('choice') // choice | login | signup
 
   // shared fields
@@ -82,13 +84,13 @@ export default function AuthModal({ onClose, onSignedUp }) {
 
   const doLogin = () => {
     const res = logIn(email.trim(), password)
-    if (!res.ok) setError(res.error)
+    if (!res.ok) setError(t('errWrong'))
     else onClose()
   }
 
   const doSignup = () => {
     if (!emailOk(email) || !pwOk(password) || interests.length === 0) {
-      setError('*Something is missing. Try again')
+      setError(t('errMissing'))
       return
     }
     const res = signUp({
@@ -96,7 +98,7 @@ export default function AuthModal({ onClose, onSignedUp }) {
       password,
       interests,
     })
-    if (!res.ok) setError(res.error)
+    if (!res.ok) setError(t('accountExists'))
     else onSignedUp()
   }
 
@@ -115,10 +117,10 @@ export default function AuthModal({ onClose, onSignedUp }) {
         {view === 'choice' && (
           <div className="auth__choice">
             <button className="auth__link" onClick={() => { setError(''); setView('login') }}>
-              LOG IN
+              {t('logIn')}
             </button>
             <button className="auth__link" onClick={() => { setError(''); setView('signup') }}>
-              SIGN UP
+              {t('signUp')}
             </button>
           </div>
         )}
@@ -128,8 +130,8 @@ export default function AuthModal({ onClose, onSignedUp }) {
             className="auth__form"
             onSubmit={(e) => { e.preventDefault(); doLogin() }}
           >
-            <h2 className="auth__title">LOG IN</h2>
-            <label className="auth__label">E-mail:</label>
+            <h2 className="auth__title">{t('logIn')}</h2>
+            <label className="auth__label">{t('emailLabelColon')}</label>
             <input
               className={`auth__input ${email && emailOk(email) ? 'auth__input--ok' : ''}`}
               type="email"
@@ -137,7 +139,7 @@ export default function AuthModal({ onClose, onSignedUp }) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <label className="auth__label">Password:</label>
+            <label className="auth__label">{t('passwordLabelColon')}</label>
             <input
               className="auth__input"
               type="password"
@@ -151,12 +153,12 @@ export default function AuthModal({ onClose, onSignedUp }) {
                 checked={remember}
                 onChange={(e) => setRemember(e.target.checked)}
               />
-              Remember me
+              {t('rememberMe')}
             </label>
-            <button type="submit" className="auth__done">Done</button>
+            <button type="submit" className="auth__done">{t('done')}</button>
             {error && <p className="auth__error auth__error--big">{error}</p>}
             <button type="button" className="auth__switch" onClick={() => { setError(''); setView('signup') }}>
-              No account? Sign up
+              {t('noAccount')}
             </button>
           </form>
         )}
@@ -166,9 +168,9 @@ export default function AuthModal({ onClose, onSignedUp }) {
             className="auth__form"
             onSubmit={(e) => { e.preventDefault(); doSignup() }}
           >
-            <h2 className="auth__title">SIGN UP</h2>
+            <h2 className="auth__title">{t('signUp')}</h2>
 
-            <label className="auth__label">E-mail</label>
+            <label className="auth__label">{t('emailLabel')}</label>
             <div className="auth__field">
               <input
                 className={`auth__input ${email && emailOk(email) ? 'auth__input--ok' : ''}`}
@@ -184,7 +186,7 @@ export default function AuthModal({ onClose, onSignedUp }) {
               </span>
             </div>
 
-            <label className="auth__label">Password</label>
+            <label className="auth__label">{t('passwordLabel')}</label>
             <div className="auth__field">
               <input
                 className="auth__input"
@@ -200,9 +202,7 @@ export default function AuthModal({ onClose, onSignedUp }) {
               </span>
             </div>
 
-            <h3 className="auth__interests-q">
-              On what type of events are you interested?
-            </h3>
+            <h3 className="auth__interests-q">{t('interestsQ')}</h3>
             <div className="auth__interests">
               {INTERESTS.map((it) => {
                 const on = interests.includes(it.label)
@@ -218,16 +218,18 @@ export default function AuthModal({ onClose, onSignedUp }) {
                     onClick={() => toggleInterest(it.label)}
                   >
                     <span className="badge__dot" style={{ background: it.color }} />
-                    {it.label}
+                    {CATEGORY_ORDER.includes(it.label)
+                      ? t(`cat_${it.label}`)
+                      : t(`chip_${it.label}`)}
                   </button>
                 )
               })}
             </div>
 
             {error && <p className="auth__error">{error}</p>}
-            <button type="submit" className="auth__done">Done</button>
+            <button type="submit" className="auth__done">{t('done')}</button>
             <button type="button" className="auth__switch" onClick={() => { setError(''); setView('login') }}>
-              Have an account? Log in
+              {t('haveAccount')}
             </button>
           </form>
         )}

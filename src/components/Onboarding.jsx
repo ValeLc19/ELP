@@ -1,18 +1,14 @@
 import { useState, useLayoutEffect } from 'react'
+import { useLang } from '../lib/i18n.js'
 import './Onboarding.css'
 
 const STEPS = [
-  {
-    text: 'Add a local business’s social media account to pull in the events they post.',
-    target: '[data-onb="add"]',
-  },
-  {
-    text: 'Now you can save the events you are interested in.',
-    target: '[data-onb="saved"]',
-  },
+  { key: 'onb1', target: '[data-onb="add"]' },
+  { key: 'onb2', target: '[data-onb="saved"]' },
 ]
 
 export default function Onboarding({ onDone }) {
+  const { t } = useLang()
   const [step, setStep] = useState(0)
   const [pos, setPos] = useState(null)
   const last = step === STEPS.length - 1
@@ -41,7 +37,7 @@ export default function Onboarding({ onDone }) {
       <div className="onb__backdrop" />
       <div className="onb__card" style={cardStyle}>
         <div className="onb__pointer" />
-        <p className="onb__text">{STEPS[step].text}</p>
+        <p className="onb__text">{t(STEPS[step].key)}</p>
         <div className="onb__actions">
           <span className="onb__dots">
             {STEPS.map((_, i) => (
@@ -52,7 +48,7 @@ export default function Onboarding({ onDone }) {
             className="onb__next"
             onClick={() => (last ? onDone() : setStep(step + 1))}
           >
-            {last ? 'Got it' : 'Next'}
+            {last ? t('gotIt') : t('next')}
           </button>
         </div>
       </div>

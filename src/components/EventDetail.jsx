@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { categoryColor, categoryTint } from '../data/categories.js'
 import { useSaved } from '../lib/saved.js'
 import { useAuth } from '../lib/auth.js'
+import { useLang } from '../lib/i18n.js'
 import {
   LocationIcon,
   CalendarIcon,
@@ -19,6 +20,7 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
   const [copied, setCopied] = useState(false)
   const { isSaved, toggle } = useSaved()
   const { user } = useAuth()
+  const { t } = useLang()
   const saveKey = event.seriesId || event.id
   const saved = isSaved(saveKey)
 
@@ -65,7 +67,7 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
             style={{ background: categoryTint(event.category), color: 'var(--ink)' }}
           >
             <span className="badge__dot" style={{ background: color }} />
-            {event.category}
+            {t(`cat_${event.category}`)}
           </span>
 
           <hr className="detail__rule" />
@@ -78,7 +80,7 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
             )}
             {event.family && !event.ageNote && (
               <p className="ev-meta">
-                <UsersIcon /> Family Event
+                <UsersIcon /> {t('familyEvent')}
               </p>
             )}
             <p className="ev-meta">
@@ -87,7 +89,7 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
             <p className="ev-meta">
               <CalendarIcon /> {event.date}
               {event.recurLabel && (
-                <span className="recur-tag">{event.recurLabel}</span>
+                <span className="recur-tag">{t(`recur_${event.recurLabel}`)}</span>
               )}
             </p>
             <p className="ev-meta">
@@ -101,13 +103,13 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
           <hr className="detail__rule" />
 
           <h4 className="detail__label">
-            <ChatIcon /> About:
+            <ChatIcon /> {t('about')}
           </h4>
           <p className="detail__text">{event.about}</p>
 
           {event.additionalInfo && (
             <>
-              <h4 className="detail__label">Additional Information:</h4>
+              <h4 className="detail__label">{t('additionalInfo')}</h4>
               <p className="detail__text">{event.additionalInfo}</p>
             </>
           )}
@@ -115,11 +117,11 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
           {event.host && (
             <div className="detail__host">
               <div>
-                <h4 className="detail__label">Host:</h4>
+                <h4 className="detail__label">{t('host')}</h4>
                 <p className="detail__text">{event.host}</p>
               </div>
               <div className="detail__host-actions">
-                {copied && <span className="copied-toast">Copied!</span>}
+                {copied && <span className="copied-toast">{t('copied')}</span>}
                 <button
                   onClick={copyLink}
                   aria-label="Copy event link"
@@ -145,7 +147,7 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
             target="_blank"
             rel="noopener noreferrer"
           >
-            More Info →
+            {t('moreInfo')}
           </a>
         </div>
       )}
