@@ -132,6 +132,20 @@ export const XIcon = (p) => (
   </svg>
 )
 
+export const UserIcon = (p) => (
+  <svg {...base} {...p}>
+    <circle cx="12" cy="8" r="4" />
+    <path d="M4 20c0-4 3.6-6 8-6s8 2 8 6" />
+  </svg>
+)
+
+export const LogOutIcon = (p) => (
+  <svg {...base} {...p}>
+    <path d="M9 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h3" />
+    <path d="M13 12h8M18 9l3 3-3 3" />
+  </svg>
+)
+
 export const TrashIcon = (p) => (
   <svg {...base} {...p}>
     <path d="M4 7h16" />
