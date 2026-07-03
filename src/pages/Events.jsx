@@ -243,7 +243,8 @@ export default function Events() {
     return arr
   }, [collapsed, sortBy])
 
-  const selected = EVENTS.find((e) => e.id === selectedId) || null
+  const selected =
+    [...EVENTS, ...myBizEvents].find((e) => e.id === selectedId) || null
 
   const tabs = (
     <div className="tabs">
