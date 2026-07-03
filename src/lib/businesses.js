@@ -188,6 +188,81 @@ export function removeBusiness(id) {
   emit()
 }
 
+// ---- Mock "events pulled from a business's social" (prototype) -------------
+// Stands in for the real pipeline (scrape posts -> vision-extract -> geocode).
+// Same shape as the app's event instances, tagged with fromBusiness.
+const STOCK = (id) =>
+  `https://images.unsplash.com/photo-${id}?w=800&q=80&auto=format&fit=crop`
+const CAT_IMG = {
+  Food: '1414235077428-338989a2e8c0',
+  Arts: '1531058020387-3be344556be6',
+  Markets: '1488459716781-31db52582fe9',
+  Music: '1501386761578-eac5c94b800a',
+  Sports: '1506126613408-eca07ce68773',
+  Outdoors: '1551632811-561732d1e306',
+}
+const ADDRS = [
+  { a: '2260 N Zaragoza Rd, El Paso, TX', lat: 31.744, lng: -106.303 },
+  { a: '500 N Oregon St, El Paso, TX', lat: 31.7597, lng: -106.4877 },
+  { a: '3100 N Mesa St, El Paso, TX', lat: 31.795, lng: -106.505 },
+  { a: '1201 N Cotton St, El Paso, TX', lat: 31.774, lng: -106.472 },
+  { a: '7400 Remcon Cir, El Paso, TX', lat: 31.833, lng: -106.545 },
+]
+const TITLES = ['Pop-Up', 'Event Night', 'Open House', 'Market Day', 'Live Session']
+const TIMES = ['12:00 pm', '6:00 pm', '5:00 pm', '7:00 pm', '10:00 am']
+const PRICES = ['Free', 'Free', '$5', '$10', 'Free']
+
+function guessCategory(name) {
+  const s = name.toLowerCase()
+  if (/coffee|matcha|tea|cafe|bakery|kitchen|grill|bbq|taco|pizza|food|eat|brew|wine|juice|dessert|sweet|donut|deli|diner|bar/.test(s)) return 'Food'
+  if (/book|art|gallery|studio|paint|craft|museum|theat|press|print/.test(s)) return 'Arts'
+  if (/music|record|sound|dj|band|vinyl|stage/.test(s)) return 'Music'
+  if (/yoga|gym|fit|run|sport|climb|bike/.test(s)) return 'Sports'
+  if (/park|garden|hike|trail|outdoor/.test(s)) return 'Outdoors'
+  return 'Markets'
+}
+
+export function businessEvents(items) {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  return items.map((b, idx) => {
+    const seq = b.seq || idx + 1
+    const cat = guessCategory(b.name)
+    const addr = ADDRS[seq % ADDRS.length]
+    const d = new Date(today)
+    d.setDate(today.getDate() + 7 + ((seq * 4) % 40))
+    const iso = isoOf(d)
+    return {
+      id: `bizev-${b.id}`,
+      seriesId: `bizev-${b.id}`,
+      fromBusiness: true,
+      businessId: b.id,
+      businessName: b.name,
+      businessAvatar: b.avatar,
+      title: `${b.name} ${TITLES[seq % TITLES.length]}`,
+      short: b.name,
+      category: cat,
+      image: STOCK(CAT_IMG[cat]),
+      family: true,
+      address: addr.a,
+      lat: addr.lat + (seq % 3) * 0.004,
+      lng: addr.lng + (seq % 2) * 0.004,
+      dateISO: iso,
+      dateObj: d,
+      iso,
+      day: d.getDate(),
+      date: `${MONTHS[d.getMonth()]} ${ordinal(d.getDate())}`,
+      time: TIMES[seq % TIMES.length],
+      price: PRICES[seq % PRICES.length],
+      about: `A pop-up from ${b.name} — details pulled from their latest social post. Come by and say hi!`,
+      additionalInfo: 'Detected from their post.',
+      host: b.name,
+      recurLabel: null,
+      sourceUrl: b.url,
+    }
+  })
+}
+
 export function useBusinesses() {
   const [, force] = useReducer((n) => n + 1, 0)
   useEffect(() => {

@@ -19,7 +19,7 @@ import BusinessCard from '../components/BusinessCard.jsx'
 import Onboarding from '../components/Onboarding.jsx'
 import { useAuth, displayName, demoSignIn } from '../lib/auth.js'
 import { isSaved } from '../lib/saved.js'
-import { useBusinesses } from '../lib/businesses.js'
+import { useBusinesses, businessEvents, addBusiness } from '../lib/businesses.js'
 import { useLang } from '../lib/i18n.js'
 import {
   SearchIcon,
@@ -108,6 +108,7 @@ export default function Events() {
   const [priceFilter, setPriceFilter] = useState(null) // 'Free' | 'Cost'
   const [audienceFilter, setAudienceFilter] = useState(null) // 'Kids' | 'Adults'
   const [savedFilter, setSavedFilter] = useState(false) // account-only: saved events only
+  const [businessFilter, setBusinessFilter] = useState(false) // account-only: my businesses' events
   const [sortBy, setSortBy] = useState('Date')
   const [query, setQuery] = useState('')
   const [selectedId, setSelectedId] = useState(null)
@@ -123,12 +124,19 @@ export default function Events() {
   const [bizScreen, setBizScreen] = useState(false) // My Local Business screen
   const { items: businesses, remove: removeBusiness } = useBusinesses()
 
+  // Events "pulled" from the businesses this user added (mock; account-only).
+  const myBizEvents = useMemo(
+    () => (user ? businessEvents(businesses) : []),
+    [businesses, user]
+  )
+
   const resetFilters = () => {
     setActiveCat('All')
     setActiveDate(null)
     setPriceFilter(null)
     setAudienceFilter(null)
     setSavedFilter(false)
+    setBusinessFilter(false)
     setQuery('')
   }
 
@@ -140,7 +148,13 @@ export default function Events() {
     // preview helpers: ?demo=1 signs in; ?onboard=1 also shows the post-signup
     // tour; ?guest=1 signs out to view the logged-out state
     if (params.get('guest')) logOut()
-    else if (params.get('demo') || params.get('onboard')) demoSignIn()
+    else if (params.get('demo') || params.get('onboard')) {
+      demoSignIn()
+      // seed a couple of sample businesses so "From my businesses" has content
+      addBusiness('https://www.instagram.com/sassysips_matcha/')
+      addBusiness('https://www.instagram.com/thebrewerytx/')
+      addBusiness('marginnotesbookbar')
+    }
     if (params.get('onboard')) setOnboarding(true)
   }, [])
 
@@ -155,7 +169,8 @@ export default function Events() {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
     const win = dateWindow()
-    return EVENTS.filter((e) => {
+    const pool = user ? [...EVENTS, ...myBizEvents] : EVENTS
+    return pool.filter((e) => {
       const catOk = activeCat === 'All' || e.category === activeCat
       const qOk =
         !q ||
@@ -170,15 +185,29 @@ export default function Events() {
         !audienceFilter ||
         (audienceFilter === 'Kids' ? e.family : !!e.ageNote)
       const savedOk = !savedFilter || isSaved(e.seriesId || e.id)
-      return catOk && qOk && dateOk && priceOk && audienceOk && savedOk
+      // business events are hidden from the normal feed; the chip reveals them
+      const businessOk = businessFilter ? !!e.fromBusiness : !e.fromBusiness
+      return catOk && qOk && dateOk && priceOk && audienceOk && savedOk && businessOk
     })
-  }, [activeCat, activeDate, priceFilter, audienceFilter, savedFilter, query, view])
+  }, [
+    activeCat,
+    activeDate,
+    priceFilter,
+    audienceFilter,
+    savedFilter,
+    businessFilter,
+    myBizEvents,
+    user,
+    query,
+    view,
+  ])
 
   const handleLogout = () => {
     logOut()
     setSavedScreen(false)
     setBizScreen(false)
     setSavedFilter(false)
+    setBusinessFilter(false)
     setAccountOpen(false)
   }
 
@@ -350,6 +379,20 @@ export default function Events() {
               >
                 <span className="badge__dot" style={{ background: '#d15a3a' }} />
                 {t('savedChip')}
+              </button>
+            )}
+            {user && (
+              <button
+                className="chip"
+                aria-pressed={businessFilter}
+                style={{
+                  borderColor: '#2e6f69',
+                  background: businessFilter ? hexToRgba('#2e6f69', 0.5) : undefined,
+                }}
+                onClick={() => setBusinessFilter((s) => !s)}
+              >
+                <span className="badge__dot" style={{ background: '#2e6f69' }} />
+                {t('fromBusinesses')}
               </button>
             )}
             <button className="filters__clear" onClick={resetFilters}>

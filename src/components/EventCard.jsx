@@ -10,6 +10,7 @@ import {
   TicketIcon,
   UsersIcon,
   HeartIcon,
+  ShopIcon,
 } from './icons.jsx'
 
 export default function EventCard({
@@ -84,6 +85,12 @@ export default function EventCard({
             {t(`cat_${event.category}`)}
           </span>
         </div>
+
+        {event.fromBusiness && (
+          <p className="ev-card__from">
+            <ShopIcon width={14} height={14} /> {event.businessName}
+          </p>
+        )}
 
         {compact ? (
           <p className="ev-meta">

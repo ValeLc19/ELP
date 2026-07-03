@@ -776,6 +776,18 @@
   padding: 0.05rem 0.4rem;
 }
 
+.ev-card__from {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0 0 0.5rem;
+  font-size: 0.92rem;
+  color: #2e6f69;
+}
+.ev-card__from svg {
+  flex: none;
+}
+
 .see-details {
   display: block;
   margin-left: auto;

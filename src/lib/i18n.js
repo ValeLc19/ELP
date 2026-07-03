@@ -29,6 +29,7 @@ const DICT = {
     'This Week': 'This Week',
     clearFilters: 'Clear filters',
     savedChip: 'Saved',
+    fromBusinesses: 'From my businesses',
     // categories
     cat_Food: 'Food',
     cat_Music: 'Music',
@@ -143,6 +144,7 @@ const DICT = {
     'This Week': 'Esta semana',
     clearFilters: 'Borrar filtros',
     savedChip: 'Guardados',
+    fromBusinesses: 'De mis negocios',
     cat_Food: 'Comida',
     cat_Music: 'Música',
     cat_Arts: 'Arte',
