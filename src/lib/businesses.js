@@ -211,6 +211,19 @@ const ADDRS = [
 const TITLES = ['Pop-Up', 'Event Night', 'Open House', 'Market Day', 'Live Session']
 const TIMES = ['12:00 pm', '6:00 pm', '5:00 pm', '7:00 pm', '10:00 am']
 const PRICES = ['Free', 'Free', '$5', '$10', 'Free']
+const MONTHS = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+]
+const isoOf = (d) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(
+    d.getDate()
+  ).padStart(2, '0')}`
+const ordinal = (n) => {
+  const s = ['th', 'st', 'nd', 'rd']
+  const v = n % 100
+  return n + (s[(v - 20) % 10] || s[v] || s[0])
+}
 
 function guessCategory(name) {
   const s = name.toLowerCase()
