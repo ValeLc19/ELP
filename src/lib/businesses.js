@@ -245,6 +245,7 @@ export function businessEvents(items) {
     const d = new Date(today)
     d.setDate(today.getDate() + 7 + ((seq * 4) % 40))
     const iso = isoOf(d)
+    const title = `${b.name} ${TITLES[seq % TITLES.length]}`
     return {
       id: `bizev-${b.id}`,
       seriesId: `bizev-${b.id}`,
@@ -252,8 +253,8 @@ export function businessEvents(items) {
       businessId: b.id,
       businessName: b.name,
       businessAvatar: b.avatar,
-      title: `${b.name} ${TITLES[seq % TITLES.length]}`,
-      short: b.name,
+      title,
+      short: title,
       category: cat,
       image: STOCK(CAT_IMG[cat]),
       family: true,
