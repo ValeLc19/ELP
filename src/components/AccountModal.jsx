@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useAuth, changePassword } from '../lib/auth.js'
 import { useLang } from '../lib/i18n.js'
-import { XIcon, UserIcon, ShopIcon, LogOutIcon } from './icons.jsx'
+import { XIcon, UserIcon, ShopIcon, LogOutIcon, EyeIcon, EyeOffIcon } from './icons.jsx'
 import ConfirmDialog from './ConfirmDialog.jsx'
 import './AccountModal.css'
 
@@ -12,6 +12,7 @@ export default function AccountModal({ onClose, onLogout, onBusinesses }) {
   const [changing, setChanging] = useState(false)
   const [confirmLogout, setConfirmLogout] = useState(false)
   const [pw, setPw] = useState('')
+  const [showPw, setShowPw] = useState(false)
   const [msg, setMsg] = useState('')
   const [err, setErr] = useState('')
 
@@ -80,13 +81,24 @@ export default function AccountModal({ onClose, onLogout, onBusinesses }) {
                 </div>
               ) : (
                 <div className="acct__change">
-                  <input
-                    className="acct__input"
-                    type="password"
-                    placeholder={t('newPassword')}
-                    value={pw}
-                    onChange={(e) => setPw(e.target.value)}
-                  />
+                  <div className="acct__pw-wrap">
+                    <input
+                      className="acct__input"
+                      type={showPw ? 'text' : 'password'}
+                      placeholder={t('newPassword')}
+                      value={pw}
+                      onChange={(e) => setPw(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="acct__eye"
+                      onClick={() => setShowPw((s) => !s)}
+                      aria-label={showPw ? 'Hide password' : 'Show password'}
+                      aria-pressed={showPw}
+                    >
+                      {showPw ? <EyeOffIcon width={18} height={18} /> : <EyeIcon width={18} height={18} />}
+                    </button>
+                  </div>
                   <button type="button" className="acct__save" onClick={save}>
                     {t('save')}
                   </button>

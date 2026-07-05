@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useAuth, resendVerification } from '../lib/auth.js'
 import { useLang } from '../lib/i18n.js'
 import { CATEGORY_ORDER, categoryColor, categoryTint } from '../data/categories.js'
-import { ScanFaceIcon, XIcon } from './icons.jsx'
+import { ScanFaceIcon, XIcon, EyeIcon, EyeOffIcon } from './icons.jsx'
 import './AuthModal.css'
 
 // Animated circle marker: green circle+check when valid, red circle+X when not.
@@ -78,6 +78,7 @@ export default function AuthModal({ onClose, onSignedUp }) {
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const [resent, setResent] = useState(false)
+  const [showPw, setShowPw] = useState(false)
 
   const toggleInterest = (label) =>
     setInterests((prev) =>
@@ -152,13 +153,24 @@ export default function AuthModal({ onClose, onSignedUp }) {
               onChange={(e) => setEmail(e.target.value)}
             />
             <label className="auth__label">{t('passwordLabelColon')}</label>
-            <input
-              className="auth__input"
-              type="password"
-              placeholder="**********"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className="auth__pw-wrap">
+              <input
+                className="auth__input"
+                type={showPw ? 'text' : 'password'}
+                placeholder="**********"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                className="auth__eye"
+                onClick={() => setShowPw((s) => !s)}
+                aria-label={showPw ? 'Hide password' : 'Show password'}
+                aria-pressed={showPw}
+              >
+                {showPw ? <EyeOffIcon width={20} height={20} /> : <EyeIcon width={20} height={20} />}
+              </button>
+            </div>
             <label className="auth__remember">
               <input
                 type="checkbox"
@@ -202,13 +214,24 @@ export default function AuthModal({ onClose, onSignedUp }) {
 
             <label className="auth__label">{t('passwordLabel')}</label>
             <div className="auth__field">
-              <input
-                className="auth__input"
-                type="password"
-                placeholder="*******"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <div className="auth__pw-wrap">
+                <input
+                  className="auth__input"
+                  type={showPw ? 'text' : 'password'}
+                  placeholder="*******"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="auth__eye"
+                  onClick={() => setShowPw((s) => !s)}
+                  aria-label={showPw ? 'Hide password' : 'Show password'}
+                  aria-pressed={showPw}
+                >
+                  {showPw ? <EyeOffIcon width={20} height={20} /> : <EyeIcon width={20} height={20} />}
+                </button>
+              </div>
               <span className="auth__mark">
                 {password && (
                   <AuthMark key={pwOk(password) ? 'ok' : 'no'} ok={pwOk(password)} />
