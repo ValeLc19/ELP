@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAuth } from '../lib/auth.js'
+import { useAuth, resendVerification } from '../lib/auth.js'
 import { useLang } from '../lib/i18n.js'
 import { CATEGORY_ORDER, categoryColor, categoryTint } from '../data/categories.js'
 import { ScanFaceIcon, XIcon } from './icons.jsx'
@@ -76,30 +76,42 @@ export default function AuthModal({ onClose, onSignedUp }) {
   const [remember, setRemember] = useState(false)
   const [interests, setInterests] = useState([])
   const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [resent, setResent] = useState(false)
 
   const toggleInterest = (label) =>
     setInterests((prev) =>
       prev.includes(label) ? prev.filter((x) => x !== label) : [...prev, label]
     )
 
-  const doLogin = () => {
-    const res = logIn(email.trim(), password)
-    if (!res.ok) setError(t('errWrong'))
-    else onClose()
+  const doLogin = async () => {
+    if (busy) return
+    setBusy(true)
+    setError('')
+    const res = await logIn(email.trim(), password)
+    setBusy(false)
+    if (res.ok) onClose()
+    else setError(res.needsVerification ? t('errUnverified') : t('errWrong'))
   }
 
-  const doSignup = () => {
+  const doSignup = async () => {
+    if (busy) return
     if (!emailOk(email) || !pwOk(password) || interests.length === 0) {
       setError(t('errMissing'))
       return
     }
-    const res = signUp({
-      username: email.trim(),
-      password,
-      interests,
-    })
-    if (!res.ok) setError(t('accountExists'))
-    else onSignedUp()
+    setBusy(true)
+    setError('')
+    const res = await signUp({ username: email.trim(), password, interests })
+    setBusy(false)
+    if (res.ok && res.needsVerification) setView('verify')
+    else if (res.ok) onSignedUp()
+    else setError(res.exists ? t('accountExists') : res.error || t('errMissing'))
+  }
+
+  const doResend = async () => {
+    await resendVerification(email.trim())
+    setResent(true)
   }
 
   return (
@@ -155,7 +167,9 @@ export default function AuthModal({ onClose, onSignedUp }) {
               />
               {t('rememberMe')}
             </label>
-            <button type="submit" className="auth__done">{t('done')}</button>
+            <button type="submit" className="auth__done" disabled={busy}>
+              {busy ? t('working') : t('done')}
+            </button>
             {error && <p className="auth__error auth__error--big">{error}</p>}
             <button type="button" className="auth__switch" onClick={() => { setError(''); setView('signup') }}>
               {t('noAccount')}
@@ -227,11 +241,35 @@ export default function AuthModal({ onClose, onSignedUp }) {
             </div>
 
             {error && <p className="auth__error">{error}</p>}
-            <button type="submit" className="auth__done">{t('done')}</button>
+            <button type="submit" className="auth__done" disabled={busy}>
+              {busy ? t('working') : t('done')}
+            </button>
             <button type="button" className="auth__switch" onClick={() => { setError(''); setView('login') }}>
               {t('haveAccount')}
             </button>
           </form>
+        )}
+
+        {view === 'verify' && (
+          <div className="auth__form auth__verify">
+            <h2 className="auth__title">{t('verifyTitle')}</h2>
+            <p className="auth__verify-text">{t('verifyText')}</p>
+            <p className="auth__verify-email">{email}</p>
+            {resent ? (
+              <p className="auth__msg">{t('resendDone')}</p>
+            ) : (
+              <button type="button" className="auth__switch" onClick={doResend}>
+                {t('resend')}
+              </button>
+            )}
+            <button
+              type="button"
+              className="auth__done"
+              onClick={() => { setError(''); setResent(false); setView('login') }}
+            >
+              {t('backToLogin')}
+            </button>
+          </div>
         )}
       </div>
     </div>

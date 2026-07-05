@@ -242,3 +242,30 @@
   font-family: inherit;
   font-size: 0.95rem;
 }
+
+.auth__done:disabled {
+  opacity: 0.6;
+  cursor: default;
+  filter: none;
+}
+
+.auth__verify {
+  align-items: center;
+  text-align: center;
+}
+.auth__verify-text {
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0.4rem 0 0.6rem;
+  max-width: 30ch;
+}
+.auth__verify-email {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  margin: 0 0 0.4rem;
+  word-break: break-all;
+}
+.auth__msg {
+  color: #5a7d6b;
+  margin: 0.6rem 0 0;
+}

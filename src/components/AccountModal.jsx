@@ -17,12 +17,16 @@ export default function AccountModal({ onClose, onLogout, onBusinesses }) {
 
   if (!user) return null
 
-  const save = () => {
+  const save = async () => {
     if (pw.length < 6) {
       setErr(t('pwTooShort'))
       return
     }
-    changePassword(pw)
+    const res = await changePassword(pw)
+    if (!res.ok) {
+      setErr(res.error || t('errWrong'))
+      return
+    }
     setChanging(false)
     setPw('')
     setErr('')

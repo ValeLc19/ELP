@@ -17,7 +17,7 @@ import AccountModal from '../components/AccountModal.jsx'
 import AddBusinessModal from '../components/AddBusinessModal.jsx'
 import BusinessCard from '../components/BusinessCard.jsx'
 import Onboarding from '../components/Onboarding.jsx'
-import { useAuth, displayName, demoSignIn } from '../lib/auth.js'
+import { useAuth, displayName, demoSignIn, consumePendingOnboard } from '../lib/auth.js'
 import { isSaved } from '../lib/saved.js'
 import { useBusinesses, businessEvents, addBusiness } from '../lib/businesses.js'
 import { useLang } from '../lib/i18n.js'
@@ -158,6 +158,11 @@ export default function Events() {
     if (params.get('onboard')) setOnboarding(true)
   }, [])
 
+  // After a verified sign-up and the first login, show the welcome tour once.
+  useEffect(() => {
+    if (user && consumePendingOnboard(user.username)) setOnboarding(true)
+  }, [user])
+
   // Keep the URL in sync with the open event so it's always shareable.
   useEffect(() => {
     const url = new URL(window.location.href)
@@ -202,13 +207,13 @@ export default function Events() {
     view,
   ])
 
-  const handleLogout = () => {
-    logOut()
+  const handleLogout = async () => {
     setSavedScreen(false)
     setBizScreen(false)
     setSavedFilter(false)
     setBusinessFilter(false)
     setAccountOpen(false)
+    await logOut()
   }
 
   // Go to the events home (default view) — not the landing page.
