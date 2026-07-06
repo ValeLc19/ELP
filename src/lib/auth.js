@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react'
+import { useSyncExternalStore } from 'react'
 import { supabase, isSupabaseConfigured } from './supabase.js'
 
 // Real authentication backed by Supabase. Session is persisted by supabase-js
@@ -146,11 +146,18 @@ export function displayName(user) {
   return user.username.split('@')[0]
 }
 
+// Subscribe/snapshot for useSyncExternalStore. getUser returns a stable
+// reference between changes (realUser/mockUser only change on emit), so the
+// snapshot is safe to read on every render.
+function subscribe(cb) {
+  listeners.add(cb)
+  return () => listeners.delete(cb)
+}
+
 export function useAuth() {
-  const [, force] = useReducer((n) => n + 1, 0)
-  useEffect(() => {
-    listeners.add(force)
-    return () => listeners.delete(force)
-  }, [])
-  return { user: getUser(), signUp, logIn, logOut }
+  // useSyncExternalStore reads the current snapshot at commit time and
+  // re-subscribes correctly, so there's no window where an auth change (e.g.
+  // the session hydrating from an email-confirmation redirect) is missed.
+  const user = useSyncExternalStore(subscribe, getUser, getUser)
+  return { user, signUp, logIn, logOut }
 }
