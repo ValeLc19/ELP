@@ -342,6 +342,11 @@
 .cal-event--selected .cal-event__name {
   font-weight: 700;
 }
+/* events on days that already passed read as muted */
+.cal-event--past,
+.cal-week__event--past {
+  opacity: 0.4;
+}
 .cal-cell__num {
   position: absolute;
   top: 0.25rem;
@@ -861,6 +866,21 @@
   border-radius: 16px;
   background-size: cover;
   background-position: center;
+}
+/* a passed event reads as muted, greyscale, no longer "active" */
+.detail__img--past {
+  filter: grayscale(0.7) brightness(0.9);
+  opacity: 0.75;
+}
+.detail__passed {
+  display: inline-block;
+  margin: 0.2rem 0 0;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  background: #efe7d6;
+  color: #7a6f5c;
+  font-style: italic;
+  font-size: 1rem;
 }
 .detail__body {
   padding: 1rem 1.3rem 1.4rem;

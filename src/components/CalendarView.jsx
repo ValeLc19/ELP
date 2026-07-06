@@ -71,7 +71,9 @@ function MonthView({ anchor, events, selectedId, onSelect }) {
               {shown.map((e) => (
                 <button
                   key={e.id}
-                  className={`cal-event ${e.id === selectedId ? 'cal-event--selected' : ''}`}
+                  className={`cal-event ${e.id === selectedId ? 'cal-event--selected' : ''} ${
+                    e.iso < TODAY_ISO ? 'cal-event--past' : ''
+                  }`}
                   onClick={() => onSelect(e.id)}
                   title={e.title}
                 >
@@ -120,7 +122,7 @@ function WeekView({ anchor, events, selectedId, onSelect }) {
                   key={e.id}
                   className={`cal-week__event ${
                     e.id === selectedId ? 'cal-week__event--selected' : ''
-                  }`}
+                  } ${e.iso < TODAY_ISO ? 'cal-week__event--past' : ''}`}
                   onClick={() => onSelect(e.id)}
                   style={{ borderColor: categoryColor(e.category) }}
                 >

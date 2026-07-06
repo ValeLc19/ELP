@@ -53,6 +53,7 @@ const DICT = {
     seeSimilar: 'See similar events',
     // card / detail
     familyEvent: 'Family Event',
+    eventPassed: 'This event has already passed.',
     seeDetails: 'See Details',
     about: 'About:',
     additionalInfo: 'Additional Information:',
@@ -171,6 +172,7 @@ const DICT = {
     empty3: 'El evento más cercano es:',
     seeSimilar: 'Ver eventos similares',
     familyEvent: 'Evento familiar',
+    eventPassed: 'Este evento ya pasó.',
     seeDetails: 'Ver detalles',
     about: 'Acerca de:',
     additionalInfo: 'Información adicional:',

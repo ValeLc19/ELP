@@ -26,6 +26,11 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
   const saveKey = event.seriesId || event.id
   const saved = isSaved(saveKey)
 
+  // Past events open as a muted "already passed" state, not an active card.
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const isPast = event.dateObj < today
+
   const eventUrl = `${window.location.origin}${window.location.pathname}?event=${encodeURIComponent(event.id)}`
 
   const copyLink = async () => {
@@ -46,11 +51,11 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
 
       <div className="detail__scroll">
         <div
-          className="detail__img"
+          className={`detail__img ${isPast ? 'detail__img--past' : ''}`}
           style={{ backgroundImage: `url("${event.image}")` }}
         >
           <span className="ev-card__price-tag">{event.price}</span>
-          {user && (
+          {!isPast && user && (
             <button
               className={`save-heart ${saved ? 'is-saved' : ''}`}
               aria-label={saved ? 'Remove from saved' : 'Save event'}
@@ -71,6 +76,8 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
             <span className="badge__dot" style={{ background: color }} />
             {t(`cat_${event.category}`)}
           </span>
+
+          {isPast && <p className="detail__passed">{t('eventPassed')}</p>}
 
           <hr className="detail__rule" />
 
@@ -141,7 +148,7 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
         </div>
       </div>
 
-      {event.sourceUrl && (
+      {event.sourceUrl && !isPast && (
         <div className="detail__footer">
           <a
             className="register"
