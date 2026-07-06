@@ -1,0 +1,21 @@
+# Render infrastructure-as-code. Connect the repo in Render and it reads this.
+# Mirrors the Atlasly service: migrations run at boot (idempotent, so every
+# deploy self-migrates and seeds), secrets set by hand in the dashboard.
+services:
+  - type: web
+    name: elp-api                 # -> https://elp-api.onrender.com
+    runtime: python
+    rootDir: backend              # monorepo: backend lives in a subdir
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: alembic upgrade head && python -m scripts.seed_events && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      - key: DATABASE_URL         # sync:false -> set by hand in the dashboard
+        sync: false
+      - key: CORS_ORIGINS         # e.g. https://elp-xxxx.vercel.app
+        sync: false
+      - key: SUPABASE_JWT_SECRET  # Supabase -> Settings -> API -> JWT Secret
+        sync: false

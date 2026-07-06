@@ -1,0 +1,13 @@
+# Keeps the free Supabase tier from auto-pausing (~7 days idle). /health does a
+# tiny DB touch, which counts as activity. Runs ~every 6 days so we stay under
+# the threshold year-round. Update the URL once Render assigns the real host.
+name: keepalive
+on:
+  schedule:
+    - cron: "0 12 1,7,13,19,25 * *"
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl -sS --max-time 120 https://elp-api.onrender.com/health

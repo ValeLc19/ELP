@@ -1,0 +1,7 @@
+# Local secrets and dev artifacts — never committed.
+.env
+*.db
+__pycache__/
+*.pyc
+.venv/
+venv/
