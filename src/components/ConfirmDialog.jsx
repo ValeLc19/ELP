@@ -1,10 +1,14 @@
+import { createPortal } from 'react-dom'
 import { useLang } from '../lib/i18n.js'
 import './ConfirmDialog.css'
 
-// Reusable "Are you sure?" dialog for destructive actions.
+// Reusable "Are you sure?" dialog for destructive actions. Rendered through a
+// portal to document.body so its position:fixed overlay is always relative to
+// the viewport — never trapped by an ancestor's transform (e.g. a card's hover
+// lift), which otherwise causes the overlay to flicker.
 export default function ConfirmDialog({ message, confirmLabel, onConfirm, onCancel }) {
   const { t } = useLang()
-  return (
+  return createPortal(
     <div
       className="confirm"
       role="dialog"
@@ -23,6 +27,7 @@ export default function ConfirmDialog({ message, confirmLabel, onConfirm, onCanc
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
