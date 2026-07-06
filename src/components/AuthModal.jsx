@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAuth, resendVerification } from '../lib/auth.js'
+import { useAuth, resendVerification, sendPasswordReset } from '../lib/auth.js'
 import { useLang } from '../lib/i18n.js'
 import { CATEGORY_ORDER, categoryColor, categoryTint } from '../data/categories.js'
 import { ScanFaceIcon, XIcon, EyeIcon, EyeOffIcon } from './icons.jsx'
@@ -78,6 +78,7 @@ export default function AuthModal({ onClose, onSignedUp }) {
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const [resent, setResent] = useState(false)
+  const [resetSent, setResetSent] = useState(false)
   const [showPw, setShowPw] = useState(false)
 
   const toggleInterest = (label) =>
@@ -113,6 +114,19 @@ export default function AuthModal({ onClose, onSignedUp }) {
   const doResend = async () => {
     await resendVerification(email.trim())
     setResent(true)
+  }
+
+  const doReset = async () => {
+    if (busy) return
+    if (!emailOk(email)) {
+      setError(t('errMissing'))
+      return
+    }
+    setBusy(true)
+    setError('')
+    await sendPasswordReset(email.trim())
+    setBusy(false)
+    setResetSent(true)
   }
 
   return (
@@ -185,6 +199,40 @@ export default function AuthModal({ onClose, onSignedUp }) {
             {error && <p className="auth__error auth__error--big">{error}</p>}
             <button type="button" className="auth__switch" onClick={() => { setError(''); setView('signup') }}>
               {t('noAccount')}
+            </button>
+            <button type="button" className="auth__switch" onClick={() => { setError(''); setResetSent(false); setView('forgot') }}>
+              {t('forgotPassword')}
+            </button>
+          </form>
+        )}
+
+        {view === 'forgot' && (
+          <form
+            className="auth__form"
+            onSubmit={(e) => { e.preventDefault(); doReset() }}
+          >
+            <h2 className="auth__title">{t('resetTitle')}</h2>
+            {resetSent ? (
+              <p className="auth__msg">{t('resetSent')}</p>
+            ) : (
+              <>
+                <p className="auth__verify-text">{t('resetText')}</p>
+                <label className="auth__label">{t('emailLabelColon')}</label>
+                <input
+                  className={`auth__input ${email && emailOk(email) ? 'auth__input--ok' : ''}`}
+                  type="email"
+                  placeholder="user@mail.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                {error && <p className="auth__error">{error}</p>}
+                <button type="submit" className="auth__done" disabled={busy}>
+                  {busy ? t('working') : t('sendReset')}
+                </button>
+              </>
+            )}
+            <button type="button" className="auth__switch" onClick={() => { setError(''); setResetSent(false); setView('login') }}>
+              {t('backToLogin')}
             </button>
           </form>
         )}

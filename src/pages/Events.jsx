@@ -17,7 +17,8 @@ import AccountModal from '../components/AccountModal.jsx'
 import AddBusinessModal from '../components/AddBusinessModal.jsx'
 import BusinessCard from '../components/BusinessCard.jsx'
 import Onboarding from '../components/Onboarding.jsx'
-import { useAuth, displayName, demoSignIn, consumePendingOnboard } from '../lib/auth.js'
+import { useAuth, useRecovery, displayName, demoSignIn, consumePendingOnboard } from '../lib/auth.js'
+import ResetPasswordModal from '../components/ResetPasswordModal.jsx'
 import { isSaved } from '../lib/saved.js'
 import { useBusinesses, businessEvents, addBusiness } from '../lib/businesses.js'
 import { useLang } from '../lib/i18n.js'
@@ -114,6 +115,7 @@ export default function Events() {
   const [selectedId, setSelectedId] = useState(null)
 
   const { user, logOut } = useAuth()
+  const recovery = useRecovery()
   const { lang, setLang, t } = useLang()
   const [authOpen, setAuthOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
@@ -514,6 +516,7 @@ export default function Events() {
         />
       )}
       {onboarding && <Onboarding onDone={() => setOnboarding(false)} />}
+      {recovery && <ResetPasswordModal />}
       {addBizOpen && <AddBusinessModal onClose={() => setAddBizOpen(false)} />}
       {accountOpen && (
         <AccountModal

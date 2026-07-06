@@ -24,6 +24,10 @@ function shape(u) {
 // --- real session -----------------------------------------------------------
 let realUser = null
 
+// True while the user is in the password-recovery flow (they clicked a reset
+// link from their email). The app shows the "set a new password" screen.
+let recoveryMode = false
+
 // --- local preview user (?demo=1) -------------------------------------------
 const MOCK_KEY = 'elp-mock-user'
 let mockUser = readMock()
@@ -45,14 +49,33 @@ if (isSupabaseConfigured) {
     realUser = shape(data.session?.user)
     emit()
   })
-  supabase.auth.onAuthStateChange((_event, session) => {
+  supabase.auth.onAuthStateChange((event, session) => {
     realUser = shape(session?.user)
+    // Landing from a reset-password email fires PASSWORD_RECOVERY.
+    if (event === 'PASSWORD_RECOVERY') recoveryMode = true
     emit()
   })
 }
 
 export function getUser() {
   return realUser || mockUser
+}
+
+export function getRecovery() {
+  return recoveryMode
+}
+export function clearRecovery() {
+  recoveryMode = false
+  emit()
+}
+
+// Send a password-reset link to the given email (the "forgot password" flow).
+export async function sendPasswordReset(email) {
+  if (!isSupabaseConfigured) return { ok: false, error: 'Auth is not configured yet.' }
+  const { error } = await supabase.auth.resetPasswordForEmail(String(email).trim(), {
+    redirectTo: `${window.location.origin}/events`,
+  })
+  return { ok: !error, error: error?.message }
 }
 
 // Remember to show the welcome tour after the user verifies + logs in once.
@@ -160,4 +183,8 @@ export function useAuth() {
   // the session hydrating from an email-confirmation redirect) is missed.
   const user = useSyncExternalStore(subscribe, getUser, getUser)
   return { user, signUp, logIn, logOut }
+}
+
+export function useRecovery() {
+  return useSyncExternalStore(subscribe, getRecovery, getRecovery)
 }
