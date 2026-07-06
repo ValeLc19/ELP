@@ -48,17 +48,17 @@ set -a; source .env.local; set +a
 npm run deploy      # = vite build && wrangler pages deploy dist ...
 ```
 
-You'll get a URL like `https://elp.pages.dev`. Every run redeploys.
+You'll get a URL like `https://elp-37r.pages.dev`. Every run redeploys.
 
 ---
 
 ## After the first deploy — connect the two sides
 
 1. **Backend CORS:** set `CORS_ORIGINS` on Render to your Pages URL
-   (e.g. `https://elp.pages.dev`) so the browser can call the API.
+   (e.g. `https://elp-37r.pages.dev`) so the browser can call the API.
 2. **Supabase auth URLs:** Authentication → URL Configuration →
    - **Site URL**: your Pages URL
-   - **Redirect URLs**: add `https://elp.pages.dev/**` and keep
+   - **Redirect URLs**: add `https://elp-37r.pages.dev/**` and keep
      `http://localhost:5173/**` for local dev.
 3. **Keepalive:** confirm the URL in `.github/workflows/keepalive.yml` matches
    your Render backend.
