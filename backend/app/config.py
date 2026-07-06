@@ -20,9 +20,15 @@ class Settings(BaseSettings):
     # the deployed frontend URL (e.g. https://elp-xxxx.vercel.app).
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
 
-    # Supabase project's JWT secret (Settings -> API -> JWT Secret). Used to
-    # verify the HS256 access token the browser sends as a Bearer. Left blank
-    # in dev; when blank, protected routes reject every request (fail closed).
+    # Supabase project URL, e.g. https://<ref>.supabase.co. Used to build the
+    # JWKS endpoint that verifies asymmetric (ES256/RS256) access tokens, which
+    # is how current Supabase projects sign them. Required for those tokens.
+    supabase_url: str = ""
+
+    # Legacy shared JWT secret (Settings -> JWT Keys -> Legacy JWT Secret).
+    # Only used for older projects that still sign tokens with HS256. Optional
+    # when the project uses asymmetric keys. Fails closed when a token needs it
+    # but it's unset.
     supabase_jwt_secret: str = ""
 
     # Supabase access tokens carry aud="authenticated". Kept configurable in

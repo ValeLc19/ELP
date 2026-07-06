@@ -15,7 +15,9 @@ services:
         value: "3.12.7"
       - key: DATABASE_URL         # sync:false -> set by hand in the dashboard
         sync: false
-      - key: CORS_ORIGINS         # e.g. https://elp-xxxx.vercel.app
+      - key: CORS_ORIGINS         # e.g. https://elp.pages.dev
         sync: false
-      - key: SUPABASE_JWT_SECRET  # Supabase -> Settings -> API -> JWT Secret
+      - key: SUPABASE_URL         # https://<ref>.supabase.co (for JWKS verify)
+        sync: false
+      - key: SUPABASE_JWT_SECRET  # legacy HS256 secret; optional w/ asymmetric keys
         sync: false
