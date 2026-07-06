@@ -156,6 +156,14 @@ export default function Events() {
       addBusiness('marginnotesbookbar')
     }
     if (params.get('onboard')) setOnboarding(true)
+    // Strip the preview params so a refresh doesn't re-trigger the tour/sign-in.
+    if (params.get('demo') || params.get('onboard') || params.get('guest')) {
+      const url = new URL(window.location.href)
+      url.searchParams.delete('demo')
+      url.searchParams.delete('onboard')
+      url.searchParams.delete('guest')
+      window.history.replaceState({}, '', url)
+    }
   }, [])
 
   // After a verified sign-up and the first login, show the welcome tour once.
