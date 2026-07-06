@@ -1,0 +1,4 @@
+# Cloudflare Pages SPA fallback: serve index.html for any path so client-side
+# routing (/events, etc.) works on refresh and deep links. Copied into dist/
+# at build time (Vite copies everything in public/). Replaces vercel.json.
+/*  /index.html  200
