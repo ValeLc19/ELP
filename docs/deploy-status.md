@@ -53,7 +53,7 @@ BLOCKER — what's stopping us right now
 ENV VARS on elp-api (Render) — target state
 ------------------------------------------------------------------------
   DATABASE_URL         postgresql+psycopg2://postgres.agdarjcpgwbdjgtkcvoi:***@aws-1-ca-central-1.pooler.supabase.com:5432/postgres
-  CORS_ORIGINS         http://localhost:5173,https://elp-37r.pages.dev
+  CORS_ORIGINS         http://localhost:5173,https://elpaso-events.pages.dev
   SUPABASE_URL         https://agdarjcpgwbdjgtkcvoi.supabase.co      (needed for ES256 auth)
   SUPABASE_JWT_SECRET  <legacy secret>                              (fallback only)
 
