@@ -548,8 +548,10 @@ export default function Events() {
     const today = new Date()
     today.setHours(0, 0, 0, 0)
     const q = query.trim().toLowerCase()
+    // Search the same pool the other views use (public events + this user's
+    // business events) so saved "From my businesses" events show up here too.
     const savedList = collapseSeries(
-      EVENTS.filter((e) => isSaved(e.seriesId || e.id))
+      [...EVENTS, ...myBizEvents].filter((e) => isSaved(e.seriesId || e.id))
     ).filter(
       (e) =>
         !q ||
