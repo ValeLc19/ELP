@@ -192,7 +192,11 @@ export default function Events() {
       const savedOk = !savedFilter || isSaved(e.seriesId || e.id)
       // business events are hidden from the normal feed; the chip reveals them
       const businessOk = businessFilter ? !!e.fromBusiness : !e.fromBusiness
-      return catOk && qOk && dateOk && priceOk && audienceOk && savedOk && businessOk
+      // Once an event's date passes it drops out of the browse feed (map/list);
+      // the calendar still shows it on its date. Saved past events live under
+      // the saved screen's "Past Events" tab.
+      const notPast = view === 'calendar' || e.dateObj >= win.today
+      return catOk && qOk && dateOk && priceOk && audienceOk && savedOk && businessOk && notPast
     })
   }, [
     activeCat,
