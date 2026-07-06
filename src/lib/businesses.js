@@ -1,6 +1,14 @@
 import { useEffect, useReducer } from 'react'
+import { isApiConfigured, api, onAuthChange } from './api.js'
 
-// Persisted list of local-business accounts the user added (front-end mock).
+// Persisted list of local-business accounts the user followed.
+//
+// Local-first (see saved.js for the same pattern): localStorage is the instant
+// source of truth; when VITE_API_BASE is set and a real user is signed in, the
+// list also syncs to `/me/businesses`. Each item carries an optional
+// `serverId` (the backend row id) so it can be deleted server-side later. The
+// name/avatar derivation below stays client-side — the server just persists
+// the already-derived fields. Every server call is best-effort.
 const KEY = 'elp-businesses'
 
 function read() {
@@ -169,23 +177,91 @@ export function addBusiness(raw) {
   const name = prettifyName(handle)
   if (items.some((b) => b.name.toLowerCase() === name.toLowerCase())) return
   seq += 1
-  items = [
-    ...items,
-    {
-      id: `biz-${seq}`,
-      seq,
-      handle,
-      name,
-      avatar: avatarUrl(handle),
-      url: toUrl(handle),
-      addedAt: Date.now(),
-    },
-  ]
+  const biz = {
+    id: `biz-${seq}`,
+    seq,
+    handle,
+    name,
+    avatar: avatarUrl(handle),
+    url: toUrl(handle),
+    addedAt: Date.now(),
+  }
+  items = [...items, biz]
   emit()
+  pushToServer(biz)
 }
 export function removeBusiness(id) {
+  const target = items.find((b) => b.id === id)
   items = items.filter((b) => b.id !== id)
   emit()
+  if (isApiConfigured && target && target.serverId != null) {
+    api(`/me/businesses/${target.serverId}`, { method: 'DELETE' }).catch(() => {})
+  }
+}
+
+// --- server sync (best-effort; no-ops when unconfigured / signed out) -------
+
+function setServerId(localId, serverId) {
+  items = items.map((b) => (b.id === localId ? { ...b, serverId } : b))
+  emit()
+}
+
+// Create a business on the server and remember its row id for later deletes.
+function pushToServer(biz) {
+  if (!isApiConfigured || biz.serverId != null) return
+  api('/me/businesses', {
+    method: 'POST',
+    body: { handle: biz.handle, name: biz.name, avatar: biz.avatar, url: biz.url },
+  })
+    .then((row) => {
+      if (row && row.id != null) setServerId(biz.id, row.id)
+    })
+    .catch(() => {}) // 409 duplicate / offline / signed out — keep local.
+}
+
+// Pull the server's list, adopt rows we don't have (matched by name), tag
+// local rows with their serverId, and upload any the server is missing.
+async function syncFromServer() {
+  if (!isApiConfigured) return
+  try {
+    const server = await api('/me/businesses')
+    const localNames = new Set(items.map((b) => b.name.toLowerCase()))
+    const adopted = server
+      .filter((s) => !localNames.has(s.name.toLowerCase()))
+      .map((s) => {
+        seq += 1
+        return {
+          id: `biz-${seq}`,
+          seq,
+          serverId: s.id,
+          handle: s.handle,
+          name: s.name,
+          avatar: s.avatar || avatarUrl(s.handle),
+          url: s.url || toUrl(s.handle),
+          addedAt: Date.now(),
+        }
+      })
+    const serverByName = new Map(server.map((s) => [s.name.toLowerCase(), s]))
+    items = [...items, ...adopted].map((b) => {
+      const match = serverByName.get(b.name.toLowerCase())
+      return match ? { ...b, serverId: match.id } : b
+    })
+    emit()
+    items.filter((b) => b.serverId == null).forEach(pushToServer)
+  } catch {
+    // Backend unreachable — keep local state.
+  }
+}
+
+if (isApiConfigured) {
+  onAuthChange((session) => {
+    if (session) syncFromServer()
+    else {
+      items = []
+      emit()
+    }
+  })
+  syncFromServer()
 }
 
 // ---- Mock "events pulled from a business's social" (prototype) -------------
