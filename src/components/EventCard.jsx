@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { categoryColor, categoryTint } from '../data/categories.js'
-import { moreInfoUrl } from '../data/events.js'
+import { moreInfoUrl, socialUrl } from '../data/events.js'
 import { useSaved } from '../lib/saved.js'
 import { useAuth } from '../lib/auth.js'
 import { useLang } from '../lib/i18n.js'
@@ -12,6 +12,7 @@ import {
   UsersIcon,
   HeartIcon,
   ShopIcon,
+  InstagramIcon,
 } from './icons.jsx'
 
 export default function EventCard({
@@ -126,6 +127,18 @@ export default function EventCard({
         )}
 
         <div className="ev-card__actions">
+          {socialUrl(event) && (
+            <a
+              className="ev-card__social"
+              href={socialUrl(event)}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              aria-label="Instagram"
+            >
+              <InstagramIcon width={17} height={17} />
+            </a>
+          )}
           {moreInfoUrl(event) && (
             <a
               className="ev-card__moreinfo"

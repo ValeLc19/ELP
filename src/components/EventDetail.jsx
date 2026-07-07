@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { categoryColor, categoryTint } from '../data/categories.js'
-import { moreInfoUrl } from '../data/events.js'
+import { moreInfoUrl, socialUrl } from '../data/events.js'
 import { useSaved } from '../lib/saved.js'
 import { removeUserEvent } from '../lib/userEvents.js'
 import { useAuth } from '../lib/auth.js'
@@ -16,6 +16,7 @@ import {
   CopyIcon,
   CheckIcon,
   HeartIcon,
+  InstagramIcon,
 } from './icons.jsx'
 
 export default function EventDetail({ event, onBack, onRequireAuth }) {
@@ -163,16 +164,29 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
         </div>
       </div>
 
-      {moreInfoUrl(event) && !isPast && (
+      {(moreInfoUrl(event) || socialUrl(event)) && !isPast && (
         <div className="detail__footer">
-          <a
-            className="register"
-            href={moreInfoUrl(event)}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {t('moreInfo')}
-          </a>
+          {socialUrl(event) && (
+            <a
+              className="detail__social"
+              href={socialUrl(event)}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+            >
+              <InstagramIcon width={22} height={22} />
+            </a>
+          )}
+          {moreInfoUrl(event) && (
+            <a
+              className="register"
+              href={moreInfoUrl(event)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t('moreInfo')}
+            </a>
+          )}
         </div>
       )}
 

@@ -193,6 +193,14 @@ export const GoogleIcon = ({ width = 22, height = 22, ...p }) => (
   </svg>
 )
 
+export const InstagramIcon = (p) => (
+  <svg {...base} {...p}>
+    <rect x="3" y="3" width="18" height="18" rx="5" />
+    <circle cx="12" cy="12" r="4" />
+    <circle cx="17.2" cy="6.8" r="0.7" fill="currentColor" stroke="none" />
+  </svg>
+)
+
 export const ScanFaceIcon = (p) => (
   <svg {...base} width={26} height={26} {...p}>
     <path d="M3.7 8V5.7a2 2 0 0 1 2-2H8M16 3.7h2.3a2 2 0 0 1 2 2V8M20.3 16v2.3a2 2 0 0 1-2 2H16M8 20.3H5.7a2 2 0 0 1-2-2V16" />

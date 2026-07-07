@@ -59,6 +59,7 @@ const RAW = [
     id: 'cool-canyon-nights',
     theme: 'concert',
     sourceUrl: '',
+    social: 'https://www.instagram.com/coolcanyonnightsep/',
     recur: { every: 7, until: '2026-07-30' },
     title: 'Cool Canyon Nights',
     short: 'Canyon Nights',
@@ -1233,6 +1234,19 @@ export function moreInfoUrl(event) {
   if (event.sourceUrl) return event.sourceUrl
   if (event.fromBusiness) return null
   const q = encodeURIComponent(`${event.title} El Paso event`)
+  return `https://www.google.com/search?q=${q}`
+}
+
+// Social-profile link for an event (the organizer's Instagram, etc.).
+//   1. A stored `social` handle wins — the exact profile (e.g. Cool Canyon
+//      Nights -> instagram.com/coolcanyonnightsep).
+//   2. General events with none fall back to an Instagram-scoped search that
+//      lands on the organizer's profile — no per-event handle collection needed.
+//   3. User-added events return null (their sourceUrl already points to the post).
+export function socialUrl(event) {
+  if (event.social) return event.social
+  if (event.fromBusiness) return null
+  const q = encodeURIComponent(`${event.title} El Paso instagram`)
   return `https://www.google.com/search?q=${q}`
 }
 
