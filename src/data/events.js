@@ -1222,6 +1222,20 @@ function makeInstance(e, d, first) {
   }
 }
 
+// "More info" destination for an event's card/detail link.
+//   1. A real sourceUrl always wins (user-added events carry the pasted link).
+//   2. General events are curated from visitelpaso.com but have no per-event URL
+//      stored, so fall back to a web search that lands on that specific event's
+//      official listing — the button works for all of them without hand-collecting
+//      56 links. Swap the fallback for exact URLs anytime by filling `sourceUrl`.
+//   3. A user-added event with no link gets no button (returns null).
+export function moreInfoUrl(event) {
+  if (event.sourceUrl) return event.sourceUrl
+  if (event.fromBusiness) return null
+  const q = encodeURIComponent(`${event.title} El Paso event`)
+  return `https://www.google.com/search?q=${q}`
+}
+
 // The nth occurrence of a weekday in a given month (e.g., 3rd Thursday).
 function nthWeekday(year, month, weekday, nth) {
   const first = new Date(year, month, 1)

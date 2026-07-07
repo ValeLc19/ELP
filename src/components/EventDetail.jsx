@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { categoryColor, categoryTint } from '../data/categories.js'
+import { moreInfoUrl } from '../data/events.js'
 import { useSaved } from '../lib/saved.js'
 import { removeUserEvent } from '../lib/userEvents.js'
 import { useAuth } from '../lib/auth.js'
@@ -162,11 +163,11 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
         </div>
       </div>
 
-      {event.sourceUrl && !isPast && (
+      {moreInfoUrl(event) && !isPast && (
         <div className="detail__footer">
           <a
             className="register"
-            href={event.sourceUrl}
+            href={moreInfoUrl(event)}
             target="_blank"
             rel="noopener noreferrer"
           >

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { categoryColor, categoryTint } from '../data/categories.js'
+import { moreInfoUrl } from '../data/events.js'
 import { useSaved } from '../lib/saved.js'
 import { useAuth } from '../lib/auth.js'
 import { useLang } from '../lib/i18n.js'
@@ -125,10 +126,10 @@ export default function EventCard({
         )}
 
         <div className="ev-card__actions">
-          {event.sourceUrl && (
+          {moreInfoUrl(event) && (
             <a
               className="ev-card__moreinfo"
-              href={event.sourceUrl}
+              href={moreInfoUrl(event)}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
