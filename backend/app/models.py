@@ -69,6 +69,31 @@ class SavedEvent(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
+class UserEvent(Base):
+    """An event a user added themselves (e.g. pasted from a business's link).
+
+    Private to the user — separate from the public `events` catalog so it's
+    never visible to anyone else. Mirrors the fields the frontend renders.
+    """
+    __tablename__ = "user_events"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    user_id: Mapped[str] = mapped_column(String, index=True)
+    business_id: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    business_name: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+
+    title: Mapped[str] = mapped_column(String)
+    category: Mapped[str] = mapped_column(String, default="Markets")
+    image: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    address: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    date_iso: Mapped[str] = mapped_column(String, index=True)
+    time: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    price: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    about: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    source_url: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
 class Business(Base):
     __tablename__ = "businesses"
     __table_args__ = (UniqueConstraint("user_id", "name", name="uq_user_business"),)

@@ -9,7 +9,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from .models import Business, Event
+from .models import Business, Event, UserEvent
 
 _MONTHS = [
     "January", "February", "March", "April", "May", "June",
@@ -80,3 +80,65 @@ class BusinessOut(BaseModel):
 
 class SaveIn(BaseModel):
     seriesId: str
+
+
+# ---- link extraction + user-added events -----------------------------------
+
+class ExtractIn(BaseModel):
+    url: str
+
+
+class ExtractOut(BaseModel):
+    """Best-effort event fields read from a pasted link. Any may be null."""
+    title: Optional[str] = None
+    dateISO: Optional[str] = None
+    time: Optional[str] = None
+    image: Optional[str] = None
+    address: Optional[str] = None
+    price: Optional[str] = None
+    about: Optional[str] = None
+    sourceUrl: Optional[str] = None
+
+
+class UserEventIn(BaseModel):
+    businessId: Optional[str] = None
+    businessName: Optional[str] = None
+    title: str
+    category: str = "Markets"
+    image: Optional[str] = None
+    address: Optional[str] = None
+    dateISO: str
+    time: Optional[str] = None
+    price: Optional[str] = None
+    about: Optional[str] = None
+    sourceUrl: Optional[str] = None
+
+
+def serialize_user_event(e: UserEvent) -> dict:
+    """Flat dict matching the frontend event shape, tagged fromBusiness."""
+    d = datetime.strptime(e.date_iso, "%Y-%m-%d")
+    uid = f"uev-{e.id}"
+    return {
+        "id": uid,
+        "seriesId": uid,
+        "title": e.title,
+        "short": e.title,
+        "category": e.category,
+        "image": e.image,
+        "family": True,
+        "address": e.address,
+        "time": e.time,
+        "price": e.price or "Free",
+        "about": e.about,
+        "host": e.business_name,
+        "sourceUrl": e.source_url,
+        "fromBusiness": True,
+        "businessId": e.business_id,
+        "businessName": e.business_name,
+        "recurLabel": None,
+        "dateISO": e.date_iso,
+        "iso": e.date_iso,
+        "dateObj": d.isoformat(),
+        "day": d.day,
+        "date": f"{_MONTHS[d.month - 1]} {_ordinal(d.day)}",
+    }

@@ -13,7 +13,7 @@ from sqlalchemy import text
 
 from .config import settings
 from .database import engine
-from .routers import businesses, events, pipeline, saved
+from .routers import businesses, events, pipeline, saved, user_events
 
 app = FastAPI(title="ELP API", version="0.1.0")
 
@@ -57,3 +57,4 @@ app.include_router(events.router)
 app.include_router(saved.router)
 app.include_router(businesses.router)
 app.include_router(pipeline.router)
+app.include_router(user_events.router)
