@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { categoryColor, categoryTint } from '../data/categories.js'
+import { moreInfoUrl, socialUrl } from '../data/events.js'
 import { useSaved } from '../lib/saved.js'
 import { removeUserEvent } from '../lib/userEvents.js'
 import { useAuth } from '../lib/auth.js'
@@ -15,6 +16,7 @@ import {
   CopyIcon,
   CheckIcon,
   HeartIcon,
+  InstagramIcon,
 } from './icons.jsx'
 
 export default function EventDetail({ event, onBack, onRequireAuth }) {
@@ -34,6 +36,9 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
   const isPast = event.dateObj < today
+
+  const more = moreInfoUrl(event)
+  const social = socialUrl(event)
 
   const eventUrl = `${window.location.origin}${window.location.pathname}?event=${encodeURIComponent(event.id)}`
 
@@ -162,16 +167,29 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
         </div>
       </div>
 
-      {event.sourceUrl && !isPast && (
+      {(more || social) && !isPast && (
         <div className="detail__footer">
-          <a
-            className="register"
-            href={event.sourceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {t('moreInfo')}
-          </a>
+          {social && (
+            <a
+              className="detail__social"
+              href={social}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+            >
+              <InstagramIcon width={22} height={22} />
+            </a>
+          )}
+          {more && (
+            <a
+              className={`register ${more.isSearch ? 'register--search' : ''}`}
+              href={more.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {more.isSearch ? t('searchGoogle') : t('moreInfo')}
+            </a>
+          )}
         </div>
       )}
 

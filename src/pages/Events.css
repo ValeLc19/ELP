@@ -833,10 +833,37 @@
   flex: none;
 }
 
+.ev-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: auto;
+}
+.ev-card__moreinfo {
+  padding-top: 0.5rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: #c0563f;
+  text-decoration: underline;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.ev-card__moreinfo:hover {
+  color: #a5432f;
+}
+.ev-card__social {
+  display: inline-flex;
+  align-items: center;
+  padding-top: 0.5rem;
+  color: #8a5a8f;
+  cursor: pointer;
+}
+.ev-card__social:hover {
+  color: #6d4471;
+}
 .see-details {
   display: block;
   margin-left: auto;
-  margin-top: auto;
   padding-top: 0.5rem;
   background: none;
   border: none;
@@ -999,6 +1026,26 @@
 .detail__footer {
   flex: none;
   padding: 0.6rem 1.3rem 1.2rem;
+  display: flex;
+  align-items: stretch;
+  gap: 0.6rem;
+}
+.detail__social {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  border-radius: 12px;
+  background: #f0ebe0;
+  border: 1px solid var(--line);
+  color: #8a5a8f;
+  text-decoration: none;
+  transition: filter 0.15s ease;
+}
+.detail__social:hover {
+  filter: brightness(0.97);
+  color: #6d4471;
 }
 .register {
   display: block;
@@ -1018,6 +1065,13 @@
 }
 .register:hover {
   filter: brightness(1.04);
+}
+/* Search fallback (no exact registration URL) — muted so it doesn't read as
+   the official "register here" call-to-action. */
+.register--search {
+  background: #ece5d7;
+  color: var(--ink);
+  font-size: 1.35rem;
 }
 
 /* Filled category badge (used in the detail view) */

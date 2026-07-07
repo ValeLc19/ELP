@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { categoryColor, categoryTint } from '../data/categories.js'
+import { moreInfoUrl, socialUrl } from '../data/events.js'
 import { useSaved } from '../lib/saved.js'
 import { useAuth } from '../lib/auth.js'
 import { useLang } from '../lib/i18n.js'
@@ -11,6 +12,7 @@ import {
   UsersIcon,
   HeartIcon,
   ShopIcon,
+  InstagramIcon,
 } from './icons.jsx'
 
 export default function EventCard({
@@ -27,6 +29,7 @@ export default function EventCard({
   const [confirmUnsave, setConfirmUnsave] = useState(false)
   const saveKey = event.seriesId || event.id
   const saved = isSaved(saveKey)
+  const more = moreInfoUrl(event)
 
   return (
     <article
@@ -124,9 +127,34 @@ export default function EventCard({
           </>
         )}
 
-        <button className="see-details" onClick={() => onSelect(event.id)}>
-          {t('seeDetails')} →
-        </button>
+        <div className="ev-card__actions">
+          {socialUrl(event) && (
+            <a
+              className="ev-card__social"
+              href={socialUrl(event)}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              aria-label="Instagram"
+            >
+              <InstagramIcon width={17} height={17} />
+            </a>
+          )}
+          {more && (
+            <a
+              className="ev-card__moreinfo"
+              href={more.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {more.isSearch ? t('searchGoogle') : t('moreInfo')}
+            </a>
+          )}
+          <button className="see-details" onClick={() => onSelect(event.id)}>
+            {t('seeDetails')} →
+          </button>
+        </div>
       </div>
     </article>
   )
