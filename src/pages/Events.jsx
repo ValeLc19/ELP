@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import 'leaflet/dist/leaflet.css'
 import './Events.css'
-import { EVENTS } from '../data/events.js'
+import { useEvents } from '../lib/events.js'
 import {
   CATEGORY_ORDER,
   categoryColor,
@@ -133,6 +133,9 @@ export default function Events() {
   // backend. Shown behind the "From my businesses" chip.
   const myBizEvents = useUserEvents()
 
+  // Public catalog: live backend list when available, static bundle otherwise.
+  const events = useEvents()
+
   const resetFilters = () => {
     setActiveCat('All')
     setActiveDate(null)
@@ -147,7 +150,7 @@ export default function Events() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const id = params.get('event')
-    if (id && EVENTS.some((e) => e.id === id)) setSelectedId(id)
+    if (id && events.some((e) => e.id === id)) setSelectedId(id)
     // preview helpers: ?demo=1 signs in; ?onboard=1 also shows the post-signup
     // tour; ?guest=1 signs out to view the logged-out state
     if (params.get('guest')) logOut()
@@ -185,7 +188,7 @@ export default function Events() {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
     const win = dateWindow()
-    const pool = user ? [...EVENTS, ...myBizEvents] : EVENTS
+    const pool = user ? [...events, ...myBizEvents] : events
     return pool.filter((e) => {
       const catOk =
         activeCat === 'All' ||
@@ -275,7 +278,7 @@ export default function Events() {
   }, [collapsed, sortBy])
 
   const selected =
-    [...EVENTS, ...myBizEvents].find((e) => e.id === selectedId) || null
+    [...events, ...myBizEvents].find((e) => e.id === selectedId) || null
 
   const tabs = (
     <div className="tabs">
@@ -445,7 +448,7 @@ export default function Events() {
         <br />
         {t('empty3')}
       </p>
-      <EventCard event={EVENTS[0]} onSelect={setSelectedId} onRequireAuth={requireAuth} />
+      <EventCard event={events[0]} onSelect={setSelectedId} onRequireAuth={requireAuth} />
       <button className="empty__similar" onClick={resetFilters}>
         {t('seeSimilar')}
       </button>
@@ -586,7 +589,7 @@ export default function Events() {
     // Search the same pool the other views use (public events + this user's
     // business events) so saved "From my businesses" events show up here too.
     const savedList = collapseSeries(
-      [...EVENTS, ...myBizEvents].filter((e) => isSaved(e.seriesId || e.id))
+      [...events, ...myBizEvents].filter((e) => isSaved(e.seriesId || e.id))
     ).filter(
       (e) =>
         !q ||

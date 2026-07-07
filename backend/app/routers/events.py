@@ -20,7 +20,16 @@ def list_events(
         default=None, description="Only events on/after this YYYY-MM-DD"
     ),
 ):
+    # Prefer the live visitelpaso-synced catalog once it exists; fall back to the
+    # curated seed when the sync hasn't run yet. This keeps the boot-time seed as
+    # a safety net and avoids showing a curated + synced copy of the same event.
+    has_synced = db.execute(
+        select(Event.id).where(Event.source == "visitelpaso").limit(1)
+    ).first()
+
     stmt = select(Event)
+    if has_synced:
+        stmt = stmt.where(Event.source == "visitelpaso")
     if category:
         stmt = stmt.where(Event.category == category)
     if upcoming_from:
