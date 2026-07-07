@@ -5,6 +5,8 @@ with sensible localhost defaults so the app runs out of the box in dev, while
 secrets (DATABASE_URL, SUPABASE_JWT_SECRET, CORS_ORIGINS) are injected as
 environment variables in prod (Render dashboard, sync:false).
 """
+import re
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -17,8 +19,16 @@ class Settings(BaseSettings):
     database_url: str = "sqlite:///./elp_dev.db"
 
     # Comma-separated list of allowed browser origins for CORS. In prod this is
-    # the deployed frontend URL (e.g. https://elp-xxxx.vercel.app).
+    # the deployed frontend URL (e.g. https://elpaso-events.pages.dev).
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
+
+    # Regex matching additional allowed origins. Cloudflare Pages publishes every
+    # `wrangler pages deploy` to a per-deploy preview subdomain
+    # (https://<hash>.elpaso-events.pages.dev) and branch previews
+    # (https://<branch>.elpaso-events.pages.dev). Without this, testing on a
+    # preview URL fails CORS while the apex production URL works. Overridable via
+    # env for a different project name.
+    cors_origin_regex: str = r"https://([a-z0-9-]+\.)?elpaso-events\.pages\.dev"
 
     # Supabase project URL, e.g. https://<ref>.supabase.co. Used to build the
     # JWKS endpoint that verifies asymmetric (ES256/RS256) access tokens, which
@@ -38,6 +48,14 @@ class Settings(BaseSettings):
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
+
+    def origin_allowed(self, origin: str) -> bool:
+        """Mirror the CORS middleware's decision for the 500-handler headers."""
+        if origin in self.cors_origin_list:
+            return True
+        if self.cors_origin_regex:
+            return re.fullmatch(self.cors_origin_regex, origin) is not None
+        return False
 
 
 settings = Settings()
