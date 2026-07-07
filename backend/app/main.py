@@ -20,6 +20,7 @@ app = FastAPI(title="ELP API", version="0.1.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origin_list,
+    allow_origin_regex=settings.cors_origin_regex or None,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -43,7 +44,7 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
     """Return JSON (not an opaque 500) and keep CORS headers on errors."""
     origin = request.headers.get("origin")
     headers = {}
-    if origin and origin in settings.cors_origin_list:
+    if origin and settings.origin_allowed(origin):
         headers["Access-Control-Allow-Origin"] = origin
         headers["Access-Control-Allow-Credentials"] = "true"
     return JSONResponse(
