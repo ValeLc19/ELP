@@ -833,10 +833,27 @@
   flex: none;
 }
 
+.ev-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: auto;
+}
+.ev-card__moreinfo {
+  padding-top: 0.5rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: #c0563f;
+  text-decoration: underline;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.ev-card__moreinfo:hover {
+  color: #a5432f;
+}
 .see-details {
   display: block;
   margin-left: auto;
-  margin-top: auto;
   padding-top: 0.5rem;
   background: none;
   border: none;

@@ -124,9 +124,22 @@ export default function EventCard({
           </>
         )}
 
-        <button className="see-details" onClick={() => onSelect(event.id)}>
-          {t('seeDetails')} →
-        </button>
+        <div className="ev-card__actions">
+          {event.sourceUrl && (
+            <a
+              className="ev-card__moreinfo"
+              href={event.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {t('moreInfo')}
+            </a>
+          )}
+          <button className="see-details" onClick={() => onSelect(event.id)}>
+            {t('seeDetails')} →
+          </button>
+        </div>
       </div>
     </article>
   )
