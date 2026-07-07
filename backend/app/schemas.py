@@ -98,6 +98,8 @@ class ExtractOut(BaseModel):
     price: Optional[str] = None
     about: Optional[str] = None
     sourceUrl: Optional[str] = None
+    # The flyer image as a data URL, so the browser can OCR it (CORS-free).
+    imageData: Optional[str] = None
 
 
 class UserEventIn(BaseModel):

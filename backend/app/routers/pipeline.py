@@ -9,6 +9,7 @@ This is the realistic stand-in for the full social-scrape pipeline: it works
 well on event web pages; social-post links (IG/FB/TikTok) serve a login wall,
 so those come back mostly empty and the user fills the form manually.
 """
+import base64
 import html as _html
 import ipaddress
 import json
@@ -233,6 +234,47 @@ def _parse(html_str: str, source_url: str) -> dict:
     return {k: v for k, v in out.items() if v}
 
 
+# The flyer image is fetched server-side and handed to the browser as a data
+# URL so the frontend can OCR it without hitting cross-origin restrictions
+# (Instagram/Facebook CDNs don't allow direct canvas access from the browser).
+_MAX_IMG_BYTES = 1_500_000
+
+
+def _fetch_image_data_url(url: str, max_redirects: int = 3) -> Optional[str]:
+    opener = urllib.request.build_opener(_NoRedirect)
+    for _ in range(max_redirects + 1):
+        p = urlparse(url)
+        if p.scheme not in ("http", "https") or not p.hostname:
+            return None
+        if not _is_public_host(p.hostname):
+            return None
+        req = urllib.request.Request(url, headers={"User-Agent": _UA})
+        try:
+            resp = opener.open(req, timeout=_TIMEOUT)
+        except urllib.error.HTTPError as e:
+            if e.code in (301, 302, 303, 307, 308) and e.headers.get("Location"):
+                url = urljoin(url, e.headers["Location"])
+                continue
+            return None
+        except Exception:
+            return None
+        code = resp.getcode()
+        if code in (301, 302, 303, 307, 308):
+            loc = resp.headers.get("Location")
+            if not loc:
+                return None
+            url = urljoin(url, loc)
+            continue
+        ctype = resp.headers.get("Content-Type", "").split(";")[0].strip().lower()
+        if not ctype.startswith("image/"):
+            return None
+        raw = resp.read(_MAX_IMG_BYTES + 1)
+        if not raw or len(raw) > _MAX_IMG_BYTES:
+            return None
+        return f"data:{ctype};base64,{base64.b64encode(raw).decode('ascii')}"
+    return None
+
+
 @router.post("/extract")
 def extract_event(
     body: ExtractIn,
@@ -248,4 +290,6 @@ def extract_event(
     except ValueError:
         # Not fatal — the frontend still opens a blank form to fill by hand.
         return ExtractOut(sourceUrl=url)
-    return ExtractOut(**_parse(html_str, url))
+    result = _parse(html_str, url)
+    image_data = _fetch_image_data_url(result["image"]) if result.get("image") else None
+    return ExtractOut(**result, imageData=image_data)

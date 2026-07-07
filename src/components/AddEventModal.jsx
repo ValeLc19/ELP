@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { extractLink, addUserEvent } from '../lib/userEvents.js'
+import { ocrImage, parseEventText } from '../lib/ocr.js'
 import { useLang } from '../lib/i18n.js'
 import { CATEGORY_ORDER } from '../data/categories.js'
 import { XIcon } from './icons.jsx'
@@ -15,6 +16,8 @@ export default function AddEventModal({ businesses, onClose }) {
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState('')
   const [added, setAdded] = useState(false)
+  const [autofillMsg, setAutofillMsg] = useState('')
+  const [imgError, setImgError] = useState(false)
   const [form, setForm] = useState({
     title: '', category: 'Markets', dateISO: '', time: '',
     price: '', address: '', image: '', about: '',
@@ -25,17 +28,36 @@ export default function AddEventModal({ businesses, onClose }) {
     if (!url.trim() || reading) return
     setReading(true)
     setErr('')
+    setAutofillMsg('')
     const d = await extractLink(url.trim())
+
+    // Read the flyer itself: OCR the image (browser-side) + the caption, then
+    // pull date/time/price/place out of that text. Fills only what the page's
+    // structured data (OG/JSON-LD) didn't already provide.
+    const merged = { ...d }
+    if (d.imageData || d.about) {
+      if (d.imageData) setAutofillMsg(t('readingFlyer'))
+      const ocrText = d.imageData ? await ocrImage(d.imageData) : ''
+      const parsed = parseEventText([ocrText, d.about].filter(Boolean).join('\n'))
+      for (const k of ['dateISO', 'time', 'price', 'address']) {
+        if (!merged[k] && parsed[k]) merged[k] = parsed[k]
+      }
+    }
+
     setReading(false)
+    const found = ['title', 'dateISO', 'time', 'price', 'address', 'image', 'about']
+      .filter((k) => merged[k]).length
+    setAutofillMsg(found > 0 ? t('autofillFilled') : t('autofillEmpty'))
+    if (merged.image) setImgError(false)
     setForm((f) => ({
       ...f,
-      title: d.title || f.title,
-      dateISO: d.dateISO || f.dateISO,
-      time: d.time || f.time,
-      price: d.price || f.price,
-      address: d.address || f.address,
-      image: d.image || f.image,
-      about: d.about || f.about,
+      title: merged.title || f.title,
+      dateISO: merged.dateISO || f.dateISO,
+      time: merged.time || f.time,
+      price: merged.price || f.price,
+      address: merged.address || f.address,
+      image: merged.image || f.image,
+      about: merged.about || f.about,
     }))
   }
 
@@ -85,6 +107,7 @@ export default function AddEventModal({ businesses, onClose }) {
         ) : (
           <>
             <h2 className="aev__title">{t('addEventTitle')}</h2>
+            <p className="aev__intro">{t('addEventIntro')}</p>
 
             <label className="aev__label">{t('forBusiness')}</label>
             <select className="aev__input" value={bizId} onChange={(e) => setBizId(e.target.value)}>
@@ -93,7 +116,10 @@ export default function AddEventModal({ businesses, onClose }) {
               ))}
             </select>
 
-            <label className="aev__label">{t('eventLinkLabel')}</label>
+            <div className="aev__step">
+              <span className="aev__step-num">1</span>
+              <h3 className="aev__step-title">{t('importFromLink')}</h3>
+            </div>
             <div className="aev__row">
               <input
                 className="aev__input"
@@ -105,14 +131,27 @@ export default function AddEventModal({ businesses, onClose }) {
                 {reading ? t('reading') : t('autofillLink')}
               </button>
             </div>
-            <p className="aev__hint">{t('autofillHint')}</p>
+            {autofillMsg ? (
+              <p className="aev__autofill-msg">{autofillMsg}</p>
+            ) : (
+              <p className="aev__hint">{t('autofillHint')}</p>
+            )}
 
-            <label className="aev__label">{t('evTitle')}</label>
+            <div className="aev__step">
+              <span className="aev__step-num">2</span>
+              <h3 className="aev__step-title">{t('reviewEdit')}</h3>
+            </div>
+
+            <label className="aev__label">
+              {t('evTitle')} <span className="aev__req">*</span>
+            </label>
             <input className="aev__input" value={form.title} onChange={(e) => set('title', e.target.value)} />
 
             <div className="aev__grid">
               <div>
-                <label className="aev__label">{t('evDate')}</label>
+                <label className="aev__label">
+                  {t('evDate')} <span className="aev__req">*</span>
+                </label>
                 <input className="aev__input" type="date" value={form.dateISO} onChange={(e) => set('dateISO', e.target.value)} />
               </div>
               <div>
@@ -141,6 +180,22 @@ export default function AddEventModal({ businesses, onClose }) {
 
             <label className="aev__label">{t('evAbout')}</label>
             <textarea className="aev__input aev__textarea" rows={3} value={form.about} onChange={(e) => set('about', e.target.value)} />
+
+            <label className="aev__label">{t('evImage')}</label>
+            {form.image && !imgError && (
+              <img
+                className="aev__preview"
+                src={form.image}
+                alt=""
+                onError={() => setImgError(true)}
+              />
+            )}
+            <input
+              className="aev__input"
+              placeholder="https://…"
+              value={form.image}
+              onChange={(e) => { setImgError(false); set('image', e.target.value) }}
+            />
 
             {err && <p className="aev__err">{err}</p>}
             <button className="aev__save" onClick={save} disabled={busy}>
