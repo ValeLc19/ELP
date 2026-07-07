@@ -133,20 +133,24 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
                 <h4 className="detail__label">{t('host')}</h4>
                 <p className="detail__text">{event.host}</p>
               </div>
-              <div className="detail__host-actions">
-                {copied && <span className="copied-toast">{t('copied')}</span>}
-                <button
-                  onClick={copyLink}
-                  aria-label="Copy event link"
-                  className={copied ? 'is-copied' : ''}
-                >
-                  {copied ? (
-                    <CheckIcon width={15} height={15} />
-                  ) : (
-                    <CopyIcon width={15} height={15} />
-                  )}
-                </button>
-              </div>
+              {/* Copy-link only for public events — a private, user-added event
+                  has no shareable link (it lives only in your account). */}
+              {!isUserAdded && (
+                <div className="detail__host-actions">
+                  {copied && <span className="copied-toast">{t('copied')}</span>}
+                  <button
+                    onClick={copyLink}
+                    aria-label="Copy event link"
+                    className={copied ? 'is-copied' : ''}
+                  >
+                    {copied ? (
+                      <CheckIcon width={15} height={15} />
+                    ) : (
+                      <CopyIcon width={15} height={15} />
+                    )}
+                  </button>
+                </div>
+              )}
             </div>
           )}
 

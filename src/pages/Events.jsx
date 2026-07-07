@@ -187,11 +187,16 @@ export default function Events() {
     const win = dateWindow()
     const pool = user ? [...EVENTS, ...myBizEvents] : EVENTS
     return pool.filter((e) => {
-      const catOk = activeCat === 'All' || e.category === activeCat
-      const qOk =
-        !q ||
-        e.title.toLowerCase().includes(q) ||
-        e.address.toLowerCase().includes(q)
+      const catOk =
+        activeCat === 'All' ||
+        e.category === activeCat ||
+        (e.categories && e.categories.includes(activeCat))
+      // Search matches title, place, business name, category, and description.
+      const hay = [e.title, e.address, e.businessName, e.category, e.about]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase()
+      const qOk = !q || hay.includes(q)
       // Date filters don't apply in calendar view (you navigate by date there).
       const dateOk = view === 'calendar' || matchesDateFilter(e, activeDate, win)
       const priceOk =
@@ -201,8 +206,14 @@ export default function Events() {
         !audienceFilter ||
         (audienceFilter === 'Kids' ? e.family : !!e.ageNote)
       const savedOk = !savedFilter || isSaved(e.seriesId || e.id)
-      // business events are hidden from the normal feed; the chip reveals them
-      const businessOk = businessFilter ? !!e.fromBusiness : !e.fromBusiness
+      // Business events are hidden from the normal feed; the chip reveals them.
+      // A search, though, looks across everything — so your added events turn
+      // up by name even without the chip on.
+      const businessOk = businessFilter
+        ? !!e.fromBusiness
+        : q
+          ? true
+          : !e.fromBusiness
       // Once an event's date passes it drops out of the browse feed (map/list);
       // the calendar still shows it on its date. Saved past events live under
       // the saved screen's "Past Events" tab.

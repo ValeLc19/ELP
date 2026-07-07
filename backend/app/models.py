@@ -86,6 +86,8 @@ class UserEvent(Base):
     category: Mapped[str] = mapped_column(String, default="Markets")
     image: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     address: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    lat: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    lng: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     date_iso: Mapped[str] = mapped_column(String, index=True)
     time: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     price: Mapped[Optional[str]] = mapped_column(String, nullable=True)

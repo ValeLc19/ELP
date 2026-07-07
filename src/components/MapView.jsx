@@ -21,11 +21,14 @@ function pinIcon(color, active) {
   })
 }
 
+// An event can be placed on the map only if it has real numeric coordinates.
+const hasCoords = (e) => Number.isFinite(e.lat) && Number.isFinite(e.lng)
+
 // Pans/zooms the map when the selected event changes.
 function FlyTo({ event }) {
   const map = useMap()
   useEffect(() => {
-    if (event) {
+    if (event && hasCoords(event)) {
       map.flyTo([event.lat, event.lng], 15, { duration: 1.1 })
     }
   }, [event, map])
@@ -34,6 +37,8 @@ function FlyTo({ event }) {
 
 export default function MapView({ events, selectedId, onSelectPin }) {
   const selected = events.find((e) => e.id === selectedId) || null
+  // Skip events without coordinates so a missing lat/lng never crashes Leaflet.
+  const pins = events.filter(hasCoords)
 
   return (
     <MapContainer
@@ -46,7 +51,7 @@ export default function MapView({ events, selectedId, onSelectPin }) {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {events.map((e) => (
+      {pins.map((e) => (
         <Marker
           key={e.id}
           position={[e.lat, e.lng]}

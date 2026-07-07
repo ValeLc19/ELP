@@ -83,6 +83,9 @@ export default function EventCard({
           >
             <span className="badge__dot" style={{ background: color }} />
             {t(`cat_${event.category}`)}
+            {event.categories && event.categories.length > 1 && (
+              <span className="badge__more"> +{event.categories.length - 1}</span>
+            )}
           </span>
         </div>
 

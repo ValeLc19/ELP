@@ -107,6 +107,10 @@ class UserEventIn(BaseModel):
     businessName: Optional[str] = None
     title: str
     category: str = "Markets"
+    # A user event can carry more than one category (e.g. Food + Arts). Stored
+    # comma-joined in the single `category` column; `category` (above) stays the
+    # primary for back-compat.
+    categories: Optional[list[str]] = None
     image: Optional[str] = None
     address: Optional[str] = None
     dateISO: str
@@ -120,15 +124,19 @@ def serialize_user_event(e: UserEvent) -> dict:
     """Flat dict matching the frontend event shape, tagged fromBusiness."""
     d = datetime.strptime(e.date_iso, "%Y-%m-%d")
     uid = f"uev-{e.id}"
+    cats = [c for c in (e.category or "").split(",") if c] or ["Markets"]
     return {
         "id": uid,
         "seriesId": uid,
         "title": e.title,
         "short": e.title,
-        "category": e.category,
+        "category": cats[0],
+        "categories": cats,
         "image": e.image,
         "family": True,
         "address": e.address,
+        "lat": e.lat,
+        "lng": e.lng,
         "time": e.time,
         "price": e.price or "Free",
         "about": e.about,

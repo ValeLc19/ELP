@@ -11,6 +11,15 @@ let events = []
 const listeners = new Set()
 const emit = () => listeners.forEach((fn) => fn())
 
+// The backend serializes dateObj as an ISO *string*; the rest of the app (and
+// the static public events) expect a real Date for comparisons/sorting. Build
+// it from dateISO in local time so it lines up with "today" at local midnight.
+function normalize(e) {
+  const iso = e.dateISO || e.iso || ''
+  const [y, m, d] = iso.split('-').map(Number)
+  return { ...e, dateObj: new Date(y || 1970, (m || 1) - 1, d || 1) }
+}
+
 export function getUserEvents() {
   return events
 }
@@ -30,10 +39,18 @@ export async function extractLink(url) {
 
 export async function addUserEvent(data) {
   if (!isApiConfigured) return { ok: false, error: 'Sign in to add events.' }
+  // Guard against adding the same event twice (same business, title, date).
+  const dup = events.some(
+    (e) =>
+      (e.businessId || '') === (data.businessId || '') &&
+      (e.title || '').trim().toLowerCase() === data.title.trim().toLowerCase() &&
+      e.dateISO === data.dateISO
+  )
+  if (dup) return { ok: false, duplicate: true }
   try {
     const row = await api('/me/events', { method: 'POST', body: data })
     if (row) {
-      events = [...events, row]
+      events = [...events, normalize(row)]
       emit()
     }
     return { ok: true, event: row }
@@ -55,7 +72,7 @@ export function removeUserEvent(id) {
 async function syncFromServer() {
   if (!isApiConfigured) return
   try {
-    events = (await api('/me/events')) || []
+    events = ((await api('/me/events')) || []).map(normalize)
     emit()
   } catch {
     /* backend unreachable — keep what we have */

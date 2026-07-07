@@ -171,11 +171,14 @@ function toUrl(raw) {
   return `https://www.instagram.com/${cleanName(s)}`
 }
 
+// Returns the business (newly created, or the existing match on a duplicate
+// name) so callers can immediately reference it; null for empty input.
 export function addBusiness(raw) {
   const handle = String(raw).trim()
-  if (!handle) return
+  if (!handle) return null
   const name = prettifyName(handle)
-  if (items.some((b) => b.name.toLowerCase() === name.toLowerCase())) return
+  const existing = items.find((b) => b.name.toLowerCase() === name.toLowerCase())
+  if (existing) return existing
   seq += 1
   const biz = {
     id: `biz-${seq}`,
@@ -189,6 +192,7 @@ export function addBusiness(raw) {
   items = [...items, biz]
   emit()
   pushToServer(biz)
+  return biz
 }
 export function removeBusiness(id) {
   const target = items.find((b) => b.id === id)
