@@ -176,18 +176,19 @@ def _iter_events(data):
 
 
 def _meta(html_str: str, prop: str) -> Optional[str]:
-    m = re.search(
-        r'<meta[^>]+(?:property|name)=["\']' + re.escape(prop) + r'["\'][^>]+content=["\'](.*?)["\']',
-        html_str,
-        re.I | re.S,
-    )
-    if not m:
-        m = re.search(
-            r'<meta[^>]+content=["\'](.*?)["\'][^>]+(?:property|name)=["\']' + re.escape(prop) + r'["\']',
-            html_str,
-            re.I | re.S,
-        )
-    return _html.unescape(m.group(1)).strip() if m else None
+    # Walk each <meta ...> tag individually. Iterating tag-by-tag keeps every
+    # regex bounded to one short tag string, so there's no catastrophic
+    # backtracking on huge pages (e.g. Instagram's ~660KB shell). Attribute
+    # order (property-then-content or content-then-property) doesn't matter.
+    needle = re.compile(r'(?:property|name)=["\']' + re.escape(prop) + r'["\']', re.I)
+    content = re.compile(r'content=(["\'])(.*?)\1', re.I | re.S)
+    for m in re.finditer(r"<meta\b[^>]*>", html_str, re.I):
+        tag = m.group(0)
+        if needle.search(tag):
+            cm = content.search(tag)
+            if cm:
+                return _html.unescape(cm.group(2)).strip()
+    return None
 
 
 def _parse(html_str: str, source_url: str) -> dict:
