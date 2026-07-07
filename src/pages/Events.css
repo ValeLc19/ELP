@@ -1066,6 +1066,13 @@
 .register:hover {
   filter: brightness(1.04);
 }
+/* Search fallback (no exact registration URL) — muted so it doesn't read as
+   the official "register here" call-to-action. */
+.register--search {
+  background: #ece5d7;
+  color: var(--ink);
+  font-size: 1.35rem;
+}
 
 /* Filled category badge (used in the detail view) */
 .badge--filled {

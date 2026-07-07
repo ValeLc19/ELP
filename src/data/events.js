@@ -1231,10 +1231,12 @@ function makeInstance(e, d, first) {
 //      56 links. Swap the fallback for exact URLs anytime by filling `sourceUrl`.
 //   3. A user-added event with no link gets no button (returns null).
 export function moreInfoUrl(event) {
-  if (event.sourceUrl) return event.sourceUrl
+  if (event.sourceUrl) return { url: event.sourceUrl, isSearch: false }
   if (event.fromBusiness) return null
   const q = encodeURIComponent(`${event.title} El Paso event`)
-  return `https://www.google.com/search?q=${q}`
+  // A search, not an official page — callers label it honestly (not "More Info")
+  // so people don't mistake it for the exact registration link.
+  return { url: `https://www.google.com/search?q=${q}`, isSearch: true }
 }
 
 // Social-profile link for an event (the organizer's Instagram, etc.).

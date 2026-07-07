@@ -29,6 +29,7 @@ export default function EventCard({
   const [confirmUnsave, setConfirmUnsave] = useState(false)
   const saveKey = event.seriesId || event.id
   const saved = isSaved(saveKey)
+  const more = moreInfoUrl(event)
 
   return (
     <article
@@ -139,15 +140,15 @@ export default function EventCard({
               <InstagramIcon width={17} height={17} />
             </a>
           )}
-          {moreInfoUrl(event) && (
+          {more && (
             <a
               className="ev-card__moreinfo"
-              href={moreInfoUrl(event)}
+              href={more.url}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
             >
-              {t('moreInfo')}
+              {more.isSearch ? t('searchGoogle') : t('moreInfo')}
             </a>
           )}
           <button className="see-details" onClick={() => onSelect(event.id)}>

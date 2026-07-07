@@ -37,6 +37,9 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
   today.setHours(0, 0, 0, 0)
   const isPast = event.dateObj < today
 
+  const more = moreInfoUrl(event)
+  const social = socialUrl(event)
+
   const eventUrl = `${window.location.origin}${window.location.pathname}?event=${encodeURIComponent(event.id)}`
 
   const copyLink = async () => {
@@ -164,12 +167,12 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
         </div>
       </div>
 
-      {(moreInfoUrl(event) || socialUrl(event)) && !isPast && (
+      {(more || social) && !isPast && (
         <div className="detail__footer">
-          {socialUrl(event) && (
+          {social && (
             <a
               className="detail__social"
-              href={socialUrl(event)}
+              href={social}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
@@ -177,14 +180,14 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
               <InstagramIcon width={22} height={22} />
             </a>
           )}
-          {moreInfoUrl(event) && (
+          {more && (
             <a
-              className="register"
-              href={moreInfoUrl(event)}
+              className={`register ${more.isSearch ? 'register--search' : ''}`}
+              href={more.url}
               target="_blank"
               rel="noopener noreferrer"
             >
-              {t('moreInfo')}
+              {more.isSearch ? t('searchGoogle') : t('moreInfo')}
             </a>
           )}
         </div>
