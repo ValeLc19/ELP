@@ -555,11 +555,9 @@ export default function Events() {
         {header}
         <div className="biz-screen__head">
           <h2 className="biz-screen__title">{t('myBusinesses')}</h2>
-          {businesses.length > 0 && (
-            <button className="biz-screen__add-event" onClick={() => setAddEventOpen(true)}>
-              + {t('addEvent')}
-            </button>
-          )}
+          <button className="biz-screen__add-event" onClick={() => setAddEventOpen(true)}>
+            + {t('addEvent')}
+          </button>
         </div>
         <div className="biz-grid">
           {businesses.map((b) => (
