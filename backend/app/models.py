@@ -55,6 +55,11 @@ class Event(Base):
     from_business: Mapped[bool] = mapped_column(Boolean, default=False)
     business_id: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
+    # Provenance: 'seed' (curated snapshot from seed_events.py) or 'visitelpaso'
+    # (auto-synced by scripts.sync_visitelpaso). Lets the sync upsert/prune only
+    # its own rows without disturbing the curated seed.
+    source: Mapped[str] = mapped_column(String, default="seed", index=True)
+
 
 class SavedEvent(Base):
     __tablename__ = "saved_events"
