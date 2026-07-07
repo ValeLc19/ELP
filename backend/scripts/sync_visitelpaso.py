@@ -23,16 +23,20 @@ import sys
 import time
 from datetime import date, timedelta
 
+import collections
+import json
+import urllib.parse
+import urllib.request
+
 from app.database import SessionLocal
 from app.models import Event
 from app.routers.pipeline import _fetch, _iter_events, _split_dt, _address, _price, _text
-from app.routers.user_events import _geocode
-
-import json
+from app.routers.user_events import _ELP
 
 SITEMAP = "https://visitelpaso.com/sitemap.xml"
 WINDOW_DAYS = int(os.environ.get("SYNC_WINDOW_DAYS", "90"))  # events within N days
 MAX_EVENTS = int(os.environ.get("SYNC_MAX_EVENTS", "250"))   # cap kept per run
+SERIES_MAX = int(os.environ.get("SYNC_SERIES_MAX", "3"))     # instances per series
 PAGE_THROTTLE = 0.35    # seconds between page fetches (politeness)
 GEO_THROTTLE = 1.0      # Nominatim asks for <= 1 req/sec
 
@@ -154,15 +158,53 @@ def _clean_address(addr):
     return re.sub(r"\s+", " ", addr.replace("\n", ", ")).strip(" ,")
 
 
-def _geo_query(addr: str) -> str:
-    """A Nominatim-friendly query: start at the street number, drop the venue
-    name prefix and suite/unit fragments (those return zero results)."""
+_NOMINATIM = "https://nominatim.openstreetmap.org/search"
+_GEO_UA = "ELP-events/1.0 (elpaso community events app)"
+
+
+def _nominatim(q: str):
+    """One geocode query -> (lat, lng) or None (no fallback)."""
+    try:
+        qs = urllib.parse.urlencode({"q": q, "format": "json", "limit": 1, "countrycodes": "us"})
+        req = urllib.request.Request(f"{_NOMINATIM}?{qs}", headers={"User-Agent": _GEO_UA})
+        rows = json.loads(urllib.request.urlopen(req, timeout=8).read())
+        if rows:
+            return float(rows[0]["lat"]), float(rows[0]["lon"])
+    except Exception:
+        pass
+    return None
+
+
+def _geo_candidates(addr: str):
+    """Ordered geocode queries: clean street address first, then the venue name,
+    then the whole string — so venue-only addresses (museums, plazas) still
+    resolve instead of dropping to the city-center fallback."""
     a = _clean_address(addr) or ""
+    cands = []
     m = re.search(r"\d{2,6}\s+\w.*", a)
     if m:
-        a = m.group(0)
-    a = re.sub(r"\b(suite|ste|unit|apt|#)\s*\S+", "", a, flags=re.I)
-    return re.sub(r"\s*,\s*(,|$)", r"\1", a).strip(" ,")
+        street = re.sub(r"\b(suite|ste|unit|apt|#)\s*\S+", "", m.group(0), flags=re.I)
+        cands.append(re.sub(r"\s*,\s*(,|$)", r"\1", street).strip(" ,"))
+    venue = a.split(",")[0].strip()
+    if venue and not re.match(r"^\d", venue):
+        cands.append(f"{venue}, El Paso, TX")
+    cands.append(a)
+    out, seen = [], set()
+    for c in cands:
+        if c and c not in seen:
+            seen.add(c)
+            out.append(c)
+    return out
+
+
+def _geocode_addr(addr: str):
+    """Try each candidate query (throttled) until one resolves; else El Paso center."""
+    for q in _geo_candidates(addr):
+        hit = _nominatim(q)
+        time.sleep(GEO_THROTTLE)
+        if hit:
+            return hit
+    return _ELP
 
 
 def run(dry: bool = False) -> int:
@@ -174,8 +216,9 @@ def run(dry: bool = False) -> int:
 
     db = SessionLocal()
     seen = set()
+    series_count = collections.Counter()
     kept = 0
-    skip = {"date": 0, "online": 0, "nonlocal": 0, "nodata": 0, "fetch": 0}
+    skip = {"date": 0, "online": 0, "nonlocal": 0, "nodata": 0, "fetch": 0, "series_cap": 0}
     pruned = 0
     try:
         for url in urls:
@@ -219,29 +262,42 @@ def run(dry: bool = False) -> int:
                 skip["nonlocal"] += 1
                 continue
 
+            # cap near-identical instances of a recurring series (e.g. daily
+            # museum exhibitions) so they don't skew categories or fill the cap
+            series = _base_slug(slug)
+            if series_count[series] >= SERIES_MAX:
+                skip["series_cap"] += 1
+                continue
+
             category = guess_category(blob)
             theme = pick_theme(blob, category)
             image = THEME_IMAGES.get(theme, THEME_IMAGES["festival"])
             host = addr.split(" - ", 1)[0].strip() if " - " in addr else None
-            price = _price(node.get("offers")) or "See details"
+            price = _price(node.get("offers"))
+            if not price:
+                price = "Free" if re.search(r"\bfree\b", blob, re.I) else "See details"
             family = bool(FAMILY_RE.search(blob))
-            age_note = "21+" if ADULT_RE.search(blob) else None
 
             ev_id = slug
             seen.add(ev_id)
+            series_count[series] += 1
             row = db.get(Event, ev_id)
-            # geocode only when we don't already have coords (Nominatim politeness);
-            # dry runs skip geocoding entirely so they stay fast.
+            # geocode only when we don't already have GOOD coords (Nominatim
+            # politeness). Rows previously stuck at the city-center fallback are
+            # retried, so an improved geocode pass can resolve them. Dry runs
+            # skip geocoding entirely so they stay fast.
+            def _is_center(la, ln):
+                return la is not None and abs(la - _ELP[0]) < 1e-3 and abs(ln - _ELP[1]) < 1e-3
+
             if dry:
                 lat, lng = None, None
-            elif row is not None and row.lat is not None and row.lng is not None:
+            elif row is not None and row.lat is not None and not _is_center(row.lat, row.lng):
                 lat, lng = row.lat, row.lng
             else:
-                lat, lng = _geocode(_geo_query(addr))
-                time.sleep(GEO_THROTTLE)
+                lat, lng = _geocode_addr(addr)
 
             fields = dict(
-                series_id=_base_slug(slug), title=title, short=None,
+                series_id=series, title=title, short=None,
                 category=category, theme=theme, image=image, family=family,
                 address=addr, lat=lat, lng=lng, date_iso=di, time=ti,
                 price=price, about=about, additional_info=None, host=host,
