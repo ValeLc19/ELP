@@ -19,8 +19,9 @@ import urllib.request
 from typing import Optional
 from urllib.parse import urljoin, urlparse
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 
+from ..auth import get_current_user_id
 from ..schemas import ExtractIn, ExtractOut
 
 router = APIRouter(prefix="/pipeline", tags=["pipeline"])
@@ -232,7 +233,10 @@ def _parse(html_str: str, source_url: str) -> dict:
 
 
 @router.post("/extract")
-def extract_event(body: ExtractIn) -> ExtractOut:
+def extract_event(
+    body: ExtractIn,
+    user_id: str = Depends(get_current_user_id),
+) -> ExtractOut:
     url = (body.url or "").strip()
     if not url:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Please provide a link.")

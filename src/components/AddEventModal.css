@@ -1,0 +1,132 @@
+.aev {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.aev__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(28, 22, 18, 0.5);
+}
+.aev__card {
+  position: relative;
+  z-index: 1;
+  width: min(440px, 94vw);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--card, #fbf6ee);
+  border-radius: 18px;
+  padding: 1.6rem 1.5rem 1.4rem;
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.55);
+}
+.aev__close {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted, #8a7d68);
+}
+.aev__title {
+  font-family: var(--serif);
+  font-size: 1.9rem;
+  margin: 0 0 0.9rem;
+}
+.aev__label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted, #8a7d68);
+  margin: 0.7rem 0 0.25rem;
+}
+.aev__input {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid #d8cdbe;
+  border-radius: 10px;
+  background: #fffdf8;
+  color: #1c1c1c;
+  outline: none;
+}
+.aev__input:focus {
+  border-color: #b89a6a;
+}
+.aev__textarea {
+  resize: vertical;
+}
+.aev__row {
+  display: flex;
+  gap: 0.5rem;
+}
+.aev__row .aev__input {
+  flex: 1;
+}
+.aev__fetch {
+  flex: none;
+  white-space: nowrap;
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 0 0.9rem;
+  border-radius: 10px;
+  border: 1px solid #2e6f69;
+  background: rgba(46, 111, 105, 0.1);
+  color: #2e6f69;
+  cursor: pointer;
+}
+.aev__fetch:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.aev__hint {
+  font-size: 0.78rem;
+  color: var(--muted, #8a7d68);
+  margin: 0.35rem 0 0;
+  font-style: italic;
+}
+.aev__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+.aev__save {
+  display: block;
+  width: 100%;
+  margin-top: 1.2rem;
+  background: #d15a3a;
+  color: #fbf6ee;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  padding: 0.55rem;
+  cursor: pointer;
+}
+.aev__save:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.aev__err {
+  color: #c0564a;
+  font-style: italic;
+  margin: 0.7rem 0 0;
+}
+.aev__added,
+.aev__empty {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 2rem 1rem;
+  margin: 0;
+  color: var(--ink, #2c231d);
+}
+.aev__empty {
+  font-size: 1.15rem;
+  color: var(--muted, #8a7d68);
+}

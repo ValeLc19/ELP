@@ -489,10 +489,32 @@
 }
 
 /* ---------- My Local Business screen ---------- */
+.biz-screen__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 0 0 1.3rem;
+}
 .biz-screen__title {
   font-family: var(--serif);
   font-size: 2rem;
-  margin: 0 0 1.3rem;
+  margin: 0;
+}
+.biz-screen__add-event {
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  border: 1.5px solid #2e6f69;
+  background: rgba(46, 111, 105, 0.1);
+  color: #2e6f69;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.biz-screen__add-event:hover {
+  background: rgba(46, 111, 105, 0.18);
 }
 .biz-grid {
   display: grid;
@@ -872,6 +894,21 @@
   filter: grayscale(0.7) brightness(0.9);
   opacity: 0.75;
 }
+.detail__remove {
+  margin-top: 1.2rem;
+  background: none;
+  border: 1.5px solid #c0564a;
+  color: #c0564a;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.4rem 1.1rem;
+  cursor: pointer;
+}
+.detail__remove:hover {
+  background: rgba(192, 86, 74, 0.08);
+}
+
 .detail__passed {
   display: inline-block;
   margin: 0.2rem 0 0;

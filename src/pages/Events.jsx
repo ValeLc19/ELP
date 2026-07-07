@@ -15,12 +15,14 @@ import EventDetail from '../components/EventDetail.jsx'
 import AuthModal from '../components/AuthModal.jsx'
 import AccountModal from '../components/AccountModal.jsx'
 import AddBusinessModal from '../components/AddBusinessModal.jsx'
+import AddEventModal from '../components/AddEventModal.jsx'
 import BusinessCard from '../components/BusinessCard.jsx'
 import Onboarding from '../components/Onboarding.jsx'
 import { useAuth, useRecovery, displayName, demoSignIn, consumePendingOnboard } from '../lib/auth.js'
 import ResetPasswordModal from '../components/ResetPasswordModal.jsx'
 import { isSaved } from '../lib/saved.js'
-import { useBusinesses, businessEvents, addBusiness } from '../lib/businesses.js'
+import { useBusinesses, addBusiness } from '../lib/businesses.js'
+import { useUserEvents } from '../lib/userEvents.js'
 import { useLang } from '../lib/i18n.js'
 import {
   SearchIcon,
@@ -123,14 +125,13 @@ export default function Events() {
   const [savedScreen, setSavedScreen] = useState(false) // dedicated saved-events screen
   const [savedTab, setSavedTab] = useState('next') // next | past
   const [addBizOpen, setAddBizOpen] = useState(false)
+  const [addEventOpen, setAddEventOpen] = useState(false)
   const [bizScreen, setBizScreen] = useState(false) // My Local Business screen
   const { items: businesses, remove: removeBusiness } = useBusinesses()
 
-  // Events "pulled" from the businesses this user added (mock; account-only).
-  const myBizEvents = useMemo(
-    () => (user ? businessEvents(businesses) : []),
-    [businesses, user]
-  )
+  // Events the user added from a business's link — private, per-user, from the
+  // backend. Shown behind the "From my businesses" chip.
+  const myBizEvents = useUserEvents()
 
   const resetFilters = () => {
     setActiveCat('All')
@@ -518,6 +519,9 @@ export default function Events() {
       {onboarding && <Onboarding onDone={() => setOnboarding(false)} />}
       {recovery && <ResetPasswordModal />}
       {addBizOpen && <AddBusinessModal onClose={() => setAddBizOpen(false)} />}
+      {addEventOpen && (
+        <AddEventModal businesses={businesses} onClose={() => setAddEventOpen(false)} />
+      )}
       {accountOpen && (
         <AccountModal
           onClose={() => setAccountOpen(false)}
@@ -538,7 +542,14 @@ export default function Events() {
     return (
       <div className="events">
         {header}
-        <h2 className="biz-screen__title">{t('myBusinesses')}</h2>
+        <div className="biz-screen__head">
+          <h2 className="biz-screen__title">{t('myBusinesses')}</h2>
+          {businesses.length > 0 && (
+            <button className="biz-screen__add-event" onClick={() => setAddEventOpen(true)}>
+              + {t('addEvent')}
+            </button>
+          )}
+        </div>
         <div className="biz-grid">
           {businesses.map((b) => (
             <BusinessCard key={b.id} biz={b} onRemove={removeBusiness} />

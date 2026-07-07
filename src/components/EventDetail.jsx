@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { categoryColor, categoryTint } from '../data/categories.js'
 import { useSaved } from '../lib/saved.js'
+import { removeUserEvent } from '../lib/userEvents.js'
 import { useAuth } from '../lib/auth.js'
 import { useLang } from '../lib/i18n.js'
 import ConfirmDialog from './ConfirmDialog.jsx'
@@ -23,8 +24,11 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
   const { user } = useAuth()
   const { t } = useLang()
   const [confirmUnsave, setConfirmUnsave] = useState(false)
+  const [confirmRemove, setConfirmRemove] = useState(false)
   const saveKey = event.seriesId || event.id
   const saved = isSaved(saveKey)
+  // Events the user added themselves (paste-a-link) can be removed here.
+  const isUserAdded = event.fromBusiness && String(event.id).startsWith('uev-')
 
   // Past events open as a muted "already passed" state, not an active card.
   const today = new Date()
@@ -145,6 +149,12 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
               </div>
             </div>
           )}
+
+          {isUserAdded && (
+            <button className="detail__remove" onClick={() => setConfirmRemove(true)}>
+              {t('removeEvent')}
+            </button>
+          )}
         </div>
       </div>
 
@@ -159,6 +169,19 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
             {t('moreInfo')}
           </a>
         </div>
+      )}
+
+      {confirmRemove && (
+        <ConfirmDialog
+          message={t('confirmRemoveEvent')}
+          confirmLabel={t('remove')}
+          onConfirm={() => {
+            setConfirmRemove(false)
+            removeUserEvent(event.id)
+            onBack()
+          }}
+          onCancel={() => setConfirmRemove(false)}
+        />
       )}
 
       {confirmUnsave && (
