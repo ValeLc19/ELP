@@ -100,7 +100,7 @@ const RAW = [
   {
     id: 'free-yoga-thursdays',
     theme: 'yoga',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/free-yoga-thursdays-2026-07-09',
     recur: { every: 7, until: '2026-09-30' },
     title: 'Free Yoga Thursdays',
     short: 'Yoga',
@@ -121,7 +121,7 @@ const RAW = [
   {
     id: 'free-yoga-saturdays',
     theme: 'yoga',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/free-yoga-saturdays-2026-07-11',
     recur: { every: 7, until: '2026-09-30' },
     title: 'Free Yoga Saturdays',
     short: 'Yoga',
@@ -142,7 +142,7 @@ const RAW = [
   {
     id: 'consequences-pecan-grill',
     theme: 'guitar',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/the-consequences-band-at-rosa-s-cantina',
     title: 'The Consequences Band',
     short: 'Live Music',
     category: 'Music',
@@ -320,7 +320,7 @@ const RAW = [
   {
     id: 'weekend-wine-shuttle',
     theme: 'wine',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/weekend-wine-shuttle-2026-07-12',
     title: 'Weekend Wine Shuttle',
     short: 'Wine Shuttle',
     category: 'Food',
@@ -341,7 +341,7 @@ const RAW = [
   {
     id: 'the-market-ep',
     theme: 'market',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/the-market-ep-2026-07-11',
     recur: { every: 7, until: '2026-09-30' },
     title: 'The Market EP',
     short: 'The Market',
@@ -362,7 +362,7 @@ const RAW = [
   {
     id: 'mission-trail-art-market',
     theme: 'market',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/mission-trail-art-market-672715e9-a3c4-4eff-b786-349119b60027',
     recur: { monthly: true, until: '2026-12-31' },
     title: 'Mission Trail Art Market',
     short: 'Art Market',
@@ -382,7 +382,7 @@ const RAW = [
   {
     id: 'viva-el-paso',
     theme: 'theater',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/viva-el-paso-45th-season-2026-07-17-1517',
     title: 'Viva! El Paso',
     short: 'Viva! El Paso',
     category: 'Arts',
@@ -402,7 +402,7 @@ const RAW = [
   {
     id: 'plaza-classic-film-festival',
     theme: 'film',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/plaza-classic-film-festival',
     title: 'Plaza Classic Film Festival',
     short: 'Film Festival',
     category: 'Arts',
@@ -487,7 +487,7 @@ const RAW = [
   {
     id: 'way-out-west-fest',
     theme: 'festival',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/way-out-west',
     title: 'Way Out West Festival',
     short: 'Way Out West',
     category: 'Food',
@@ -529,7 +529,7 @@ const RAW = [
   {
     id: 'amigo-airsho',
     theme: 'airshow',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/amigo-airsho-2026-10-24',
     title: 'Amigo Airsho',
     short: 'Amigo Airsho',
     category: 'Outdoors',
@@ -550,7 +550,7 @@ const RAW = [
   {
     id: 'dia-de-muertos-parade',
     theme: 'festival',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/dia-de-los-muertos-festival',
     title: 'Día de Los Muertos Parade',
     short: 'Día de Muertos',
     category: 'Arts',
@@ -656,7 +656,7 @@ const RAW = [
   {
     id: 'blast-exhibition',
     theme: 'artgallery',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/blast-trancazos-de-la-vida-real-exhibition',
     title: 'Blast: Trancazos de la Vida Real',
     short: 'Art Exhibit',
     category: 'Arts',
@@ -698,7 +698,7 @@ const RAW = [
   {
     id: 'austin-jimmy-murphy',
     theme: 'guitar',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/austin-jimmy-murphy',
     recur: { every: 7, until: '2026-08-31' },
     title: 'Austin Jimmy Murphy',
     short: 'Live Music',
@@ -720,7 +720,7 @@ const RAW = [
   {
     id: 'salsa-fest',
     theme: 'restaurant',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/salsa-tasting-fest',
     title: 'Salsa Tasting Fest',
     short: 'Salsa Fest',
     category: 'Food',
@@ -741,7 +741,7 @@ const RAW = [
   {
     id: 'gear-up-sunrise',
     theme: 'mountains',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/gear-up-and-go-scenic-sunrise',
     title: 'Gear Up and Go: Scenic Sunrise',
     short: 'Sunrise Hike',
     category: 'Outdoors',
@@ -761,7 +761,7 @@ const RAW = [
   {
     id: 'san-eli-walking-tours',
     theme: 'historic',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/san-elizario-free-guided-walking-tours',
     recur: { monthly: true, until: '2026-12-31' },
     title: 'San Elizario Walking Tours',
     short: 'Walking Tours',
@@ -783,7 +783,7 @@ const RAW = [
   {
     id: 'market-under-stars',
     theme: 'market',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/the-market-under-the-stars-2026-07-16',
     recur: { monthly: true, until: '2026-12-31' },
     title: 'The Market Under the Stars',
     short: 'Night Market',
@@ -805,7 +805,7 @@ const RAW = [
   {
     id: 'third-thursdays',
     theme: 'artgallery',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/third-thursdays-in-the-downtown-arts-district-2026-07-16',
     recur: { monthly: true, until: '2026-12-31' },
     title: 'Third Thursdays Arts District',
     short: 'Third Thursdays',
@@ -827,7 +827,7 @@ const RAW = [
   {
     id: 'party-plaza-salsa',
     theme: 'dance',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/party-on-the-plaza-salsa-night-2026-07-16',
     recur: { monthly: true, until: '2026-09-30' },
     title: 'Party on the Plaza: Salsa Night',
     short: 'Salsa Night',
@@ -871,7 +871,7 @@ const RAW = [
   {
     id: 'karayoke-elmont',
     theme: 'microphone',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/ka-ray-oke-the-elmont-2026-07-16',
     recur: { every: 14, until: '2026-09-30' },
     title: 'ka-RAY-oke @ The Elmont',
     short: 'Karaoke',
@@ -892,7 +892,7 @@ const RAW = [
   {
     id: 'boombox-bingo-elmont',
     theme: 'music',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/boombox-bingo-the-elmont-2026-07-09',
     recur: { every: 14, until: '2026-09-30' },
     title: 'Boombox Bingo @ The Elmont',
     short: 'Music Bingo',
@@ -913,7 +913,7 @@ const RAW = [
   {
     id: 'el-fresco-allstars',
     theme: 'concert',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/el-fresco-all-stars-2026-07-17',
     title: 'El Fresco: All Stars',
     short: 'El Fresco',
     category: 'Music',
@@ -933,7 +933,7 @@ const RAW = [
   {
     id: 'el-fresco-country',
     theme: 'concert',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/el-fresco-country-spotlight',
     title: 'El Fresco: Country Spotlight',
     short: 'El Fresco',
     category: 'Music',
@@ -953,7 +953,7 @@ const RAW = [
   {
     id: 'el-tormento-de-pablo',
     theme: 'theater',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/el-tormento-de-pablo',
     title: 'El Tormento de Pablo',
     short: 'El Tormento',
     category: 'Arts',
@@ -974,7 +974,7 @@ const RAW = [
   {
     id: 'neighborhoods-austin-terrace',
     theme: 'artgallery',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/neighborhoods-and-shared-memories-austin-terrace',
     title: 'Neighborhoods and Shared Memories: Austin Terrace',
     short: 'Exhibition',
     category: 'Arts',
@@ -1014,7 +1014,7 @@ const RAW = [
   {
     id: 'billy-the-kid-show',
     theme: 'historic',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/billy-the-kid-breakout-show',
     recur: { monthly: true, until: '2026-12-31' },
     title: 'Billy The Kid Breakout Show',
     short: 'Billy the Kid',
@@ -1035,7 +1035,7 @@ const RAW = [
   {
     id: 'authentic-presence',
     theme: 'workshop',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/authentic-presence-creative-marketing-for-artists-makers',
     recur: { every: 7, until: '2026-07-25' },
     title: 'Authentic Presence: Creative Marketing',
     short: 'Marketing Class',
@@ -1057,7 +1057,7 @@ const RAW = [
   {
     id: 'gear-up-intermedia',
     theme: 'hiking',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/gear-up-and-go-intermedia-course-part-2',
     title: 'Gear Up and Go: Intermedia Course',
     short: 'Hiking Course',
     category: 'Outdoors',
@@ -1098,7 +1098,7 @@ const RAW = [
   {
     id: 'hope-mobile-clinic',
     theme: 'festival',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/h-o-p-e-mobile-clinic-health-fair-2026-07-18',
     title: 'H.O.P.E+ Mobile Clinic & Health Fair',
     short: 'Health Fair',
     category: 'Markets',
@@ -1119,7 +1119,7 @@ const RAW = [
   {
     id: 'consequences-deadbeach',
     theme: 'guitar',
-    sourceUrl: '',
+    sourceUrl: 'https://visitelpaso.com/events/the-consequences-band-at-deadbeach-brewery-2026-07-31',
     title: 'The Consequences Band at DeadBeach',
     short: 'Live Music',
     category: 'Music',
