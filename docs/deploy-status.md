@@ -1,67 +1,80 @@
 ========================================================================
- ELP — DEPLOYMENT MAP                         status: PHASE 2 (blocked)
- open this in a Hive pane; I update it in place as we go. no browser needed.
+ ELP — DEPLOYMENT STATUS                        status: LIVE (all phases)
+ Visual version: docs/deploy-map.html (open as a Hive canvas).
 ========================================================================
 
-WHAT WE'RE DOING
+WHAT WE BUILT
 ------------------------------------------------------------------------
-ELP had no backend — saved events + followed businesses lived only in the
-browser. We're wiring it to a real backend so that data lives in a database
-and follows the user across devices. That needs three managed services,
+ELP started with no backend — saved events and followed businesses lived
+only in the browser. It's now wired to a real backend, so that data lives
+in a database and follows the user across devices. Three managed services,
 each doing one job.
 
 
 HOW THE PIECES FIT
 ------------------------------------------------------------------------
 
-  [ Cloudflare Pages ] ---calls + token--> [ Render ] ---SQL + verify--> [ Supabase ]
-    frontend (React)  <--events, saves---  backend    <--rows, JWKS----   Postgres + Auth
-    project: elp                           FastAPI                        ES256 login
-    the website people open                elp-api.onrender.com           agdarjcpgw...supabase.co
+  [ Cloudflare Pages ] --calls + token--> [ Render ] --SQL + verify--> [ Supabase ]
+    frontend (React)  <--events, saves--   backend   <--rows, JWKS---   Postgres + Auth
+    elpaso-events                          FastAPI                      agdarjcpgw...
+      .pages.dev                           elp-api.onrender.com           .supabase.co
 
-  Cloudflare = holds the SITE   (just static files, cheap + fast)
-  Render     = holds the LOGIC  (verifies who you are, then reads/writes the DB)
-  Supabase   = holds the TRUTH  (the database + the login that signs your token)
+  Cloudflare = holds the SITE   (static files, cheap + fast)
+  Render     = holds the LOGIC  (verifies who you are, reads/writes the DB)
+  Supabase   = holds the TRUTH  (the database + the login that signs the token)
 
 
 WHERE WE ARE
 ------------------------------------------------------------------------
-  [x] 0  Build & merge the code ................... DONE  (on main)
-  [x] 1  Collect Supabase keys .................... DONE
-  [!] 2  Deploy the backend (Render) .............. >>> YOU ARE HERE (failing)
-  [ ] 3  Deploy the frontend (Cloudflare) ......... next
-  [ ] 4  Connect the two sides (CORS + auth URLs) . pending
-  [ ] 5  Verify end to end ........................ pending
+  [x] 0  Build & merge the code ................... DONE (on main)
+  [x] 1  Supabase project + keys .................. DONE
+  [x] 2  Deploy the backend (Render) .............. LIVE
+  [x] 3  Deploy the frontend (Cloudflare) ......... LIVE
+  [x] 4  Connect the two sides (CORS + auth URLs) . DONE
+  [x] 5  Verify end to end ........................ VERIFIED (250 events)
 
 
-BLOCKER — what's stopping us right now
+WHERE THE EVENTS COME FROM
 ------------------------------------------------------------------------
-  Render service `elp-api` exits on startup. Its boot runs 3 commands:
+  visitelpaso.com -> GitHub Actions -> Supabase -> GET /events -> the app
+   (sitemap+JSON-LD)  (daily 11:00 UTC)  (events table) (public, no auth)
 
-      alembic upgrade head  ->  seed 152 events  ->  start server
-                                                     ^ exits with status 1
-                                                       somewhere in here
+  250 live events: Arts 100, Outdoors 41, Food 40, Markets 40,
+  Music 17, Sports 12.
 
-  Build succeeds; the app dies while starting. The failure message is
-  generic, so the real reason is one specific line in the Render logs.
-
-  >> NEED FROM YOU: a screenshot of the Render **Logs** tab (the black
-     console), scrolled to the red error / Traceback. That line tells us
-     if it's the DB connection, the migration, or the app — fix follows.
+  The scrape runs in GitHub Actions, not the Render dyno — a ~1,350-URL
+  crawl would blow a request timeout. Images are themed Unsplash stock,
+  never visitelpaso's copyrighted art.
 
 
-ENV VARS on elp-api (Render) — target state
+WHAT RUNS ON ITS OWN
 ------------------------------------------------------------------------
-  DATABASE_URL         postgresql+psycopg2://postgres.agdarjcpgwbdjgtkcvoi:***@aws-1-ca-central-1.pooler.supabase.com:5432/postgres
-  CORS_ORIGINS         http://localhost:5173,https://elpaso-events.pages.dev
-  SUPABASE_URL         https://agdarjcpgwbdjgtkcvoi.supabase.co      (needed for ES256 auth)
-  SUPABASE_JWT_SECRET  <legacy secret>                              (fallback only)
+  sync-events   cron 0 11 * * *              re-scrape + upsert daily
+  keepalive     cron 0 12 1,7,13,19,25 * *   ping /health so free-tier
+                                             Supabase doesn't auto-pause
 
 
-NOTES / decisions so far
+CONFIG THAT BIT US — keep it this way
 ------------------------------------------------------------------------
-  - Supabase project is ELP (agdarjcpgwbdjgtkcvoi), NOT atlasly.
-  - DB connection: Session pooler (IPv4, port 5432) — right for a Render server.
-  - Tokens are ES256 -> backend verifies via Supabase JWKS (fix pushed: 41437c7).
-  - Frontend stays untouched until phase 3.
+  - Render needs SUPABASE_URL. Logins are ES256, verified against that
+    project's JWKS. Missing it => every authed request 401s. Not a secret.
+  - Use the apex URL (elpaso-events.pages.dev). Each `npm run deploy` also
+    publishes a <hash>.elpaso-events.pages.dev preview — which is what
+    Cloudflare shows you. Easy to test the wrong site. CORS covers both.
+  - "Works local, broken prod" misleads: most user data is local-first, so
+    server 401s fail silently. Only /pipeline/extract hard-depends on the
+    backend — debug prod auth there, not on saves.
+
+
+STILL OPEN
+------------------------------------------------------------------------
+  - DEFERRED: full auto-scrape of IG/FB/TikTok posts. Paste-a-link
+    extraction ships today; auto-pull needs a vision LLM (paid key) and a
+    way past each platform's login wall.
+  - LIMIT: Supabase free-tier email is rate-limited and can land in spam.
+    Fine for a demo; a real launch wants custom SMTP.
+
+
+  Render redeploys only on push to main. Cloudflare deploys on
+  `npm run deploy`. Full runbook: docs/deploy.md
 ========================================================================

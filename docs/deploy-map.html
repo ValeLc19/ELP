@@ -1,467 +1,211 @@
 <title>ELP Deployment Map</title>
-<style>
-  :root {
-    --bg: #f2f4f7;
-    --surface: #ffffff;
-    --surface-2: #eaecf2;
-    --ink: #171a21;
-    --ink-soft: #5b6274;
-    --ink-faint: #8b91a1;
-    --line: #d8dce4;
-    --line-strong: #c3c8d3;
-    --accent: #4f46e5;
-    --accent-soft: rgba(79, 70, 229, 0.10);
-    --done: #17915a;
-    --done-soft: rgba(23, 145, 90, 0.12);
-    --active: #b25f00;
-    --active-soft: rgba(178, 95, 0, 0.12);
-    --blocked: #cf3d3d;
-    --blocked-soft: rgba(207, 61, 61, 0.12);
-    --pending: #7a8090;
-    --pending-soft: rgba(122, 128, 144, 0.10);
-    --cf: #e8873b;
-    --render-c: #6d5ef0;
-    --supa: #2bbd7e;
-    --shadow: 0 1px 2px rgba(16, 20, 30, 0.05), 0 8px 24px -12px rgba(16, 20, 30, 0.12);
-    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
-    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #0d0f15;
-      --surface: #161922;
-      --surface-2: #1e222e;
-      --ink: #e9ebf1;
-      --ink-soft: #99a0b1;
-      --ink-faint: #6b7284;
-      --line: #282d3a;
-      --line-strong: #363c4c;
-      --accent: #8079ff;
-      --accent-soft: rgba(128, 121, 255, 0.14);
-      --done: #35c586;
-      --done-soft: rgba(53, 197, 134, 0.14);
-      --active: #e19338;
-      --active-soft: rgba(225, 147, 56, 0.14);
-      --blocked: #f06565;
-      --blocked-soft: rgba(240, 101, 101, 0.15);
-      --pending: #7b8296;
-      --pending-soft: rgba(123, 130, 150, 0.12);
-      --cf: #f0954a;
-      --render-c: #8b7dff;
-      --supa: #3ecf8e;
-      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px -16px rgba(0, 0, 0, 0.6);
-    }
-  }
-  :root[data-theme="light"] {
-    --bg: #f2f4f7; --surface: #ffffff; --surface-2: #eaecf2;
-    --ink: #171a21; --ink-soft: #5b6274; --ink-faint: #8b91a1;
-    --line: #d8dce4; --line-strong: #c3c8d3;
-    --accent: #4f46e5; --accent-soft: rgba(79, 70, 229, 0.10);
-    --done: #17915a; --done-soft: rgba(23,145,90,0.12);
-    --active: #b25f00; --active-soft: rgba(178,95,0,0.12);
-    --blocked: #cf3d3d; --blocked-soft: rgba(207,61,61,0.12);
-    --pending: #7a8090; --pending-soft: rgba(122,128,144,0.10);
-    --cf: #e8873b; --render-c: #6d5ef0; --supa: #2bbd7e;
-    --shadow: 0 1px 2px rgba(16,20,30,0.05), 0 8px 24px -12px rgba(16,20,30,0.12);
-  }
-  :root[data-theme="dark"] {
-    --bg: #0d0f15; --surface: #161922; --surface-2: #1e222e;
-    --ink: #e9ebf1; --ink-soft: #99a0b1; --ink-faint: #6b7284;
-    --line: #282d3a; --line-strong: #363c4c;
-    --accent: #8079ff; --accent-soft: rgba(128,121,255,0.14);
-    --done: #35c586; --done-soft: rgba(53,197,134,0.14);
-    --active: #e19338; --active-soft: rgba(225,147,56,0.14);
-    --blocked: #f06565; --blocked-soft: rgba(240,101,101,0.15);
-    --pending: #7b8296; --pending-soft: rgba(123,130,150,0.12);
-    --cf: #f0954a; --render-c: #8b7dff; --supa: #3ecf8e;
-    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 32px -16px rgba(0,0,0,0.6);
-  }
+<div style="background:#0d1117;color:#e6edf3;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;padding:26px 24px;margin:-8px;line-height:1.5">
 
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--sans);
-    line-height: 1.55;
-    -webkit-font-smoothing: antialiased;
-  }
-  .wrap {
-    max-width: 940px;
-    margin: 0 auto;
-    padding: clamp(24px, 5vw, 56px) clamp(16px, 4vw, 32px) 72px;
-  }
-  .eyebrow {
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-    margin: 0 0 10px;
-  }
-  h1 {
-    font-size: clamp(26px, 4.4vw, 38px);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    text-wrap: balance;
-    margin: 0 0 12px;
-    font-weight: 680;
-  }
-  .lede {
-    font-size: clamp(15px, 1.9vw, 17px);
-    color: var(--ink-soft);
-    max-width: 62ch;
-    margin: 0;
-  }
-  .lede b { color: var(--ink); font-weight: 620; }
+  <!-- header -->
+  <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;margin:0 0 4px">
+    <h1 style="font-size:24px;margin:0;letter-spacing:-.2px">ELP — Deployment Map</h1>
+    <span style="font:600 11px/1 -apple-system,sans-serif;letter-spacing:.6px;color:#3fb950;background:rgba(63,185,80,.13);border:1px solid rgba(63,185,80,.35);border-radius:999px;padding:5px 10px">&#9679; ALL SYSTEMS LIVE</span>
+  </div>
+  <div style="color:#9aa7b4;font-size:13px;margin:0 0 22px">
+    Three managed services, each doing one job &middot; frontend, backend and database all deployed &middot; July 2026
+  </div>
 
-  section { margin-top: clamp(38px, 6vw, 60px); }
-  .section-head {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--line);
-    padding-bottom: 10px;
-  }
-  .section-head h2 {
-    font-size: 15px;
-    font-weight: 640;
-    margin: 0;
-    letter-spacing: -0.01em;
-  }
-  .section-head .num {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--accent);
-    font-weight: 600;
-  }
+  <!-- architecture -->
+  <div style="font:600 11px/1 -apple-system,sans-serif;letter-spacing:1.2px;color:#6b7a8d;margin:0 0 12px">HOW THE PIECES FIT</div>
 
-  /* ---- architecture diagram ---- */
-  .diagram {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr auto 1fr;
-    align-items: stretch;
-    gap: 0;
-  }
-  .node {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 18px 18px 20px;
-    box-shadow: var(--shadow);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    position: relative;
-  }
-  .node__top {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
-  .node__role {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-  }
-  .node__name { font-size: 18px; font-weight: 650; letter-spacing: -0.01em; }
-  .node__svc { font-family: var(--mono); font-size: 12.5px; color: var(--ink-soft); }
-  .node__desc { font-size: 13px; color: var(--ink-soft); margin-top: 2px; }
-  .node__tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: auto; padding-top: 10px; }
-  .tag {
-    font-family: var(--mono);
-    font-size: 11px;
-    padding: 3px 7px;
-    border-radius: 6px;
-    background: var(--surface-2);
-    color: var(--ink-soft);
-    border: 1px solid var(--line);
-  }
+  <div style="display:flex;flex-wrap:wrap;align-items:stretch;gap:10px;margin:0 0 10px">
 
-  .flow {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 0 6px;
-    min-width: 92px;
-    gap: 6px;
-  }
-  .flow__label {
-    font-family: var(--mono);
-    font-size: 10.5px;
-    color: var(--ink-faint);
-    text-align: center;
-    line-height: 1.35;
-  }
-  .flow__arrow { color: var(--accent); font-size: 20px; line-height: 1; }
-  .flow__arrow.rev { opacity: 0.55; font-size: 15px; }
-
-  /* ---- why grid ---- */
-  .why {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-  }
-  .why__card {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 16px;
-  }
-  .why__card h3 {
-    font-size: 14px; margin: 0 0 6px; font-weight: 640;
-    display: flex; align-items: center; gap: 7px;
-  }
-  .why__card p { font-size: 13px; color: var(--ink-soft); margin: 0; }
-
-  /* ---- phase tracker ---- */
-  .phases { display: flex; flex-direction: column; gap: 2px; }
-  .phase {
-    display: grid;
-    grid-template-columns: 28px 118px 1fr auto;
-    align-items: center;
-    gap: 14px;
-    padding: 13px 14px;
-    border-radius: 10px;
-    position: relative;
-  }
-  .phase + .phase { border-top: 1px solid var(--line); border-radius: 0; }
-  .phase:first-child { border-top-left-radius: 12px; border-top-right-radius: 12px; }
-  .phase:last-child { border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
-  .phase-group {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  .phase__mark {
-    width: 26px; height: 26px; border-radius: 50%;
-    display: grid; place-items: center;
-    font-family: var(--mono); font-size: 13px; font-weight: 600;
-    flex: none;
-  }
-  .phase__num { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); }
-  .phase__title { font-size: 14px; font-weight: 560; }
-  .phase__note { font-size: 12.5px; color: var(--ink-soft); }
-  .phase.blocked { background: var(--blocked-soft); }
-  .phase.active-row { background: var(--active-soft); }
-
-  .pill {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    padding: 3px 9px;
-    border-radius: 999px;
-    font-weight: 600;
-    white-space: nowrap;
-  }
-  .pill.done { background: var(--done-soft); color: var(--done); }
-  .pill.active { background: var(--active-soft); color: var(--active); }
-  .pill.blocked { background: var(--blocked-soft); color: var(--blocked); }
-  .pill.pending { background: var(--pending-soft); color: var(--pending); }
-
-  .mark.done { background: var(--done-soft); color: var(--done); }
-  .mark.active { background: var(--active-soft); color: var(--active); }
-  .mark.blocked { background: var(--blocked); color: #fff; }
-  .mark.pending { background: var(--pending-soft); color: var(--pending); }
-
-  /* ---- blocker card ---- */
-  .blocker {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-left: 3px solid var(--blocked);
-    border-radius: 12px;
-    padding: 20px 22px;
-    box-shadow: var(--shadow);
-  }
-  .blocker h3 {
-    margin: 0 0 4px; font-size: 16px; font-weight: 650;
-    display: flex; align-items: center; gap: 9px;
-  }
-  .blocker .where { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); margin: 0 0 14px; }
-  .blocker p { font-size: 14px; color: var(--ink-soft); margin: 0 0 14px; }
-  .codeflow {
-    font-family: var(--mono);
-    font-size: 12.5px;
-    background: var(--surface-2);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 12px 14px;
-    color: var(--ink-soft);
-    overflow-x: auto;
-    margin: 0 0 16px;
-    white-space: nowrap;
-  }
-  .codeflow .ok { color: var(--done); }
-  .codeflow .fail { color: var(--blocked); font-weight: 600; }
-  .codeflow .arrow { color: var(--ink-faint); padding: 0 4px; }
-  .ask {
-    display: flex; align-items: flex-start; gap: 10px;
-    background: var(--accent-soft);
-    border-radius: 8px;
-    padding: 12px 14px;
-    font-size: 13.5px;
-  }
-  .ask .icon { color: var(--accent); font-weight: 700; flex: none; }
-  .ask b { color: var(--ink); }
-
-  .foot {
-    margin-top: 40px;
-    font-family: var(--mono);
-    font-size: 11.5px;
-    color: var(--ink-faint);
-    text-align: center;
-  }
-
-  @media (max-width: 720px) {
-    .diagram { grid-template-columns: 1fr; }
-    .flow { flex-direction: row; min-width: 0; padding: 12px 0; gap: 10px; }
-    .flow__arrow { transform: rotate(90deg); }
-    .flow__arrow.rev { display: none; }
-    .why { grid-template-columns: 1fr; }
-    .phase { grid-template-columns: 26px 1fr auto; }
-    .phase__num { display: none; }
-    .phase__note { grid-column: 2 / 4; }
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .node, .why__card, .phase-group, .blocker { animation: rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-    .diagram .node:nth-child(3) { animation-delay: 0.06s; }
-    .diagram .node:nth-child(5) { animation-delay: 0.12s; }
-    .pulse { animation: pulse 2.2s ease-in-out infinite; }
-    @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-    @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 var(--blocked-soft); } 50% { box-shadow: 0 0 0 6px transparent; } }
-  }
-</style>
-
-<div class="wrap">
-  <header>
-    <p class="eyebrow">ELP · Deployment in progress</p>
-    <h1>Putting three cloud services behind your events app</h1>
-    <p class="lede">ELP started as a website with no backend — saved events and followed businesses lived only in your browser. We're wiring it to a real backend so that data lives in a database and follows you across devices. That takes <b>three managed services</b>, each doing one job.</p>
-  </header>
-
-  <section>
-    <div class="section-head"><span class="num">01</span><h2>How the pieces fit</h2></div>
-    <div class="diagram">
-      <div class="node">
-        <div class="node__top"><span class="dot" style="background:var(--cf)"></span><span class="node__role">Frontend</span></div>
-        <div class="node__name">Cloudflare Pages</div>
-        <div class="node__svc">project: elp</div>
-        <div class="node__desc">The website itself — the React app people open in their browser. Just static files on a fast global host.</div>
-        <div class="node__tags"><span class="tag">React + Vite</span><span class="tag">wrangler</span></div>
+    <div style="flex:1 1 240px;min-width:240px;background:#0f151d;border:1px solid #1e2733;border-radius:12px;padding:14px 15px">
+      <div style="display:flex;align-items:center;gap:7px;margin:0 0 8px">
+        <span style="width:8px;height:8px;border-radius:50%;background:#f5a623;display:inline-block"></span>
+        <span style="font-weight:700;font-size:14px">Cloudflare Pages</span>
       </div>
+      <div style="color:#58a6ff;font-size:11px;font-weight:600;letter-spacing:.4px;margin:0 0 8px">HOLDS THE SITE</div>
+      <div style="color:#9aa7b4;font-size:12.5px;margin:0 0 10px">The static React app people open. Just files &mdash; cheap and fast.</div>
+      <div style="font:11px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;color:#7ee787;word-break:break-all">elpaso-events.pages.dev</div>
+      <div style="margin-top:9px"><span style="font:10px/1 ui-monospace,monospace;color:#9aa7b4;background:#161d27;border:1px solid #263040;border-radius:5px;padding:3px 6px;display:inline-block">Vite &middot; React SPA</span></div>
+    </div>
 
-      <div class="flow">
-        <div class="flow__label">API calls<br>+ login token</div>
-        <div class="flow__arrow">&rarr;</div>
-        <div class="flow__arrow rev">&larr;</div>
-        <div class="flow__label">events, saves</div>
+    <div style="flex:0 0 92px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 0">
+      <div style="color:#6b7a8d;font-size:10px;text-align:center;margin-bottom:2px">calls +<br>JWT token</div>
+      <div style="color:#58a6ff;font-size:20px;line-height:1">&#8594;</div>
+    </div>
+
+    <div style="flex:1 1 240px;min-width:240px;background:#0f151d;border:1px solid #1e2733;border-radius:12px;padding:14px 15px">
+      <div style="display:flex;align-items:center;gap:7px;margin:0 0 8px">
+        <span style="width:8px;height:8px;border-radius:50%;background:#bc8cff;display:inline-block"></span>
+        <span style="font-weight:700;font-size:14px">Render</span>
       </div>
-
-      <div class="node">
-        <div class="node__top"><span class="dot" style="background:var(--render-c)"></span><span class="node__role">Backend</span></div>
-        <div class="node__name">Render</div>
-        <div class="node__svc">elp-api.onrender.com</div>
-        <div class="node__desc">The API. Serves the event catalog and stores each user's saved events &amp; businesses. Checks every login token before trusting it.</div>
-        <div class="node__tags"><span class="tag">FastAPI</span><span class="tag">Python</span></div>
-      </div>
-
-      <div class="flow">
-        <div class="flow__label">SQL<br>+ verify key</div>
-        <div class="flow__arrow">&rarr;</div>
-        <div class="flow__arrow rev">&larr;</div>
-        <div class="flow__label">rows, JWKS</div>
-      </div>
-
-      <div class="node">
-        <div class="node__top"><span class="dot" style="background:var(--supa)"></span><span class="node__role">Data + Auth</span></div>
-        <div class="node__name">Supabase</div>
-        <div class="node__svc">agdarjcpgw…supabase.co</div>
-        <div class="node__desc">The Postgres database (events, saves, businesses) and the login system that issues each user a signed token.</div>
-        <div class="node__tags"><span class="tag">Postgres</span><span class="tag">Auth · ES256</span></div>
+      <div style="color:#58a6ff;font-size:11px;font-weight:600;letter-spacing:.4px;margin:0 0 8px">HOLDS THE LOGIC</div>
+      <div style="color:#9aa7b4;font-size:12.5px;margin:0 0 10px">FastAPI. Verifies who you are, then reads and writes the database.</div>
+      <div style="font:11px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;color:#7ee787;word-break:break-all">elp-api.onrender.com</div>
+      <div style="margin-top:9px;display:flex;flex-wrap:wrap;gap:4px">
+        <span style="font:10px/1 ui-monospace,monospace;color:#9aa7b4;background:#161d27;border:1px solid #263040;border-radius:5px;padding:3px 6px">/events</span>
+        <span style="font:10px/1 ui-monospace,monospace;color:#9aa7b4;background:#161d27;border:1px solid #263040;border-radius:5px;padding:3px 6px">/me/*</span>
+        <span style="font:10px/1 ui-monospace,monospace;color:#9aa7b4;background:#161d27;border:1px solid #263040;border-radius:5px;padding:3px 6px">/pipeline/extract</span>
       </div>
     </div>
-  </section>
 
-  <section>
-    <div class="section-head"><span class="num">02</span><h2>Why it's split this way</h2></div>
-    <div class="why">
-      <div class="why__card">
-        <h3><span class="dot" style="background:var(--cf)"></span>Cloudflare holds the site</h3>
-        <p>A React app is just files. A static host serves them cheaply and fast — no server needed for the page itself.</p>
+    <div style="flex:0 0 92px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 0">
+      <div style="color:#6b7a8d;font-size:10px;text-align:center;margin-bottom:2px">SQL +<br>verify JWKS</div>
+      <div style="color:#58a6ff;font-size:20px;line-height:1">&#8594;</div>
+    </div>
+
+    <div style="flex:1 1 240px;min-width:240px;background:#0f151d;border:1px solid #1e2733;border-radius:12px;padding:14px 15px">
+      <div style="display:flex;align-items:center;gap:7px;margin:0 0 8px">
+        <span style="width:8px;height:8px;border-radius:50%;background:#3fb950;display:inline-block"></span>
+        <span style="font-weight:700;font-size:14px">Supabase</span>
       </div>
-      <div class="why__card">
-        <h3><span class="dot" style="background:var(--render-c)"></span>Render holds the logic</h3>
-        <p>A browser can't be trusted with everyone's data. The API is the gatekeeper: it verifies who you are, then reads/writes the database on your behalf.</p>
-      </div>
-      <div class="why__card">
-        <h3><span class="dot" style="background:var(--supa)"></span>Supabase holds the truth</h3>
-        <p>One place for the real data and for login. It signs a token when you sign in; the backend checks that signature against Supabase's public key.</p>
+      <div style="color:#58a6ff;font-size:11px;font-weight:600;letter-spacing:.4px;margin:0 0 8px">HOLDS THE TRUTH</div>
+      <div style="color:#9aa7b4;font-size:12.5px;margin:0 0 10px">Postgres + Auth. The database, and the login that signs your token.</div>
+      <div style="font:11px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;color:#7ee787;word-break:break-all">agdarjcpgw&hellip;supabase.co</div>
+      <div style="margin-top:9px;display:flex;flex-wrap:wrap;gap:4px">
+        <span style="font:10px/1 ui-monospace,monospace;color:#9aa7b4;background:#161d27;border:1px solid #263040;border-radius:5px;padding:3px 6px">Postgres</span>
+        <span style="font:10px/1 ui-monospace,monospace;color:#9aa7b4;background:#161d27;border:1px solid #263040;border-radius:5px;padding:3px 6px">ES256 auth</span>
+        <span style="font:10px/1 ui-monospace,monospace;color:#9aa7b4;background:#161d27;border:1px solid #263040;border-radius:5px;padding:3px 6px">RLS</span>
       </div>
     </div>
-  </section>
+  </div>
 
-  <section>
-    <div class="section-head"><span class="num">03</span><h2>Where we are right now</h2></div>
-    <div class="phase-group phases">
-      <div class="phase">
-        <div class="phase__mark mark done">&#10003;</div>
-        <div><div class="phase__num">phase 0</div><div class="phase__title">Build &amp; merge the code</div></div>
-        <div class="phase__note">Backend + frontend wiring + Cloudflare config, merged to <code>main</code>.</div>
-        <span class="pill done">Done</span>
-      </div>
-      <div class="phase">
-        <div class="phase__mark mark done">&#10003;</div>
-        <div><div class="phase__num">phase 1</div><div class="phase__title">Collect Supabase keys</div></div>
-        <div class="phase__note">Connection string + JWT details from the ELP project.</div>
-        <span class="pill done">Done</span>
-      </div>
-      <div class="phase blocked">
-        <div class="phase__mark mark blocked pulse">!</div>
-        <div><div class="phase__num">phase 2</div><div class="phase__title">Deploy the backend</div></div>
-        <div class="phase__note">Render build succeeds, but the app exits on startup. Reading the log to find why.</div>
-        <span class="pill blocked">You are here</span>
-      </div>
-      <div class="phase">
-        <div class="phase__mark mark pending">3</div>
-        <div><div class="phase__num">phase 3</div><div class="phase__title">Deploy the frontend</div></div>
-        <div class="phase__note">Push the site to Cloudflare Pages with <code>npm run deploy</code>.</div>
-        <span class="pill pending">Next</span>
-      </div>
-      <div class="phase">
-        <div class="phase__mark mark pending">4</div>
-        <div><div class="phase__num">phase 4</div><div class="phase__title">Connect the two sides</div></div>
-        <div class="phase__note">Allow the site's URL in the backend (CORS) + Supabase auth settings.</div>
-        <span class="pill pending">Pending</span>
-      </div>
-      <div class="phase">
-        <div class="phase__mark mark pending">5</div>
-        <div><div class="phase__num">phase 5</div><div class="phase__title">Verify end to end</div></div>
-        <div class="phase__note">Sign in, save an event, confirm it syncs across devices.</div>
-        <span class="pill pending">Pending</span>
-      </div>
+  <div style="color:#6b7a8d;font-size:11.5px;margin:0 0 26px;padding-left:2px">
+    Tokens are <strong style="color:#9aa7b4;font-weight:600">ES256</strong> &mdash; the backend verifies them against Supabase's public JWKS, so it never needs a shared secret.
+  </div>
+
+  <!-- progress -->
+  <div style="font:600 11px/1 -apple-system,sans-serif;letter-spacing:1.2px;color:#6b7a8d;margin:0 0 12px">WHERE WE ARE</div>
+
+  <div style="background:#0f151d;border:1px solid #1e2733;border-radius:12px;padding:6px 4px;margin:0 0 26px">
+    <div style="display:flex;align-items:center;gap:11px;padding:9px 13px;border-bottom:1px solid #161d27">
+      <span style="color:#3fb950;font-size:13px;width:14px">&#10003;</span>
+      <span style="flex:1;font-size:13.5px">Build and merge the code</span>
+      <span style="font:600 10px/1 -apple-system,sans-serif;letter-spacing:.5px;color:#3fb950;background:rgba(63,185,80,.12);border-radius:5px;padding:4px 8px">DONE</span>
     </div>
-  </section>
-
-  <section>
-    <div class="section-head"><span class="num">04</span><h2>The one thing blocking us</h2></div>
-    <div class="blocker">
-      <h3><span class="dot pulse" style="background:var(--blocked)"></span>The backend won't finish starting</h3>
-      <p class="where">Render · service elp-api · status: deploy failed (exit 1)</p>
-      <p>When the backend boots, it runs three commands in a row. It gets partway and then one of them fails, so Render marks the whole deploy failed. The failure message is generic — the real reason is one specific line in the logs.</p>
-      <div class="codeflow">alembic upgrade head <span class="arrow">&rarr;</span> seed 152 events <span class="arrow">&rarr;</span> start server <span class="fail">&nbsp;&#10007; exits here somewhere</span></div>
-      <div class="ask">
-        <span class="icon">&#9432;</span>
-        <div>What I need from you: a <b>screenshot of the Render <span style="font-family:var(--mono)">Logs</span> tab</b> — the black console, scrolled to the red error / <span style="font-family:var(--mono)">Traceback</span>. That single line tells us whether it's the database connection, the migration, or the app — and the fix follows immediately.</div>
-      </div>
+    <div style="display:flex;align-items:center;gap:11px;padding:9px 13px;border-bottom:1px solid #161d27">
+      <span style="color:#3fb950;font-size:13px;width:14px">&#10003;</span>
+      <span style="flex:1;font-size:13.5px">Supabase project and keys <span style="color:#6b7a8d;font-size:12px">&middot; auth, Postgres, RLS on</span></span>
+      <span style="font:600 10px/1 -apple-system,sans-serif;letter-spacing:.5px;color:#3fb950;background:rgba(63,185,80,.12);border-radius:5px;padding:4px 8px">DONE</span>
     </div>
-  </section>
+    <div style="display:flex;align-items:center;gap:11px;padding:9px 13px;border-bottom:1px solid #161d27">
+      <span style="color:#3fb950;font-size:13px;width:14px">&#10003;</span>
+      <span style="flex:1;font-size:13.5px">Deploy the backend <span style="color:#6b7a8d;font-size:12px">&middot; Render &middot; migrations + seed</span></span>
+      <span style="font:600 10px/1 -apple-system,sans-serif;letter-spacing:.5px;color:#3fb950;background:rgba(63,185,80,.12);border-radius:5px;padding:4px 8px">LIVE</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:11px;padding:9px 13px;border-bottom:1px solid #161d27">
+      <span style="color:#3fb950;font-size:13px;width:14px">&#10003;</span>
+      <span style="flex:1;font-size:13.5px">Deploy the frontend <span style="color:#6b7a8d;font-size:12px">&middot; Cloudflare Pages &middot; wrangler</span></span>
+      <span style="font:600 10px/1 -apple-system,sans-serif;letter-spacing:.5px;color:#3fb950;background:rgba(63,185,80,.12);border-radius:5px;padding:4px 8px">LIVE</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:11px;padding:9px 13px;border-bottom:1px solid #161d27">
+      <span style="color:#3fb950;font-size:13px;width:14px">&#10003;</span>
+      <span style="flex:1;font-size:13.5px">Connect the two sides <span style="color:#6b7a8d;font-size:12px">&middot; CORS + Supabase auth URLs</span></span>
+      <span style="font:600 10px/1 -apple-system,sans-serif;letter-spacing:.5px;color:#3fb950;background:rgba(63,185,80,.12);border-radius:5px;padding:4px 8px">DONE</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:11px;padding:9px 13px">
+      <span style="color:#3fb950;font-size:13px;width:14px">&#10003;</span>
+      <span style="flex:1;font-size:13.5px">Verify end to end <span style="color:#6b7a8d;font-size:12px">&middot; 250 events served from prod</span></span>
+      <span style="font:600 10px/1 -apple-system,sans-serif;letter-spacing:.5px;color:#3fb950;background:rgba(63,185,80,.12);border-radius:5px;padding:4px 8px">VERIFIED</span>
+    </div>
+  </div>
 
-  <p class="foot">ELP · this map updates as we go &nbsp;·&nbsp; frontend untouched until phase 3</p>
+  <!-- events pipeline -->
+  <div style="font:600 11px/1 -apple-system,sans-serif;letter-spacing:1.2px;color:#6b7a8d;margin:0 0 12px">WHERE THE EVENTS COME FROM</div>
+
+  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 12px">
+    <div style="flex:1 1 128px;background:#0f151d;border:1px solid #1e2733;border-radius:9px;padding:10px 11px;text-align:center">
+      <div style="font-size:12.5px;font-weight:600">visitelpaso.com</div>
+      <div style="color:#6b7a8d;font-size:10.5px;margin-top:2px">sitemap &middot; JSON-LD</div>
+    </div>
+    <div style="color:#58a6ff;font-size:16px;flex:0 0 auto">&#8594;</div>
+    <div style="flex:1 1 128px;background:#0f151d;border:1px solid #1e2733;border-radius:9px;padding:10px 11px;text-align:center">
+      <div style="font-size:12.5px;font-weight:600">GitHub Actions</div>
+      <div style="color:#6b7a8d;font-size:10.5px;margin-top:2px">daily 11:00 UTC</div>
+    </div>
+    <div style="color:#58a6ff;font-size:16px;flex:0 0 auto">&#8594;</div>
+    <div style="flex:1 1 128px;background:#0f151d;border:1px solid #1e2733;border-radius:9px;padding:10px 11px;text-align:center">
+      <div style="font-size:12.5px;font-weight:600">Supabase</div>
+      <div style="color:#6b7a8d;font-size:10.5px;margin-top:2px">events table</div>
+    </div>
+    <div style="color:#58a6ff;font-size:16px;flex:0 0 auto">&#8594;</div>
+    <div style="flex:1 1 128px;background:#0f151d;border:1px solid #1e2733;border-radius:9px;padding:10px 11px;text-align:center">
+      <div style="font-size:12.5px;font-weight:600">GET /events</div>
+      <div style="color:#6b7a8d;font-size:10.5px;margin-top:2px">public, no auth</div>
+    </div>
+    <div style="color:#58a6ff;font-size:16px;flex:0 0 auto">&#8594;</div>
+    <div style="flex:1 1 128px;background:#0f151d;border:1px solid #1e2733;border-radius:9px;padding:10px 11px;text-align:center">
+      <div style="font-size:12.5px;font-weight:600">The app</div>
+      <div style="color:#6b7a8d;font-size:10.5px;margin-top:2px">map &middot; list &middot; calendar</div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:7px;margin:0 0 8px">
+    <span style="font:11px/1 -apple-system,sans-serif;color:#e6edf3;background:#161d27;border:1px solid #263040;border-radius:6px;padding:6px 9px"><strong>250</strong> <span style="color:#6b7a8d">live events</span></span>
+    <span style="font:11px/1 -apple-system,sans-serif;color:#9aa7b4;background:#161d27;border:1px solid #263040;border-radius:6px;padding:6px 9px">Arts 100</span>
+    <span style="font:11px/1 -apple-system,sans-serif;color:#9aa7b4;background:#161d27;border:1px solid #263040;border-radius:6px;padding:6px 9px">Outdoors 41</span>
+    <span style="font:11px/1 -apple-system,sans-serif;color:#9aa7b4;background:#161d27;border:1px solid #263040;border-radius:6px;padding:6px 9px">Food 40</span>
+    <span style="font:11px/1 -apple-system,sans-serif;color:#9aa7b4;background:#161d27;border:1px solid #263040;border-radius:6px;padding:6px 9px">Markets 40</span>
+    <span style="font:11px/1 -apple-system,sans-serif;color:#9aa7b4;background:#161d27;border:1px solid #263040;border-radius:6px;padding:6px 9px">Music 17</span>
+    <span style="font:11px/1 -apple-system,sans-serif;color:#9aa7b4;background:#161d27;border:1px solid #263040;border-radius:6px;padding:6px 9px">Sports 12</span>
+  </div>
+  <div style="color:#6b7a8d;font-size:11.5px;margin:0 0 26px;padding-left:2px">
+    The scrape runs in GitHub Actions, not on the Render dyno &mdash; a 1,350-URL crawl would blow the request timeout. Images are themed Unsplash stock, never visitelpaso's copyrighted art.
+  </div>
+
+  <!-- automation -->
+  <div style="font:600 11px/1 -apple-system,sans-serif;letter-spacing:1.2px;color:#6b7a8d;margin:0 0 12px">WHAT RUNS ON ITS OWN</div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:10px;margin:0 0 26px">
+    <div style="flex:1 1 260px;background:#0f151d;border:1px solid #1e2733;border-radius:12px;padding:13px 15px">
+      <div style="font-weight:700;font-size:13.5px;margin:0 0 3px">sync-events</div>
+      <div style="font:10.5px/1 ui-monospace,monospace;color:#d29922;margin:0 0 8px">cron: 0 11 * * *</div>
+      <div style="color:#9aa7b4;font-size:12.5px">Re-scrapes visitelpaso daily and upserts into Postgres. Owns and prunes only its own rows, so the curated seed survives as a fallback.</div>
+    </div>
+    <div style="flex:1 1 260px;background:#0f151d;border:1px solid #1e2733;border-radius:12px;padding:13px 15px">
+      <div style="font-weight:700;font-size:13.5px;margin:0 0 3px">keepalive</div>
+      <div style="font:10.5px/1 ui-monospace,monospace;color:#d29922;margin:0 0 8px">cron: 0 12 1,7,13,19,25 * *</div>
+      <div style="color:#9aa7b4;font-size:12.5px">Pings <span style="font-family:ui-monospace,monospace;font-size:11.5px">/health</span> every ~6 days. Free-tier Supabase auto-pauses after 7 idle days; this tiny DB touch counts as activity.</div>
+    </div>
+  </div>
+
+  <!-- gotchas -->
+  <div style="font:600 11px/1 -apple-system,sans-serif;letter-spacing:1.2px;color:#6b7a8d;margin:0 0 12px">CONFIG THAT BIT US &mdash; KEEP IT THIS WAY</div>
+
+  <div style="display:flex;flex-direction:column;gap:8px;margin:0 0 26px">
+    <div style="background:rgba(210,153,34,.06);border:1px solid rgba(210,153,34,.28);border-left:3px solid #d29922;border-radius:9px;padding:11px 13px">
+      <div style="font-size:13px;font-weight:600;margin:0 0 3px">Render needs <span style="font-family:ui-monospace,monospace;font-size:12px;color:#d29922">SUPABASE_URL</span></div>
+      <div style="color:#9aa7b4;font-size:12.5px">Logins are signed ES256 and verified against that project's JWKS. Without it, <em>every</em> authenticated request 401s. It is not a secret &mdash; it is the public project URL.</div>
+    </div>
+    <div style="background:rgba(210,153,34,.06);border:1px solid rgba(210,153,34,.28);border-left:3px solid #d29922;border-radius:9px;padding:11px 13px">
+      <div style="font-size:13px;font-weight:600;margin:0 0 3px">Use the apex URL, not the preview</div>
+      <div style="color:#9aa7b4;font-size:12.5px">Every <span style="font-family:ui-monospace,monospace;font-size:12px">npm run deploy</span> also publishes a <span style="font-family:ui-monospace,monospace;font-size:12px">&lt;hash&gt;.elpaso-events.pages.dev</span> preview &mdash; which is what Cloudflare shows you afterwards. Easy to test the wrong site. CORS covers both via regex.</div>
+    </div>
+    <div style="background:rgba(210,153,34,.06);border:1px solid rgba(210,153,34,.28);border-left:3px solid #d29922;border-radius:9px;padding:11px 13px">
+      <div style="font-size:13px;font-weight:600;margin:0 0 3px">"Works local, broken prod" is misleading</div>
+      <div style="color:#9aa7b4;font-size:12.5px">Most user data is local-first, so server 401s fail <em>silently</em>. Only <span style="font-family:ui-monospace,monospace;font-size:12px">/pipeline/extract</span> hard-depends on the backend &mdash; debug prod auth there, not on saves.</div>
+    </div>
+  </div>
+
+  <!-- still open -->
+  <div style="font:600 11px/1 -apple-system,sans-serif;letter-spacing:1.2px;color:#6b7a8d;margin:0 0 12px">STILL OPEN</div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:10px;margin:0 0 6px">
+    <div style="flex:1 1 260px;background:#0f151d;border:1px solid #1e2733;border-radius:12px;padding:13px 15px">
+      <div style="display:flex;align-items:center;gap:7px;margin:0 0 5px">
+        <span style="font:700 9.5px/1 -apple-system,sans-serif;letter-spacing:.5px;color:#d29922;background:rgba(210,153,34,.14);border-radius:4px;padding:4px 6px">DEFERRED</span>
+        <span style="font-weight:700;font-size:13.5px">Auto-scrape social posts</span>
+      </div>
+      <div style="color:#9aa7b4;font-size:12.5px">Paste-a-link extraction ships today. Full Instagram / Facebook / TikTok auto-pull needs a vision LLM (paid key) and a way past each platform's login wall.</div>
+    </div>
+    <div style="flex:1 1 260px;background:#0f151d;border:1px solid #1e2733;border-radius:12px;padding:13px 15px">
+      <div style="display:flex;align-items:center;gap:7px;margin:0 0 5px">
+        <span style="font:700 9.5px/1 -apple-system,sans-serif;letter-spacing:.5px;color:#9aa7b4;background:#161d27;border-radius:4px;padding:4px 6px">LIMIT</span>
+        <span style="font-weight:700;font-size:13.5px">Email deliverability</span>
+      </div>
+      <div style="color:#9aa7b4;font-size:12.5px">Supabase's free-tier sender is rate-limited and can land in spam. Fine for a demo; a real launch wants custom SMTP.</div>
+    </div>
+  </div>
+
+  <div style="color:#6b7a8d;font-size:11px;margin-top:20px;border-top:1px solid #1e2733;padding-top:12px">
+    Render redeploys only on push to <span style="font-family:ui-monospace,monospace">main</span> &middot; Cloudflare deploys on <span style="font-family:ui-monospace,monospace">npm run deploy</span> &middot; full runbook in <span style="font-family:ui-monospace,monospace">docs/deploy.md</span>
+  </div>
+
 </div>
