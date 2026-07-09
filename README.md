@@ -56,11 +56,19 @@ Next: businesses connecting their own social accounts so their events import aut
 
 <img width="1394" height="750" alt="Screenshot 2026-07-08 at 6 16 03 pm" src="https://github.com/user-attachments/assets/ee7ffabb-06af-49d5-aaf5-4e63d8cd6e12" />
 
-<img width="903" height="600" alt="Screenshot 2026-07-08 at 6 21 27 pm" src="https://github.com/user-attachments/assets/548074dc-b4d5-42e1-8da2-9c7a9e72e388" />
+<img width="1091" height="853" alt="Screenshot 2026-07-09 at 1 00 01 pm" src="https://github.com/user-attachments/assets/6ce2710c-c3d4-4469-a0f6-ac596e0fe0fe" />
+
+<img width="1127" height="707" alt="Screenshot 2026-07-09 at 12 57 45 pm" src="https://github.com/user-attachments/assets/8214dfc7-cc3b-4dac-ad4e-b82958de10f2" />
 
 <img width="903" height="781" alt="Screenshot 2026-07-08 at 6 30 49 pm" src="https://github.com/user-attachments/assets/92a0be0c-9e21-453f-8bdc-ae5de3e46442" />
 
-<img width="1158" height="653" alt="Screenshot 2026-07-08 at 6 35 32 pm" src="https://github.com/user-attachments/assets/eed7f020-2163-4b12-bc59-418354581de0" />
+<img width="1408" height="530" alt="Screenshot 2026-07-09 at 1 10 33 pm" src="https://github.com/user-attachments/assets/93d8a7b0-3dd0-4694-adc9-d643d675292b" />
+
+<img width="1160" height="661" alt="Screenshot 2026-07-09 at 1 11 53 pm" src="https://github.com/user-attachments/assets/0e117ec7-46a5-4df9-9118-22c1900ffa59" />
+
+<img width="1160" height="630" alt="Screenshot 2026-07-09 at 1 18 42 pm" src="https://github.com/user-attachments/assets/52d79444-375c-435f-8f60-b3b970573e5a" />
+
+<img width="1160" height="630" alt="Screenshot 2026-07-09 at 1 19 37 pm" src="https://github.com/user-attachments/assets/44f67b58-b114-4164-8ecc-b8570bbd68b3" />
 
 <img width="1452" height="814" alt="Screenshot 2026-07-08 at 6 37 13 pm" src="https://github.com/user-attachments/assets/e4f1b851-dad1-46b8-a9d6-4eea6c2305b2" />
 
