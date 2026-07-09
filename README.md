@@ -53,3 +53,20 @@ Live and working **→ [elpaso-events.pages.dev](https://elpaso-events.pages.dev
 Note: I also designed the social-media import flow and then shipped the curated version first. The automatic import depends on platform APIs I couldn't get working reliably in the time I had, and a working app with real events beats a broken app with an ambitious feature.
 
 Next: businesses connecting their own social accounts so their events import automatically.
+
+<img width="1394" height="750" alt="Screenshot 2026-07-08 at 6 16 03 pm" src="https://github.com/user-attachments/assets/ee7ffabb-06af-49d5-aaf5-4e63d8cd6e12" />
+
+<img width="903" height="600" alt="Screenshot 2026-07-08 at 6 21 27 pm" src="https://github.com/user-attachments/assets/548074dc-b4d5-42e1-8da2-9c7a9e72e388" />
+
+<img width="903" height="781" alt="Screenshot 2026-07-08 at 6 30 49 pm" src="https://github.com/user-attachments/assets/92a0be0c-9e21-453f-8bdc-ae5de3e46442" />
+
+<img width="1158" height="653" alt="Screenshot 2026-07-08 at 6 35 32 pm" src="https://github.com/user-attachments/assets/eed7f020-2163-4b12-bc59-418354581de0" />
+
+<img width="1452" height="814" alt="Screenshot 2026-07-08 at 6 37 13 pm" src="https://github.com/user-attachments/assets/e4f1b851-dad1-46b8-a9d6-4eea6c2305b2" />
+
+<img width="243" height="695" alt="Screenshot 2026-07-08 at 6 43 05 pm" src="https://github.com/user-attachments/assets/8594119c-7cae-4d0e-8e64-48bf49bb144c" />
+
+
+
+
+
