@@ -788,20 +788,39 @@
   flex-direction: column;
   flex: 1;
 }
-.ev-card__head {
+/* Eyebrow: the category chip, above the title. Fixed in place, so a long title
+   can no longer shove it down the card. */
+.ev-card__eyebrow {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 0.45rem;
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.55rem;
 }
+
 .ev-card__title {
   font-family: var(--serif);
   font-size: 1.6rem;
-  margin: 0;
+  line-height: 1.15;
+  margin: 0 0 0.5rem;
+  /* Exactly two lines on every card: clamp anything longer, and reserve the
+     second line with min-height so a one-line title doesn't collapse the band
+     and pull the date up. --title-lines keeps the two values in step. */
+  --title-lines: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--title-lines);
+  line-clamp: var(--title-lines);
+  overflow: hidden;
+  min-height: calc(var(--title-lines) * 1.15em);
   overflow-wrap: break-word;
   min-width: 0;
   max-width: 100%;
+}
+
+/* Sits directly under the fixed-height title band, so it aligns for free. */
+.ev-card__date {
+  margin: 0 0 0.35rem;
 }
 
 .badge {

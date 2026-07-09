@@ -151,6 +151,78 @@ def _base_slug(slug: str) -> str:
     return re.sub(r"-\d{4}-\d{2}-\d{2}$", "", re.sub(r"^\d+-", "", slug))
 
 
+# Titles often end in a parenthetical that just restates the category chip
+# ("(exhibition)", "(pop-up exhibition)") -- it's usually what pushes a card
+# title past two lines. Some are also shouted in all-caps. Mirrors cleanTitle()
+# in src/data/events.js, which repeats this client-side for rows synced before
+# this ran.
+_REDUNDANT_PAREN = re.compile(
+    r"^(?:an?\s+)?(?:free\s+)?(?:pop[-\s]?up\s+|art\s+|gallery\s+|film\s+|live\s+|group\s+|solo\s+)*"
+    r"(?:exhibition|exhibit|showcase|show|concert|festival|workshop|class|screening|"
+    r"performance|reading|lecture|tour|market)s?$",
+    re.I,
+)
+_TRAILING_PAREN = re.compile(r"^(.*\S)\s*\(([^()]+)\)\s*$")
+_ACRONYMS = {
+    "USA", "US", "EP", "TX", "NM", "AI", "DJ", "BBQ", "UTEP", "ELP",
+    "VIP", "NYE", "II", "III", "IV",
+}
+# kept lower-case mid-title; includes Spanish particles (many listings are
+# bilingual)
+_SMALL_WORDS = {
+    "a", "an", "and", "as", "at", "but", "by", "de", "del", "e", "el", "en",
+    "for", "from", "in", "la", "las", "los", "of", "on", "or", "the", "to",
+    "vs", "with", "y",
+}
+
+
+def _is_shouting(title: str) -> bool:
+    letters = [c for c in title if c.isalpha()]
+    if len(letters) < 5:
+        return False
+    return sum(1 for c in letters if c.isupper()) / len(letters) >= 0.7
+
+
+def _calm_caps(title: str) -> str:
+    # Title case, not sentence case: an all-caps source gives no way to tell a
+    # proper noun from a common one, and sentence case would flatten names
+    # ("EDITH MARQUEZ" -> "Edith marquez").
+    words = title.lower().split(" ")
+    out = []
+    for i, w in enumerate(words):
+        bare = "".join(c for c in w if c.isalpha())
+        if len(bare) > 1 and bare.upper() in _ACRONYMS:
+            out.append(w.upper())
+            continue
+        middle = i not in (0, len(words) - 1)
+        if middle and bare in _SMALL_WORDS:
+            out.append(w)
+            continue
+        # capitalise the first letter, leaving any leading punctuation intact
+        for j, c in enumerate(w):
+            if c.isalpha():
+                out.append(w[:j] + c.upper() + w[j + 1 :])
+                break
+        else:
+            out.append(w)
+    return " ".join(out)
+
+
+def _clean_title(raw: str) -> str:
+    if not isinstance(raw, str):
+        return raw
+    t = raw.strip()
+    for _ in range(2):  # trailing only, at most twice
+        m = _TRAILING_PAREN.match(t)
+        if not m or not _REDUNDANT_PAREN.match(m.group(2).strip()):
+            break
+        t = m.group(1).strip()
+    t = re.sub(r"\s+", " ", t).strip()
+    if _is_shouting(t):
+        t = _calm_caps(t)
+    return t or raw.strip()
+
+
 def _clean_address(addr):
     """Collapse newlines/whitespace for display."""
     if not addr:
@@ -251,7 +323,7 @@ def run(dry: bool = False) -> int:
                 skip["online"] += 1
                 continue
 
-            title = _text(node.get("name")) or ""
+            title = _clean_title(_text(node.get("name")) or "")
             about = _text(node.get("description")) or ""
             addr = _clean_address(_address(loc))
             blob = f"{title} {about} {addr or ''}"

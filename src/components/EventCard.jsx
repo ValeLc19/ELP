@@ -100,8 +100,9 @@ export default function EventCard({
       </div>
 
       <div className="ev-card__body">
-        <div className="ev-card__head">
-          <h3 className="ev-card__title">{event.title}</h3>
+        {/* Three bands that line up across every card in a row: eyebrow,
+            two-line title, date. Everything below is free to vary. */}
+        <div className="ev-card__eyebrow">
           <span
             className="badge badge--filled"
             style={{ background: categoryTint(event.category), color: 'var(--ink)' }}
@@ -114,35 +115,36 @@ export default function EventCard({
           </span>
         </div>
 
+        <h3 className="ev-card__title" title={event.title}>
+          {event.title}
+        </h3>
+
+        <p className="ev-meta ev-card__date">
+          <CalendarIcon /> {event.date}
+          {event.time ? ` · ${event.time}` : ''}
+          {event.recurLabel && (
+            <span className="recur-tag">{t(`recur_${event.recurLabel}`)}</span>
+          )}
+        </p>
+
         {event.fromBusiness && (
           <p className="ev-card__from">
             <ShopIcon width={14} height={14} /> {event.businessName}
           </p>
         )}
 
-        {compact ? (
-          <p className="ev-meta">
-            <CalendarIcon /> {event.date} · {event.time}
-            {event.recurLabel && (
-              <span className="recur-tag">{t(`recur_${event.recurLabel}`)}</span>
-            )}
-          </p>
-        ) : (
+        {!compact && (
           <>
             {event.family && (
               <p className="ev-meta">
                 <UsersIcon /> {t('familyEvent')}
               </p>
             )}
-            <p className="ev-meta">
-              <LocationIcon /> {event.address}
-            </p>
-            <p className="ev-meta">
-              <CalendarIcon /> {event.date} · {event.time}
-              {event.recurLabel && (
-                <span className="recur-tag">{t(`recur_${event.recurLabel}`)}</span>
-              )}
-            </p>
+            {event.address && (
+              <p className="ev-meta">
+                <LocationIcon /> {event.address}
+              </p>
+            )}
             {hasPrice(event) && (
               <p className="ev-meta">
                 <TicketIcon /> {event.price}

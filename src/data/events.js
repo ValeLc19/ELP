@@ -1252,6 +1252,74 @@ export function instagramUrl(event) {
   return event.social || null
 }
 
+// --- titles ----------------------------------------------------------------
+// visitelpaso titles often end in a parenthetical that merely restates the
+// category chip -- "(exhibition)", "(pop-up exhibition)" -- and it's usually
+// what pushes a title past two lines. Some are also shouted in all-caps.
+// Cleaned on ingest (see backend/scripts/sync_visitelpaso.py); this mirror runs
+// client-side so rows synced before that change still render tidily.
+
+// Matches ONLY parenthetical text that is category noise. Anything with real
+// content ("(Chihuahua, México)", "(2026)") is left alone.
+const REDUNDANT_PAREN =
+  /^(?:an?\s+)?(?:free\s+)?(?:pop[-\s]?up\s+|art\s+|gallery\s+|film\s+|live\s+|group\s+|solo\s+)*(?:exhibition|exhibit|showcase|show|concert|festival|workshop|class|screening|performance|reading|lecture|tour|market)s?$/i
+
+// Words that must stay upper-case when a shouted title is calmed down.
+const ACRONYMS = new Set([
+  'USA', 'US', 'EP', 'TX', 'NM', 'AI', 'DJ', 'BBQ', 'UTEP', 'ELP',
+  'VIP', 'NYE', 'II', 'III', 'IV',
+])
+
+// Kept lower-case mid-title. Includes Spanish particles — plenty of El Paso
+// listings are bilingual.
+const SMALL_WORDS = new Set([
+  'a', 'an', 'and', 'as', 'at', 'but', 'by', 'de', 'del', 'e', 'el', 'en',
+  'for', 'from', 'in', 'la', 'las', 'los', 'of', 'on', 'or', 'the', 'to',
+  'vs', 'with', 'y',
+])
+
+function stripRedundantParenthetical(title) {
+  let out = title
+  // Trailing only, and at most twice ("... (a pop-up exhibition)").
+  for (let i = 0; i < 2; i++) {
+    const m = out.match(/^(.*\S)\s*\(([^()]+)\)\s*$/)
+    if (!m || !REDUNDANT_PAREN.test(m[2].trim())) break
+    out = m[1].trim()
+  }
+  return out
+}
+
+// "Mostly capitals" rather than strictly ALL CAPS, so "CELEBRATING USA at 250
+// ART & AWARD EXHIBIT" is caught too.
+function isShouting(title) {
+  const letters = title.replace(/[^A-Za-z]/g, '')
+  if (letters.length < 5) return false
+  return title.replace(/[^A-Z]/g, '').length / letters.length >= 0.7
+}
+
+// Title case, not sentence case: an all-caps source gives us no way to tell a
+// proper noun from a common one, and sentence case would flatten them
+// ("EDITH MÁRQUEZ" -> "Edith márquez"). Title case keeps names intact.
+function calmCaps(title) {
+  const words = title.toLowerCase().split(' ')
+  return words
+    .map((w, i) => {
+      const bare = w.replace(/[^\p{L}]/gu, '')
+      if (bare.length > 1 && ACRONYMS.has(bare.toUpperCase())) return w.toUpperCase()
+      const middle = i !== 0 && i !== words.length - 1
+      if (middle && SMALL_WORDS.has(bare)) return w
+      return w.replace(/\p{L}/u, (c) => c.toUpperCase())
+    })
+    .join(' ')
+}
+
+export function cleanTitle(raw) {
+  if (typeof raw !== 'string') return raw
+  let t = stripRedundantParenthetical(raw.trim()).replace(/\s+/g, ' ').trim()
+  if (isShouting(t)) t = calmCaps(t)
+  return t || raw.trim() // never return an empty title
+}
+
 // --- price -----------------------------------------------------------------
 // Most visitelpaso listings never state a price. The sync now leaves it unset;
 // rows synced before that used the literal "See details" as a sentinel. Treat
