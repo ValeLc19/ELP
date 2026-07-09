@@ -274,6 +274,21 @@ export default function Events() {
   // Map and List show one card/pin per series; the calendar keeps every date.
   const collapsed = useMemo(() => collapseSeries(filtered), [filtered])
 
+  // Suggestion shown when a search/filter matches nothing. It must be the
+  // soonest *upcoming* event — not whatever happens to sit first in the
+  // catalog, which is often one that already happened. Ignores the active
+  // filters on purpose: they're precisely what found nothing.
+  const closestUpcoming = useMemo(() => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    let best = null
+    for (const e of events) {
+      if (!e.dateObj || e.dateObj < today) continue
+      if (!best || e.dateObj < best.dateObj) best = e
+    }
+    return best
+  }, [events])
+
   const sorted = useMemo(() => {
     const arr = collapsed.slice()
     arr.sort((a, b) =>
@@ -452,10 +467,20 @@ export default function Events() {
         {t('empty1')}
         <br />
         {t('empty2')}
-        <br />
-        {t('empty3')}
+        {closestUpcoming && (
+          <>
+            <br />
+            {t('empty3')}
+          </>
+        )}
       </p>
-      <EventCard event={events[0]} onSelect={setSelectedId} onRequireAuth={requireAuth} />
+      {closestUpcoming && (
+        <EventCard
+          event={closestUpcoming}
+          onSelect={setSelectedId}
+          onRequireAuth={requireAuth}
+        />
+      )}
       <button className="empty__similar" onClick={resetFilters}>
         {t('seeSimilar')}
       </button>
