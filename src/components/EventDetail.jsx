@@ -126,10 +126,16 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
 
           <hr className="detail__rule" />
 
-          <h4 className="detail__label">
-            <ChatIcon /> {t('about')}
-          </h4>
-          <p className="detail__text">{event.about}</p>
+          {/* 26 of the 250 synced events have no description — don't render a
+              heading over an empty paragraph. */}
+          {event.about && (
+            <>
+              <h4 className="detail__label">
+                <ChatIcon /> {t('about')}
+              </h4>
+              <p className="detail__text">{event.about}</p>
+            </>
+          )}
 
           {event.additionalInfo && (
             <>

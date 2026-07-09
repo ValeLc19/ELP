@@ -632,12 +632,17 @@ export default function Events() {
     // business events) so saved "From my businesses" events show up here too.
     const savedList = collapseSeries(
       [...events, ...myBizEvents].filter((e) => isSaved(e.seriesId || e.id))
-    ).filter(
-      (e) =>
-        !q ||
-        e.title.toLowerCase().includes(q) ||
-        e.address.toLowerCase().includes(q)
-    )
+    ).filter((e) => {
+      if (!q) return true
+      // Same guarded haystack as the main filter. address/about are nullable
+      // (a user-created event may have neither), so calling .toLowerCase() on
+      // them directly throws — filter(Boolean) drops the empties first.
+      const hay = [e.title, e.address, e.businessName, e.category, e.about]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase()
+      return hay.includes(q)
+    })
     const shown = savedList
       .filter((e) => (savedTab === 'next' ? e.dateObj >= today : e.dateObj < today))
       .sort((a, b) =>
@@ -678,17 +683,19 @@ export default function Events() {
             {shown.length === 0 ? (
               <p className="saved-empty">{t('noSaved')}</p>
             ) : (
-              <div className="list-grid">
-                {shown.map((e) => (
-                  <EventCard
-                    key={e.id}
-                    event={e}
-                    variant="compact"
-                    onSelect={setSelectedId}
-                    onRequireAuth={requireAuth}
-                  />
-                ))}
-              </div>
+              <ErrorBoundary {...boundaryText} label="saved events" resetKey={savedTab}>
+                <div className="list-grid">
+                  {shown.map((e) => (
+                    <EventCard
+                      key={e.id}
+                      event={e}
+                      variant="compact"
+                      onSelect={setSelectedId}
+                      onRequireAuth={requireAuth}
+                    />
+                  ))}
+                </div>
+              </ErrorBoundary>
             )}
           </section>
           {selected && <aside className="events__panel">{detailPanel}</aside>}
