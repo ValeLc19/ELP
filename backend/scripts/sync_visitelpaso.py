@@ -275,7 +275,10 @@ def run(dry: bool = False) -> int:
             host = addr.split(" - ", 1)[0].strip() if " - " in addr else None
             price = _price(node.get("offers"))
             if not price:
-                price = "Free" if re.search(r"\bfree\b", blob, re.I) else "See details"
+                # Most listings never state a price. Leave it unset rather than
+                # inventing a label — the UI hides the pill when it's unknown,
+                # and "unknown" must not be mistaken for "paid" by the filters.
+                price = "Free" if re.search(r"\bfree\b", blob, re.I) else None
             family = bool(FAMILY_RE.search(blob))
 
             ev_id = slug

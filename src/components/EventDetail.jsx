@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { categoryColor, categoryTint } from '../data/categories.js'
-import { moreInfoUrl, socialUrl } from '../data/events.js'
+import { moreInfoUrl, socialUrl, hasPrice } from '../data/events.js'
 import { useSaved } from '../lib/saved.js'
 import { removeUserEvent } from '../lib/userEvents.js'
 import { useAuth } from '../lib/auth.js'
@@ -63,7 +63,9 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
           className={`detail__img ${isPast ? 'detail__img--past' : ''}`}
           style={{ backgroundImage: `url("${event.image}")` }}
         >
-          <span className="ev-card__price-tag">{event.price}</span>
+          {hasPrice(event) && (
+            <span className="ev-card__price-tag">{event.price}</span>
+          )}
           {!isPast && user && (
             <button
               className={`save-heart ${saved ? 'is-saved' : ''}`}
@@ -113,9 +115,11 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
             <p className="ev-meta">
               <ClockIcon /> {event.time}
             </p>
-            <p className="ev-meta">
-              <TicketIcon /> {event.price}
-            </p>
+            {hasPrice(event) && (
+              <p className="ev-meta">
+                <TicketIcon /> {event.price}
+              </p>
+            )}
           </div>
 
           <hr className="detail__rule" />

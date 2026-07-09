@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { categoryColor, categoryTint } from '../data/categories.js'
-import { moreInfoUrl, instagramUrl } from '../data/events.js'
+import { moreInfoUrl, instagramUrl, hasPrice } from '../data/events.js'
 import { useSaved } from '../lib/saved.js'
 import { useAuth } from '../lib/auth.js'
 import { useLang } from '../lib/i18n.js'
@@ -68,7 +68,9 @@ export default function EventCard({
         className="ev-card__img"
         style={{ backgroundImage: `url("${event.image}")` }}
       >
-        <span className="ev-card__price-tag">{event.price}</span>
+        {hasPrice(event) && (
+          <span className="ev-card__price-tag">{event.price}</span>
+        )}
         {user && (
           <button
             className={`save-heart ${saved ? 'is-saved' : ''}`}
@@ -141,9 +143,11 @@ export default function EventCard({
                 <span className="recur-tag">{t(`recur_${event.recurLabel}`)}</span>
               )}
             </p>
-            <p className="ev-meta">
-              <TicketIcon /> {event.price}
-            </p>
+            {hasPrice(event) && (
+              <p className="ev-meta">
+                <TicketIcon /> {event.price}
+              </p>
+            )}
           </>
         )}
 

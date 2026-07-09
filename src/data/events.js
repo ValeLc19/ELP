@@ -1252,6 +1252,25 @@ export function instagramUrl(event) {
   return event.social || null
 }
 
+// --- price -----------------------------------------------------------------
+// Most visitelpaso listings never state a price. The sync now leaves it unset;
+// rows synced before that used the literal "See details" as a sentinel. Treat
+// both as "unknown" — which is neither free nor paid, and shows no pill.
+const UNKNOWN_PRICE_LABELS = new Set(['see details', 'see detail', 'tbd'])
+
+export function hasPrice(event) {
+  const p = event?.price
+  if (typeof p !== 'string') return false
+  const v = p.trim()
+  return v !== '' && !UNKNOWN_PRICE_LABELS.has(v.toLowerCase())
+}
+export function isFreeEvent(event) {
+  return hasPrice(event) && /\bfree\b/i.test(event.price)
+}
+export function isPaidEvent(event) {
+  return hasPrice(event) && !isFreeEvent(event)
+}
+
 export function socialUrl(event) {
   if (event.social) return event.social
   if (event.fromBusiness) return null

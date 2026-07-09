@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import 'leaflet/dist/leaflet.css'
 import './Events.css'
 import { useEvents } from '../lib/events.js'
+import { hasPrice, isFreeEvent, isPaidEvent } from '../data/events.js'
 import {
   CATEGORY_ORDER,
   categoryColor,
@@ -42,7 +43,6 @@ const AUDIENCE_CHIPS = [
   { label: '18+', val: 'Adults', color: '#e08a7b' },
 ]
 
-const isFree = (e) => /free/i.test(e.price)
 
 // Collapse recurring series to a single representative instance — the soonest
 // upcoming occurrence (or the most recent past one if all are over). Used for
@@ -73,10 +73,15 @@ function collapseSeries(list) {
   return [...groups.values()]
 }
 
-function priceValue(p) {
-  if (/free/i.test(p)) return 0
-  const m = p.match(/[\d.]+/)
-  return m ? parseFloat(m[0]) : 0
+// Unknown prices sort last. A finite sentinel (not Infinity) keeps the
+// comparator's a - b from producing NaN when two unknowns are compared.
+const UNKNOWN_PRICE = Number.MAX_SAFE_INTEGER
+
+function priceValue(event) {
+  if (!hasPrice(event)) return UNKNOWN_PRICE
+  if (isFreeEvent(event)) return 0
+  const m = event.price.match(/[\d.]+/)
+  return m ? parseFloat(m[0]) : UNKNOWN_PRICE
 }
 
 const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n)
@@ -202,9 +207,11 @@ export default function Events() {
       const qOk = !q || hay.includes(q)
       // Date filters don't apply in calendar view (you navigate by date there).
       const dateOk = view === 'calendar' || matchesDateFilter(e, activeDate, win)
+      // An event whose price we don't know is neither Free nor Paid, so it
+      // matches neither chip (it used to fall into "Paid" by default).
       const priceOk =
         !priceFilter ||
-        (priceFilter === 'Free' ? isFree(e) : !isFree(e))
+        (priceFilter === 'Free' ? isFreeEvent(e) : isPaidEvent(e))
       const audienceOk =
         !audienceFilter ||
         (audienceFilter === 'Kids' ? e.family : !!e.ageNote)
@@ -271,7 +278,7 @@ export default function Events() {
     const arr = collapsed.slice()
     arr.sort((a, b) =>
       sortBy === 'Price'
-        ? priceValue(a.price) - priceValue(b.price)
+        ? priceValue(a) - priceValue(b)
         : a.dateObj - b.dateObj
     )
     return arr
