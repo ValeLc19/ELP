@@ -737,7 +737,7 @@ export default function Events() {
           {selected ? (
             detailPanel
           ) : (
-            <>
+            <div className="events__panel-fill">
               <h2 className="events__panel-title">{t('events')}</h2>
               {collapsed.length === 0 ? (
                 emptyState
@@ -753,7 +753,7 @@ export default function Events() {
                   ))}
                 </div>
               )}
-            </>
+            </div>
           )}
         </aside>
       </div>

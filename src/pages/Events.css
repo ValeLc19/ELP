@@ -106,6 +106,17 @@
   .events__layout {
     grid-template-columns: 1fr;
   }
+  /* Stacked: the panel has no row to stretch into, so its children flow
+     normally instead of absolutely filling a zero-height box. */
+  .events__panel-fill,
+  .detail {
+    position: static;
+    inset: auto;
+  }
+  .events__list {
+    flex: none;
+    max-height: 70vh;
+  }
 }
 
 /* ---------- Controls ---------- */
@@ -657,11 +668,25 @@
   font-size: 2rem;
   margin: 0 0 1rem;
 }
+/* Fills the panel (like .detail does) so the card list ends exactly where the
+   map/calendar ends, instead of stopping short at a fixed max-height. */
+.events__panel-fill {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.events__panel-fill .events__panel-title {
+  flex: none;
+}
+
 .events__list {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-  max-height: 78vh;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding-right: 0.4rem;
 }
