@@ -13,6 +13,7 @@ import MapView from '../components/MapView.jsx'
 import CalendarView from '../components/CalendarView.jsx'
 import EventCard from '../components/EventCard.jsx'
 import EventDetail from '../components/EventDetail.jsx'
+import ErrorBoundary from '../components/ErrorBoundary.jsx'
 import AuthModal from '../components/AuthModal.jsx'
 import AccountModal from '../components/AccountModal.jsx'
 import AddBusinessModal from '../components/AddBusinessModal.jsx'
@@ -487,12 +488,21 @@ export default function Events() {
     </div>
   )
 
+  // A bad event shouldn't take the page down with it — contain each panel.
+  const boundaryText = {
+    title: t('viewFailed'),
+    message: t('viewFailedMsg'),
+    retryLabel: t('tryAgain'),
+  }
+
   const detailPanel = (
-    <EventDetail
-      event={selected}
-      onBack={() => setSelectedId(null)}
-      onRequireAuth={requireAuth}
-    />
+    <ErrorBoundary {...boundaryText} label="event detail" resetKey={selectedId}>
+      <EventDetail
+        event={selected}
+        onBack={() => setSelectedId(null)}
+        onRequireAuth={requireAuth}
+      />
+    </ErrorBoundary>
   )
 
   const header = (
@@ -718,17 +728,19 @@ export default function Events() {
             {sorted.length === 0 ? (
               emptyState
             ) : (
-              <div className="list-grid">
-                {sorted.map((e) => (
-                  <EventCard
-                    key={e.id}
-                    event={e}
-                    variant="compact"
-                    onSelect={setSelectedId}
-                    onRequireAuth={requireAuth}
-                  />
-                ))}
-              </div>
+              <ErrorBoundary {...boundaryText} label="list view" resetKey={sortBy}>
+                <div className="list-grid">
+                  {sorted.map((e) => (
+                    <EventCard
+                      key={e.id}
+                      event={e}
+                      variant="compact"
+                      onSelect={setSelectedId}
+                      onRequireAuth={requireAuth}
+                    />
+                  ))}
+                </div>
+              </ErrorBoundary>
             )}
           </section>
 
@@ -747,21 +759,23 @@ export default function Events() {
         <section className="events__main">
           {controls}
           <div className="main-view">
-            {view === 'map' ? (
-              <div className="map-wrap">
-                <MapView
-                  events={collapsed}
+            <ErrorBoundary {...boundaryText} label={`${view} view`} resetKey={view}>
+              {view === 'map' ? (
+                <div className="map-wrap">
+                  <MapView
+                    events={collapsed}
+                    selectedId={selectedId}
+                    onSelectPin={setSelectedId}
+                  />
+                </div>
+              ) : (
+                <CalendarView
+                  events={filtered}
                   selectedId={selectedId}
-                  onSelectPin={setSelectedId}
+                  onSelect={setSelectedId}
                 />
-              </div>
-            ) : (
-              <CalendarView
-                events={filtered}
-                selectedId={selectedId}
-                onSelect={setSelectedId}
-              />
-            )}
+              )}
+            </ErrorBoundary>
           </div>
         </section>
 

@@ -47,6 +47,11 @@ const DICT = {
     sortDate: 'Date',
     sortPrice: 'Price',
     // list / empty
+    // error boundary
+    viewFailed: 'This view couldn’t load.',
+    viewFailedMsg:
+      'Something went wrong showing these events. The rest of the page still works — try another view, or try again.',
+    tryAgain: 'Try again',
     empty1: 'Sorry!',
     empty2: 'No events found.',
     empty3: 'The closest event is:',
@@ -221,6 +226,10 @@ const DICT = {
     sortBy: 'Ordenar por:',
     sortDate: 'Fecha',
     sortPrice: 'Precio',
+    viewFailed: 'No se pudo cargar esta vista.',
+    viewFailedMsg:
+      'Algo salió mal al mostrar estos eventos. El resto de la página sigue funcionando — prueba otra vista o inténtalo de nuevo.',
+    tryAgain: 'Intentar de nuevo',
     empty1: '¡Lo sentimos!',
     empty2: 'No se encontraron eventos.',
     empty3: 'El evento más cercano es:',
