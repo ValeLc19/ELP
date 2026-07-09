@@ -1245,6 +1245,13 @@ export function moreInfoUrl(event) {
 //   2. General events with none fall back to an Instagram-scoped search that
 //      lands on the organizer's profile — no per-event handle collection needed.
 //   3. User-added events return null (their sourceUrl already points to the post).
+// A real Instagram link, or null. Unlike socialUrl() this never invents a
+// Google-search fallback, so an icon-only link can be omitted entirely rather
+// than pointing somewhere the label doesn't promise.
+export function instagramUrl(event) {
+  return event.social || null
+}
+
 export function socialUrl(event) {
   if (event.social) return event.social
   if (event.fromBusiness) return null

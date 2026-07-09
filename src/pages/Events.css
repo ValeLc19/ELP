@@ -4,6 +4,10 @@
   --line: #d8cdbe;
   --muted: #6b6257;
   --coral: #e08a7b;
+  /* green = the primary-action accent (kept distinct from --coral, which is
+     reserved for the "Free" badge and other informational highlights) */
+  --green: #5a7d6b;
+  --green-deep: #48685a;
 
   min-height: 100vh;
   background: var(--page);
@@ -858,45 +862,71 @@
   flex: none;
 }
 
-.ev-card__actions {
+/* Footer: one filled primary action on the left, secondary icon-only links
+   grouped on the right. The icon group is omitted entirely when an event has
+   neither an Instagram nor an external link, so nothing is left dangling. */
+.ev-card__footer {
   display: flex;
   align-items: center;
-  gap: 0.9rem;
+  gap: 0.75rem;
   margin-top: auto;
+  padding-top: 0.9rem;
 }
-.ev-card__moreinfo {
-  padding-top: 0.5rem;
-  font-family: inherit;
-  font-size: 0.95rem;
-  color: #c0563f;
-  text-decoration: underline;
-  white-space: nowrap;
-  cursor: pointer;
-}
-.ev-card__moreinfo:hover {
-  color: #a5432f;
-}
-.ev-card__social {
+
+.ev-card__cta {
+  flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
-  padding-top: 0.5rem;
-  color: #8a5a8f;
-  cursor: pointer;
-}
-.ev-card__social:hover {
-  color: #6d4471;
-}
-.see-details {
-  display: block;
-  margin-left: auto;
-  padding-top: 0.5rem;
-  background: none;
+  gap: 0.4rem;
+  white-space: nowrap; /* the label (and its arrow) never break */
+  background: var(--green);
+  color: var(--card);
   border: none;
-  font-family: inherit;
-  font-size: 0.95rem;
-  color: #5a7d6b;
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 0.45rem 1rem;
   cursor: pointer;
-  text-decoration: underline;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+.ev-card__cta:hover {
+  background: var(--green-deep);
+}
+/* scoped with .events so the <a> and <button> forms of the CTA get the same
+   ring as every other focusable control (which .events button:focus-visible
+   would otherwise claim for the <button> only) */
+.events .ev-card__cta:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 2px;
+}
+
+.ev-card__links {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: auto; /* right-aligned; absent entirely when there are no links */
+}
+.ev-card__iconlink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  color: var(--muted);
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.ev-card__iconlink:hover {
+  color: var(--ink);
+  background: var(--page);
+  border-color: var(--line);
+}
+.events .ev-card__iconlink:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 2px;
 }
 
 /* ---------- Detail view ---------- */

@@ -155,6 +155,15 @@ export const TrashIcon = (p) => (
   </svg>
 )
 
+// Points at an event's own page on another site (as opposed to a Google search).
+export const ExternalLinkIcon = (p) => (
+  <svg {...base} {...p}>
+    <path d="M14 4h6v6" />
+    <path d="M20 4l-8.5 8.5" />
+    <path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4" />
+  </svg>
+)
+
 // Password reveal toggle: open eye (visible) / eye with a slash (hidden).
 export const EyeIcon = (p) => (
   <svg {...base} {...p}>

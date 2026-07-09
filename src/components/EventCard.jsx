@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { categoryColor, categoryTint } from '../data/categories.js'
-import { moreInfoUrl, socialUrl } from '../data/events.js'
+import { moreInfoUrl, instagramUrl } from '../data/events.js'
 import { useSaved } from '../lib/saved.js'
 import { useAuth } from '../lib/auth.js'
 import { useLang } from '../lib/i18n.js'
@@ -13,13 +13,23 @@ import {
   HeartIcon,
   ShopIcon,
   InstagramIcon,
+  GoogleIcon,
+  ExternalLinkIcon,
 } from './icons.jsx'
+
+// Keeps a footer link/button from also triggering the card's own click/Enter.
+const swallow = (e) => e.stopPropagation()
 
 export default function EventCard({
   event,
   onSelect,
   onRequireAuth,
   variant = 'full',
+  // Which action gets the filled button: 'details' (the in-app detail view) or
+  // 'more' (the event's own page / a Google search). Falls back to the event's
+  // own preference, then to 'details'. An event with no details page of its own
+  // can therefore promote its external link instead.
+  primaryAction,
 }) {
   const color = categoryColor(event.category)
   const compact = variant === 'compact'
@@ -29,7 +39,17 @@ export default function EventCard({
   const [confirmUnsave, setConfirmUnsave] = useState(false)
   const saveKey = event.seriesId || event.id
   const saved = isSaved(saveKey)
+
   const more = moreInfoUrl(event)
+  const instagram = instagramUrl(event)
+
+  // 'more' can only be primary if there is actually a link to point at.
+  const wanted = primaryAction ?? event.primaryAction ?? 'details'
+  const primary = wanted === 'more' && more ? 'more' : 'details'
+
+  // Whichever action isn't primary demotes to an icon — never both.
+  const moreAsIcon = more && primary !== 'more'
+  const moreLabel = more?.isSearch ? t('ariaGoogle') : t('ariaMoreInfo')
 
   return (
     <article
@@ -127,33 +147,70 @@ export default function EventCard({
           </>
         )}
 
-        <div className="ev-card__actions">
-          {socialUrl(event) && (
+        <div className="ev-card__footer">
+          {primary === 'more' ? (
             <a
-              className="ev-card__social"
-              href={socialUrl(event)}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              aria-label="Instagram"
-            >
-              <InstagramIcon width={17} height={17} />
-            </a>
-          )}
-          {more && (
-            <a
-              className="ev-card__moreinfo"
+              className="ev-card__cta"
               href={more.url}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
+              onClick={swallow}
+              onKeyDown={swallow}
             >
-              {more.isSearch ? t('searchGoogle') : t('moreInfo')}
+              {more.isSearch ? t('ctaSearchGoogle') : t('ctaMoreInfo')}
+              <span aria-hidden="true">→</span>
             </a>
+          ) : (
+            <button
+              type="button"
+              className="ev-card__cta"
+              onClick={(e) => {
+                e.stopPropagation()
+                onSelect(event.id)
+              }}
+              onKeyDown={swallow}
+            >
+              {t('seeDetails')}
+              <span aria-hidden="true">→</span>
+            </button>
           )}
-          <button className="see-details" onClick={() => onSelect(event.id)}>
-            {t('seeDetails')} →
-          </button>
+
+          {(instagram || moreAsIcon) && (
+            <div className="ev-card__links">
+              {instagram && (
+                <a
+                  className="ev-card__iconlink"
+                  href={instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={swallow}
+                  onKeyDown={swallow}
+                  aria-label={t('ariaInstagram')}
+                  title={t('ariaInstagram')}
+                >
+                  <InstagramIcon width={17} height={17} />
+                </a>
+              )}
+              {moreAsIcon && (
+                <a
+                  className="ev-card__iconlink"
+                  href={more.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={swallow}
+                  onKeyDown={swallow}
+                  aria-label={moreLabel}
+                  title={moreLabel}
+                >
+                  {more.isSearch ? (
+                    <GoogleIcon width={16} height={16} />
+                  ) : (
+                    <ExternalLinkIcon width={17} height={17} />
+                  )}
+                </a>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </article>
