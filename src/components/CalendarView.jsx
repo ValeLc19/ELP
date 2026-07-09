@@ -15,10 +15,16 @@ function startOfToday() {
 }
 const TODAY_ISO = isoOf(startOfToday())
 
+// Plenty of synced events state no start time at all (time === null). They sort
+// after every timed event. A finite sentinel, not Infinity: two untimed events
+// would otherwise compare Infinity - Infinity === NaN and corrupt the sort.
+const UNTIMED = Number.MAX_SAFE_INTEGER
+
 // "7:00 am" / "9:30 pm" -> minutes since midnight, for sorting.
 function timeToMinutes(t) {
+  if (typeof t !== 'string') return UNTIMED
   const m = t.match(/(\d+):(\d+)\s*(am|pm)/i)
-  if (!m) return 0
+  if (!m) return UNTIMED
   let h = parseInt(m[1], 10) % 12
   if (/pm/i.test(m[3])) h += 12
   return h * 60 + parseInt(m[2], 10)
@@ -126,7 +132,7 @@ function WeekView({ anchor, events, selectedId, onSelect }) {
                   onClick={() => onSelect(e.id)}
                   style={{ borderColor: categoryColor(e.category) }}
                 >
-                  <span className="cal-week__time">{e.time}</span>
+                  {e.time && <span className="cal-week__time">{e.time}</span>}
                   <span className="cal-week__title">{e.short || e.title}</span>
                 </button>
               ))}

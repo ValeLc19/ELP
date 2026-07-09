@@ -112,9 +112,11 @@ export default function EventDetail({ event, onBack, onRequireAuth }) {
                 <span className="recur-tag">{t(`recur_${event.recurLabel}`)}</span>
               )}
             </p>
-            <p className="ev-meta">
-              <ClockIcon /> {event.time}
-            </p>
+            {event.time && (
+              <p className="ev-meta">
+                <ClockIcon /> {event.time}
+              </p>
+            )}
             {hasPrice(event) && (
               <p className="ev-meta">
                 <TicketIcon /> {event.price}

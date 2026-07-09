@@ -444,6 +444,10 @@
   flex-direction: column;
   gap: 0.5rem;
   padding: 0.5rem 0.4rem;
+  /* a busy day (18+ events) scrolls inside its column instead of stretching
+     the whole calendar down the page */
+  max-height: 46vh;
+  overflow-y: auto;
 }
 .cal-week__event {
   display: flex;
